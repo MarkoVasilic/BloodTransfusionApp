@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,8 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework.authtoken',
-    'corsheaders'
+    'corsheaders',
+    'rest_framework_simplejwt',
+    'django_filters',
+    'django_seed',
+    'tranfusion_center',
+    'user_profile'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -82,7 +87,7 @@ WSGI_APPLICATION = 'BloodTranfusionApi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'BloodTransfusionDataBase',
+        'NAME': 'BloodCenterDatabase',
         'USER': 'postgres',
         'PASSWORD': 'dajkrv',
         'HOST': '127.0.0.1',
@@ -131,3 +136,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':
+        ['rest_framework.authentication.SessionAuthentication', 'rest_framework_simplejwt.authentication.JWTAuthentication', ],
+    'DEFAULT_FILTER_BACKENDS': 
+        ['django_filters.rest_framework.DjangoFilterBackend'],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+}
