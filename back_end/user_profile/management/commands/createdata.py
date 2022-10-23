@@ -7,7 +7,7 @@ from tranfusion_center.models import TranfusionCenter
 from user_profile.models import UserProfile
 
 GROUP_PERMISSIONS = [
-    1, 2, 3
+    1, 2, 3, 4
 ]
 
 GENDER = [
