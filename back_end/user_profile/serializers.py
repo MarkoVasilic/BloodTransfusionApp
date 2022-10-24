@@ -40,9 +40,9 @@ class RegisterSerializer(serializers.ModelSerializer):
     return user
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    jmbg = serializers.RegexField("^(\d{13})?$", max_length=None, min_length=None, allow_blank=False)
     class Meta:
       model = UserProfile
-      read_only_fields = ['email']
       fields = ('address', 'city', 'country', 'phone_number',
        'jmbg', 'gender', 'blood_type', 'profession', 'workplace', 'tranfusion_center')       
 
@@ -55,5 +55,31 @@ class UserSerializer(serializers.ModelSerializer):
      )
   class Meta:
     model = User
+    read_only_fields = ['email']
     fields = ['id', 'email', 'password', 'first_name', 'last_name',
      'userprofile', 'groups']
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    userprofile = UserProfileSerializer()
+    class Meta:
+        model = User
+        read_only_fields = ['email']
+        fields = ['id', 'email', 'password', 'first_name', 'last_name',
+     'userprofile']
+
+    def update(self, instance, validated_data):
+        users_profile_data = validated_data.pop('userprofile')
+        print(users_profile_data)
+        users = instance.userprofile
+        users.address = users_profile_data.get('address')
+        users.city = users_profile_data.get('city')
+        users.country = users_profile_data.get('country')
+        users.phone_number = users_profile_data.get('phone_number')
+        users.jmbg = users_profile_data.get('jmbg')
+        users.gender = users_profile_data.get('gender')
+        users.blood_type = users_profile_data.get('blood_type')
+        users.profession = users_profile_data.get('profession')
+        users.workplace = users_profile_data.get('workplace')
+        users.tranfusion_center = users_profile_data.get('tranfusion_center')
+        instance.save()
+        return instance

@@ -6,18 +6,21 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from user_profile.models import UserProfile
-from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer
+from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer, UserUpdateSerializer
 from django.contrib.auth.models import Group
-from rest_framework import status, mixins
+from rest_framework import status, mixins, generics
 
 class UserViewSet(mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin,
                    mixins.ListModelMixin,
                    GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    print(queryset)
+
+class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserUpdateSerializer
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
 
 class RegisterCenterUserAPIView(APIView):
     def post(self, request, format=None):
