@@ -44,7 +44,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
       model = UserProfile
       read_only_fields = ['email']
       fields = ('address', 'city', 'country', 'phone_number',
-       'jmbg', 'gender', 'profession', 'workplace', 'tranfusion_center')       
+       'jmbg', 'gender', 'blood_type', 'profession', 'workplace', 'tranfusion_center')       
 
 class UserSerializer(serializers.ModelSerializer):
   userprofile = UserProfileSerializer()

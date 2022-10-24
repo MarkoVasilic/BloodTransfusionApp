@@ -26,4 +26,5 @@ urlpatterns = [
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('account/',include('user_profile.urls')),
     path('center/',include('tranfusion_center.urls')),
+    path('questionnaire/',include('questionnaire.urls')),
 ]

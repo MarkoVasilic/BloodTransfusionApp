@@ -16,26 +16,32 @@ class UserViewSet(mixins.RetrieveModelMixin,
                    GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [DjangoModelPermissions]
-    #authentication_classes = [IsAuthenticated]
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     print(queryset)
 
 class RegisterCenterUserAPIView(APIView):
     def post(self, request, format=None):
-        return post_new_user(request, Group.objects.get(name="TranfusionCenterUser"), False)
+        return post_new_user(request, Group.objects.get(name="TranfusionCenterUser"), False, False, False)
 
 class RegisterCenterStaffAPIView(APIView):
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     def post(self, request, format=None):
-        return post_new_user(request, Group.objects.get(name="TranfusionCenterStaff"), True)
+        return post_new_user(request, Group.objects.get(name="TranfusionCenterStaff"), True, False, False)
 
-def post_new_user(request, group, isActive):
+class RegisterCenterAdminAPIView(APIView):
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    def post(self, request, format=None):
+        return post_new_user(request, Group.objects.get(name="Admin"), True, True, True)
+
+def post_new_user(request, group, isActive, is_superuser, is_staff):
     register_serializer = RegisterSerializer(data=request.data)
     user_profile_serializer = UserProfileSerializer(data=request.data)
     if register_serializer.is_valid():
         if user_profile_serializer.is_valid():
             instance = register_serializer.save()
             instance.groups.add(group)
+            instance.is_superuser = is_superuser
+            instance.is_staff = is_staff
             instance.userprofile.is_activated = isActive
             instance.save()
             user_profile_serializer.instance = instance.userprofile

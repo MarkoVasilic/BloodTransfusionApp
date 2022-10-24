@@ -1,3 +1,6 @@
 from django.contrib import admin
+from questionnaire.models import Questionnaire
 
-# Register your models here.
+@admin.register(Questionnaire)
+class QuestionnaireAdmin(admin.ModelAdmin):
+    pass
