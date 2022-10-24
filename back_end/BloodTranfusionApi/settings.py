@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django_filters',
     'django_seed',
     'tranfusion_center',
-    'user_profile'
+    'user_profile',
+    'questionnaire'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True

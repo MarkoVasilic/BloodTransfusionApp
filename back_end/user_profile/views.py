@@ -6,36 +6,45 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from user_profile.models import UserProfile
-from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer
+from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer, UserUpdateSerializer
 from django.contrib.auth.models import Group
-from rest_framework import status, mixins
+from rest_framework import status, mixins, generics
 
 class UserViewSet(mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin,
                    mixins.ListModelMixin,
                    GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [DjangoModelPermissions]
-    #authentication_classes = [IsAuthenticated]
-    permission_classes = [DjangoModelPermissions]
-    print(queryset)
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+
+class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserUpdateSerializer
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
 
 class RegisterCenterUserAPIView(APIView):
     def post(self, request, format=None):
-        return post_new_user(request, Group.objects.get(name="TranfusionCenterUser"), False)
+        return post_new_user(request, Group.objects.get(name="TranfusionCenterUser"), False, False, False)
 
 class RegisterCenterStaffAPIView(APIView):
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     def post(self, request, format=None):
-        return post_new_user(request, Group.objects.get(name="TranfusionCenterStaff"), True)
+        return post_new_user(request, Group.objects.get(name="TranfusionCenterStaff"), True, False, False)
 
-def post_new_user(request, group, isActive):
+class RegisterCenterAdminAPIView(APIView):
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    def post(self, request, format=None):
+        return post_new_user(request, Group.objects.get(name="Admin"), True, True, True)
+
+def post_new_user(request, group, isActive, is_superuser, is_staff):
     register_serializer = RegisterSerializer(data=request.data)
     user_profile_serializer = UserProfileSerializer(data=request.data)
     if register_serializer.is_valid():
         if user_profile_serializer.is_valid():
             instance = register_serializer.save()
             instance.groups.add(group)
+            instance.is_superuser = is_superuser
+            instance.is_staff = is_staff
             instance.userprofile.is_activated = isActive
             instance.save()
             user_profile_serializer.instance = instance.userprofile

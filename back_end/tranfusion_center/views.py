@@ -8,7 +8,7 @@ from rest_framework.filters import OrderingFilter
 class TranfusionCenterAPIView(ModelViewSet):
     queryset = TranfusionCenter.objects.all()
     serializer_class = TranfusionCenterSerializer
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     filter_backends = [OrderingFilter]
     ordering_fields = '__all__'
     ordering = ['name']

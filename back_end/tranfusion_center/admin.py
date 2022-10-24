@@ -1,3 +1,6 @@
 from django.contrib import admin
+from tranfusion_center.models import TranfusionCenter
 
-# Register your models here.
+@admin.register(TranfusionCenter)
+class TranfusionCenterAdmin(admin.ModelAdmin):
+    pass
