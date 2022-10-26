@@ -12,10 +12,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='questionnaire',
-            name='last_medicine_before_7_days',
-        ),
         migrations.AddField(
             model_name='questionnaire',
             name='created',

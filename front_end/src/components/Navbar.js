@@ -74,7 +74,7 @@ export default function Navbar() {
             </div>
           )}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Photos
+            Dashboard
           </Typography>
           {(
             <div>
