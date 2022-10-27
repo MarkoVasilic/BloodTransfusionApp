@@ -37,6 +37,7 @@ class RegisterCenterAdminAPIView(APIView):
         return post_new_user(request, Group.objects.get(name="Admin"), True, True, True)
 
 def post_new_user(request, group, isActive, is_superuser, is_staff):
+    print(request.data)
     register_serializer = RegisterSerializer(data=request.data)
     user_profile_serializer = UserProfileSerializer(data=request.data)
     if register_serializer.is_valid():

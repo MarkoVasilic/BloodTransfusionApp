@@ -9,11 +9,12 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
+import sumbitRegistration from '../api/registration';
 
 const RegistrationForm = ({ handleClose }) => {
   const { handleSubmit, control, getValues } = useForm();
-  const onSubmit = data => {
-    console.log(data);
+  const onSubmit = async(data) => {
+    await sumbitRegistration(data)
   };
 
   function isValidEmail(email) {
@@ -30,12 +31,12 @@ const RegistrationForm = ({ handleClose }) => {
       <Grid container rowSpacing={1} sx={{padding:"100px 550px 0px 550px"}}>
         <Grid item xs={12}>
           <Grid item>
-              <InputTextField name="firstName" control={control} label="First Name" rules={{ required: 'First name required' }}/>
+              <InputTextField name="first_name" control={control} label="First Name" rules={{ required: 'First name required' }}/>
           </Grid>
         </Grid>
         <Grid item xs={12}>
           <Grid item>
-            <InputTextField name="lastName" control={control} label="Last Name" rules={{ required: 'Last name required' }}/>
+            <InputTextField name="last_name" control={control} label="Last Name" rules={{ required: 'Last name required' }}/>
           </Grid>
         </Grid>
         <Grid item xs={12}>
@@ -73,7 +74,7 @@ const RegistrationForm = ({ handleClose }) => {
         <Grid item xs={12}>
           <Grid item>    
             <Controller
-                name="confirmPassword"
+                name="confirm_password"
                 control={control}
                 defaultValue=""
                 render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -114,6 +115,11 @@ const RegistrationForm = ({ handleClose }) => {
         </Grid>
         <Grid item xs={12}>
           <Grid item>
+            <InputTextField name="phone_number" control={control} label="Phone Number"/>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Grid item>
             <InputTextField name="jmbg" control={control} label="JMBG"
             rules={{validate: {
               validateJMBG: v =>  isValidJMBG(getValues("jmbg")) || "JMBG must be numbers and length needs to be 13"
@@ -138,9 +144,9 @@ const RegistrationForm = ({ handleClose }) => {
                         
                         onChange={onChange}
                       >
-                        <MenuItem value={1}>Male</MenuItem>
-                        <MenuItem value={2}>Female</MenuItem>
-                        <MenuItem value={3}>Unknow</MenuItem>
+                        <MenuItem value={'M'}>Male</MenuItem>
+                        <MenuItem value={'F'}>Female</MenuItem>
+                        <MenuItem value={'N'}>Unknow</MenuItem>
                       </Select>
                   </FormControl>
                 )}
