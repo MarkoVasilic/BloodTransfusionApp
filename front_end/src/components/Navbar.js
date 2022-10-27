@@ -5,7 +5,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import ListItemText from '@mui/material/ListItemText';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 // import Switch from '@mui/material/Switch';
 // import FormControlLabel from '@mui/material/FormControlLabel';
 // import FormGroup from '@mui/material/FormGroup';
@@ -14,14 +20,25 @@ import Menu from '@mui/material/Menu';
 //import Link from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 
-export default function Navbar() {
+export default function Navbar(props) {
   // const [auth, setAuth] = React.useState(true);
+  const [state, setState] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [bigMenuEl, setbigMenuEl] = React.useState(null);
   let navigate = useNavigate();
   // const handleChange = (event) => {
   //   setAuth(event.target.checked);
   // };
+  
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -29,14 +46,6 @@ export default function Navbar() {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleBigMenu = (event) => {
-    setbigMenuEl(event.currentTarget);
-  };
-
-  const handleBigClose = () => {
-    setbigMenuEl(null);
   };
 
   return (
@@ -49,35 +58,36 @@ export default function Navbar() {
                 aria-label="account of current user"
                 aria-controls="big-menu-appbar"
                 aria-haspopup="true"
-                onClick={handleBigMenu}
+                onClick={toggleDrawer('left', true)}
                 color="inherit"
               >
                 <MenuIcon />
               </IconButton>
-              <Menu
-                id="big-menu-appbar"
-                anchorEl={bigMenuEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(bigMenuEl)}
-                onClose={handleBigClose}
-                sx={{ width: 200, maxWidth: '100%' }}
-              >
-                <MenuItem onClick={handleBigClose}>Profile</MenuItem>
-                <MenuItem onClick={handleBigClose}>My account</MenuItem>
-                <MenuItem onClick={()=>{handleBigClose();navigate('/users')}}>Users</MenuItem>
-              </Menu>
+              <Drawer
+                  anchor={'left'}
+                  open={state['left']}
+                  onClose={toggleDrawer('left', false)}
+                  >
+                  <Box
+                    role="presentation"
+                    onClick={toggleDrawer('left', false)}
+                    onKeyDown={toggleDrawer('left', false)}
+                    >
+                    <List>
+                      {Object.keys(props.sidemenu).map((k) => (
+                        <ListItem key={k} disablePadding>
+                          <ListItemButton>
+                            <ListItemText primary={k} onClick={() => navigate(props.sidemenu[k])}/>
+                          </ListItemButton>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Box>
+              </Drawer>
             </div>
           )}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Dashboard
+            {props.title}
           </Typography>
           {(
             <div>
