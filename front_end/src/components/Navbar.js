@@ -11,12 +11,14 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 // import FormGroup from '@mui/material/FormGroup';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+//import Link from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
   // const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [bigMenuEl, setbigMenuEl] = React.useState(null);
-
+  let navigate = useNavigate();
   // const handleChange = (event) => {
   //   setAuth(event.target.checked);
   // };
@@ -70,6 +72,7 @@ export default function Navbar() {
               >
                 <MenuItem onClick={handleBigClose}>Profile</MenuItem>
                 <MenuItem onClick={handleBigClose}>My account</MenuItem>
+                <MenuItem onClick={()=>{handleBigClose();navigate('/users')}}>Users</MenuItem>
               </Menu>
             </div>
           )}

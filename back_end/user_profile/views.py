@@ -9,18 +9,24 @@ from user_profile.models import UserProfile
 from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer, UserUpdateSerializer
 from django.contrib.auth.models import Group
 from rest_framework import status, mixins, generics
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 class UserViewSet(mixins.RetrieveModelMixin,
                    mixins.ListModelMixin,
                    GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    #permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ['=first_name', '=last_name']
 
 class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    
+
 
 class RegisterCenterUserAPIView(APIView):
     def post(self, request, format=None):
