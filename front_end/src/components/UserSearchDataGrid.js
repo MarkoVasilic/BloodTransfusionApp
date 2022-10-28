@@ -6,9 +6,9 @@ import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
-import axios from "axios";
 import CachedIcon from "@mui/icons-material/Cached";
 import { green } from "@mui/material/colors";
+import axiosApi from "../api/axios";
 
 
 const columns = [
@@ -111,15 +111,15 @@ function DataGridSearchComponent() {
 
     let getData = async () => {
         if (searchTerm === "") {
-            axios
-                .get("http://localhost:8000/account/users/", { headers: {"Authorization" : `Bearer ${token}`} })
+            axiosApi
+                .get("/account/users/")
                 .then((response) => {
                     setKorisnici(response.data);
-                    console.log(response.data);
+                    console.log(axiosApi.defaults.headers.common);
                 });
         } else
-            axios
-                .get(`http://localhost:8000/account/users?search=${searchTerm}`, { headers: {"Authorization" : `Bearer ${token}`} })
+            axiosApi
+                .get(`/account/users?search=${searchTerm}`)
                 .then((response) => {
                     console.log("Search", searchTerm);
                     setKorisnici(response.data);

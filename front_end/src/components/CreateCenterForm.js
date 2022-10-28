@@ -2,8 +2,10 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import { Button, TextField, Typography } from "@mui/material";
 import { green } from "@mui/material/colors";
-import axios from 'axios';
 import {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+import axiosApi from "../api/axios";
+
 
 
 const url = 'http://localhost:8000/center/all/';
@@ -13,13 +15,15 @@ function CreateCenterForm() {
     const [address, setAddress] = useState('');
     const [description, setDescription] = useState('');
     let token =localStorage.getItem("token");
+    let navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(name,address,description);
         try {
-            const resp = await axios.post(url,{name, description, address},  { headers: {"Authorization" : `Bearer ${token}`} });
+            const resp = await axiosApi.post(url,{name, description, address});
             console.log(resp.data);
+            navigate("/");
         } catch (error) {
             console.log(error.response);
             }
