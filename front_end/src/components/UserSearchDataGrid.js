@@ -103,6 +103,7 @@ const columns = [
 function DataGridSearchComponent() {
     const [korisnici, setKorisnici] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    let token =localStorage.getItem("token");
 
     useEffect(() => {
         getData();
@@ -111,14 +112,14 @@ function DataGridSearchComponent() {
     let getData = async () => {
         if (searchTerm === "") {
             axios
-                .get("http://localhost:8000/account/users/")
+                .get("http://localhost:8000/account/users/", { headers: {"Authorization" : `Bearer ${token}`} })
                 .then((response) => {
                     setKorisnici(response.data);
                     console.log(response.data);
                 });
         } else
             axios
-                .get(`http://localhost:8000/account/users?search=${searchTerm}`)
+                .get(`http://localhost:8000/account/users?search=${searchTerm}`, { headers: {"Authorization" : `Bearer ${token}`} })
                 .then((response) => {
                     console.log("Search", searchTerm);
                     setKorisnici(response.data);

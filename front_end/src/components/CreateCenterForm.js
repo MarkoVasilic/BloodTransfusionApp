@@ -2,11 +2,33 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import { Button, TextField, Typography } from "@mui/material";
 import { green } from "@mui/material/colors";
+import axios from 'axios';
+import {useState} from 'react';
+
+
+const url = 'http://localhost:8000/center/all/';
 
 function CreateCenterForm() {
+    const [name, setName] = useState('');
+    const [address, setAddress] = useState('');
+    const [description, setDescription] = useState('');
+    let token =localStorage.getItem("token");
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log(name,address,description);
+        try {
+            const resp = await axios.post(url,{name, description, address},  { headers: {"Authorization" : `Bearer ${token}`} });
+            console.log(resp.data);
+        } catch (error) {
+            console.log(error.response);
+            }
+        };
+    
+
     return (
         <div>
-            <Typography variant="h3" color={green[800]} marginTop={5}>
+            <Typography variant="h3" color={green[800]} marginTop={2}>
                 Create a Center
             </Typography>
             <Grid
@@ -15,19 +37,20 @@ function CreateCenterForm() {
                 sx={{ padding: "55px 550px 0px 550px" }}
             >
                 <Grid item xs={12} >
-                    <TextField hiddenLabel="Jovan" variant="filled" label="name" fullWidth/>
+                    <TextField value={name}  variant="filled" label="name" onChange={(e)=> setName(e.target.value)} autoFocus fullWidth/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField variant="filled" label="address" fullWidth/>
+                    <TextField value={address} variant="filled" label="address"  onChange={(e)=> setAddress(e.target.value)} fullWidth/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField variant="filled" label="description" fullWidth/>
+                    <TextField value={description} variant="filled" label="description" onChange={(e)=> setDescription(e.target.value)} fullWidth/>
                 </Grid>
                 <Grid item xs={12}>
                 <Button
                                 type="submit"
                                 fullWidth
                                 variant="contained"
+                                onClick={handleSubmit}
                                 sx={{ mt: 3, mb: 2, background: "#6fbf73",height: "30" }}
                                 
                             >
