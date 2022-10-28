@@ -9,7 +9,7 @@ import Login from "./pages/Login";
 import { setAuthToken } from "./helpers/sethAuthToken";
 
 function App() {
-    const sideMenu = {'Inbox' : 'in', 'Starred' : 'st', 'Send email' : 'se', 'Users' : '/users'};
+    const sideMenu = {'Inbox' : 'in', 'Starred' : 'st', 'Send email' : 'se', 'Users' : '/users', 'Create Center': '/create-center'};
     const token = localStorage.getItem("token");
     if (token) {
         setAuthToken(token);

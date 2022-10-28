@@ -128,20 +128,18 @@ function DataGridSearchComponent() {
 
     return (
         <div>
-            <Stack direction={"row"}>
+            <Stack direction={"row"} sx={{ justifyContent: "center" }}>
                 <Typography
-                    variant="h4"
+                    variant="h3"
                     color={green[800]}
                     marginBottom={3}
                     marginTop={1}
-                    sx={{ justifyContent: "start" }}
                 >
                     Users
                 </Typography>
             </Stack>
-            <Stack direction={"row"} sx={{ justifyContent: "start" }}>
+            <Stack direction={"row"} sx={{ justifyContent: "start"}} p={2}>
                 <TextField
-                    sx={{ marginBottom: 1 }}
                     variant="standard"
                     type="text"
                     placeholder="Search..."
@@ -152,7 +150,7 @@ function DataGridSearchComponent() {
                     }}
                 ></TextField>
                 <IconButton
-                    color="success"
+                    sx={{background:"#6fbf73"}}
                     onClick={(event) => {
                         setSearchTerm("");
                     }}
@@ -166,6 +164,12 @@ function DataGridSearchComponent() {
                         rows={korisnici}
                         columns={columns}
                         autoHeight
+                        density="comfortable"
+                        disableSelectionOnClick
+                        rowHeight={50}
+                        pageSize={5}
+                        headerHeight={35}
+                        
                         
                     />
                 </Box>
