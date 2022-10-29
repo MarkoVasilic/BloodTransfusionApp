@@ -19,3 +19,5 @@ class Questionnaire(models.Model):
     blood_tranfusion_in_last_6_months = models.BooleanField(blank=True, null=True)
     pregnant = models.BooleanField(blank=True, null=True)
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add = True)
+    updated = models.DateTimeField(auto_now = True)

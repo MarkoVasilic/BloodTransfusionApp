@@ -9,6 +9,8 @@ from user_profile.models import UserProfile
 from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer, UserUpdateSerializer
 from django.contrib.auth.models import Group
 from rest_framework import status, mixins, generics
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 class UserViewSet(mixins.RetrieveModelMixin,
                    mixins.ListModelMixin,
@@ -16,27 +18,35 @@ class UserViewSet(mixins.RetrieveModelMixin,
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ['=first_name', '=last_name']
 
 class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    
+
 
 class RegisterCenterUserAPIView(APIView):
+    queryset = User.objects.all()
     def post(self, request, format=None):
         return post_new_user(request, Group.objects.get(name="TranfusionCenterUser"), False, False, False)
 
 class RegisterCenterStaffAPIView(APIView):
+    queryset = User.objects.all()
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     def post(self, request, format=None):
         return post_new_user(request, Group.objects.get(name="TranfusionCenterStaff"), True, False, False)
 
 class RegisterCenterAdminAPIView(APIView):
+    queryset = User.objects.all()
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     def post(self, request, format=None):
         return post_new_user(request, Group.objects.get(name="Admin"), True, True, True)
 
 def post_new_user(request, group, isActive, is_superuser, is_staff):
+    print(request.data)
     register_serializer = RegisterSerializer(data=request.data)
     user_profile_serializer = UserProfileSerializer(data=request.data)
     if register_serializer.is_valid():
