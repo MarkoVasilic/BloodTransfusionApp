@@ -6,9 +6,9 @@ import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
-import axios from "axios";
 import CachedIcon from "@mui/icons-material/Cached";
 import { green } from "@mui/material/colors";
+import axiosApi from "../api/axios";
 
 
 const columns = [
@@ -103,6 +103,7 @@ const columns = [
 function DataGridSearchComponent() {
     const [korisnici, setKorisnici] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    let token =localStorage.getItem("token");
 
     useEffect(() => {
         getData();
@@ -110,15 +111,15 @@ function DataGridSearchComponent() {
 
     let getData = async () => {
         if (searchTerm === "") {
-            axios
-                .get("http://localhost:8000/account/users/")
+            axiosApi
+                .get("/account/users/")
                 .then((response) => {
                     setKorisnici(response.data);
-                    console.log(response.data);
+                    console.log(axiosApi.defaults.headers.common);
                 });
         } else
-            axios
-                .get(`http://localhost:8000/account/users?search=${searchTerm}`)
+            axiosApi
+                .get(`/account/users?search=${searchTerm}`)
                 .then((response) => {
                     console.log("Search", searchTerm);
                     setKorisnici(response.data);
@@ -128,20 +129,18 @@ function DataGridSearchComponent() {
 
     return (
         <div>
-            <Stack direction={"row"}>
+            <Stack direction={"row"} sx={{ justifyContent: "center" }}>
                 <Typography
-                    variant="h4"
+                    variant="h3"
                     color={green[800]}
                     marginBottom={3}
                     marginTop={1}
-                    sx={{ justifyContent: "start" }}
                 >
                     Users
                 </Typography>
             </Stack>
-            <Stack direction={"row"} sx={{ justifyContent: "start" }}>
+            <Stack direction={"row"} sx={{ justifyContent: "start"}} p={2}>
                 <TextField
-                    sx={{ marginBottom: 1 }}
                     variant="standard"
                     type="text"
                     placeholder="Search..."
@@ -152,7 +151,7 @@ function DataGridSearchComponent() {
                     }}
                 ></TextField>
                 <IconButton
-                    color="success"
+                    sx={{background:"#6fbf73"}}
                     onClick={(event) => {
                         setSearchTerm("");
                     }}
@@ -166,6 +165,12 @@ function DataGridSearchComponent() {
                         rows={korisnici}
                         columns={columns}
                         autoHeight
+                        density="comfortable"
+                        disableSelectionOnClick
+                        rowHeight={50}
+                        pageSize={5}
+                        headerHeight={35}
+                        
                         
                     />
                 </Box>

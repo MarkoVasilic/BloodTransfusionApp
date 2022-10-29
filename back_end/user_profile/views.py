@@ -17,7 +17,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
                    GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    #permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     search_fields = ['=first_name', '=last_name']
 
@@ -29,15 +29,18 @@ class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
 
 
 class RegisterCenterUserAPIView(APIView):
+    queryset = User.objects.all()
     def post(self, request, format=None):
         return post_new_user(request, Group.objects.get(name="TranfusionCenterUser"), False, False, False)
 
 class RegisterCenterStaffAPIView(APIView):
+    queryset = User.objects.all()
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     def post(self, request, format=None):
         return post_new_user(request, Group.objects.get(name="TranfusionCenterStaff"), True, False, False)
 
 class RegisterCenterAdminAPIView(APIView):
+    queryset = User.objects.all()
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     def post(self, request, format=None):
         return post_new_user(request, Group.objects.get(name="Admin"), True, True, True)
