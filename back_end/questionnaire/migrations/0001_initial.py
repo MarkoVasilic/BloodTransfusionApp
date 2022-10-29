@@ -26,7 +26,6 @@ class Migration(migrations.Migration):
                 ('blood_preasure_low', models.BooleanField(blank=True, null=True)),
                 ('using_medicine', models.BooleanField(blank=True, null=True)),
                 ('last_medicine_in_last_7_days', models.BooleanField(blank=True, null=True)),
-                ('last_medicine_before_7_days', models.BooleanField(blank=True, null=True)),
                 ('on_menstruation_period', models.BooleanField(blank=True, null=True)),
                 ('dental_interventions_in_last_7_days', models.BooleanField(blank=True, null=True)),
                 ('tattoo_piercing_in_last_6_months', models.BooleanField(blank=True, null=True)),
