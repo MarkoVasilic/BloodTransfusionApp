@@ -17,13 +17,15 @@ import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close'
 import { useNavigate } from 'react-router-dom';
 
-const RegistrationForm = ({ handleClose }) => {
+
+const RegistrationForm = (props) => {
   const { handleSubmit, control, getValues, setError } = useForm();
   const [alert, setAlert] = React.useState(false);
   let navigate = useNavigate();
+
   const onSubmit = async(data) => {
     try{
-      await sumbitRegistration(data)
+      await sumbitRegistration(data, props.userRole)
     }
     catch(err){
       setAlert(true)
@@ -46,7 +48,7 @@ const RegistrationForm = ({ handleClose }) => {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container rowSpacing={1} sx={{padding:"100px 550px 0px 550px"}}>
+        <Grid container rowSpacing={2} sx={{padding:"55px 550px 0px 550px"}}>
           <Grid item xs={12}>
             <Grid item>
                 <InputTextField name="first_name" control={control} label="First Name" rules={{ required: 'First name required' }}/>
@@ -181,14 +183,9 @@ const RegistrationForm = ({ handleClose }) => {
             <InputTextFieldMultiline name="workplace" control={control} label="Workplace"/>
             </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <Button type="submit" variant="contained" color="success">
+          <Grid item xs={12}>
+            <Button type="submit" variant="contained" sx={{background: "#6fbf73", marginTop: 2}} fullWidth>
               Sign Up
-            </Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Button variant="contained" onClick={handleClose} color="error">
-                Cancel
             </Button>
           </Grid>
         </Grid>

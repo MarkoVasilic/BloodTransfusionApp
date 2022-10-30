@@ -11,6 +11,7 @@ from django.contrib.auth.models import Group
 from rest_framework import status, mixins, generics
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from rest_framework.decorators import api_view
 
 class UserViewSet(mixins.RetrieveModelMixin,
                    mixins.ListModelMixin,
@@ -20,6 +21,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     search_fields = ['=first_name', '=last_name']
+
 
 class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
