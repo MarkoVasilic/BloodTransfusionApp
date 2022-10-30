@@ -1,7 +1,11 @@
 import UserSearchDataGrid from "../components/UserSearchDataGrid";
+import Navbar from "../components/Navbar";
 
 export default function SearchUsers(){
     return(
-        <UserSearchDataGrid></UserSearchDataGrid>
+        <div>
+            <Navbar/>
+            <UserSearchDataGrid></UserSearchDataGrid>
+        </div>
     );
 }

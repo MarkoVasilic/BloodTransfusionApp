@@ -17,6 +17,7 @@ import Collapse from "@mui/material/Collapse";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 import { green } from "@mui/material/colors";
+import Navbar from "../components/Navbar";
 const theme = createTheme();
 
 export default function Login() {
@@ -30,6 +31,7 @@ export default function Login() {
             localStorage.setItem("token", token);
             setAuthToken(token);
             navigate("/");
+            window.location.reload(false);
         } catch (err) {
             setAlert(true);
         }
@@ -40,122 +42,125 @@ export default function Login() {
     }
 
     return (
-        <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                    }}
-                >
-                    <Avatar sx={{ m: 1, bgcolor: "#6fbf73" }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h4" color={green[800]}>
-                        Login
-                    </Typography>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <Box sx={{ mt: 1 }}>
-                            <Controller
-                                name="username"
-                                control={control}
-                                defaultValue=""
-                                render={({
-                                    field: { onChange, value },
-                                    fieldState: { error },
-                                }) => (
-                                    <TextField
-                                        margin="normal"
-                                        fullWidth
-                                        label="Email"
-                                        autoComplete="email"
-                                        autoFocus
-                                        variant="filled"
-                                        value={value}
-                                        onChange={onChange}
-                                        error={!!error}
-                                        helperText={
-                                            error ? error.message : null
-                                        }
-                                    />
-                                )}
-                                rules={{
-                                    required: "Email required",
-                                    validate: {
-                                        validateEmail: (v) =>
-                                            isValidEmail(
-                                                getValues("username")
-                                            ) || "Email form not correct",
-                                    },
-                                }}
-                            />
-                            <Controller
-                                name="password"
-                                control={control}
-                                defaultValue=""
-                                render={({
-                                    field: { onChange, value },
-                                    fieldState: { error },
-                                }) => (
-                                    <TextField
-                                        margin="normal"
-                                        fullWidth
-                                        label="Password"
-                                        type="password"
-                                        autoComplete="current-password"
-                                        variant="filled"
-                                        value={value}
-                                        onChange={onChange}
-                                        error={!!error}
-                                        helperText={
-                                            error ? error.message : null
-                                        }
-                                    />
-                                )}
-                                rules={{
-                                    required: "Password required",
-                                    minLength: {
-                                        value: 8,
-                                        message:
-                                            "Password needs to be longer than 7",
-                                    },
-                                }}
-                            />
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2, background: "#6fbf73" }}
-                            >
-                                Sign In
-                            </Button>
-                        </Box>
-                    </form>
-                </Box>
-                <Collapse in={alert}>
-                    <Alert
-                        severity="error"
-                        action={
-                            <IconButton
-                                aria-label="close"
-                                color="inherit"
-                                size="small"
-                                onClick={() => {
-                                    setAlert(false);
-                                }}
-                            >
-                                <CloseIcon fontSize="inherit" />
-                            </IconButton>
-                        }
-                        sx={{ mb: 2 }}
+        <div>
+            <Navbar />
+            <ThemeProvider theme={theme}>
+                <Container component="main" maxWidth="xs">
+                    <CssBaseline />
+                    <Box
+                        sx={{
+                            marginTop: 8,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                        }}
                     >
-                        Login failed!
-                    </Alert>
-                </Collapse>
-            </Container>
-        </ThemeProvider>
+                        <Avatar sx={{ m: 1, bgcolor: "#6fbf73" }}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h4" color={green[800]}>
+                            Login
+                        </Typography>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <Box sx={{ mt: 1 }}>
+                                <Controller
+                                    name="username"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({
+                                        field: { onChange, value },
+                                        fieldState: { error },
+                                    }) => (
+                                        <TextField
+                                            margin="normal"
+                                            fullWidth
+                                            label="Email"
+                                            autoComplete="email"
+                                            autoFocus
+                                            variant="filled"
+                                            value={value}
+                                            onChange={onChange}
+                                            error={!!error}
+                                            helperText={
+                                                error ? error.message : null
+                                            }
+                                        />
+                                    )}
+                                    rules={{
+                                        required: "Email required",
+                                        validate: {
+                                            validateEmail: (v) =>
+                                                isValidEmail(
+                                                    getValues("username")
+                                                ) || "Email form not correct",
+                                        },
+                                    }}
+                                />
+                                <Controller
+                                    name="password"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({
+                                        field: { onChange, value },
+                                        fieldState: { error },
+                                    }) => (
+                                        <TextField
+                                            margin="normal"
+                                            fullWidth
+                                            label="Password"
+                                            type="password"
+                                            autoComplete="current-password"
+                                            variant="filled"
+                                            value={value}
+                                            onChange={onChange}
+                                            error={!!error}
+                                            helperText={
+                                                error ? error.message : null
+                                            }
+                                        />
+                                    )}
+                                    rules={{
+                                        required: "Password required",
+                                        minLength: {
+                                            value: 8,
+                                            message:
+                                                "Password needs to be longer than 7",
+                                        },
+                                    }}
+                                />
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{ mt: 3, mb: 2, background: "#6fbf73" }}
+                                >
+                                    Sign In
+                                </Button>
+                            </Box>
+                        </form>
+                    </Box>
+                    <Collapse in={alert}>
+                        <Alert
+                            severity="error"
+                            action={
+                                <IconButton
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        setAlert(false);
+                                    }}
+                                >
+                                    <CloseIcon fontSize="inherit" />
+                                </IconButton>
+                            }
+                            sx={{ mb: 2 }}
+                        >
+                            Login failed!
+                        </Alert>
+                    </Collapse>
+                </Container>
+            </ThemeProvider>
+        </div>
     );
 }
