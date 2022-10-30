@@ -8,6 +8,8 @@ import CreateCenter from "./pages/CreateCenter";
 import Login from "./pages/Login";
 import { setAuthToken } from "./helpers/sethAuthToken";
 import AdminRegistration from "./pages/AdminRegistration";
+import AllCenters from "./pages/AllCenters";
+import CreateQuestionnaire from "./pages/CreateQuestionnaire";
 
 function App() {
     const sideMenu = {'Inbox' : 'in', 'Starred' : 'st', 'Send email' : 'se', 'Users' : '/users', 'Create Center': '/create-center', 'Register Admin': '/register-admin'};
@@ -27,6 +29,8 @@ function App() {
                         <Route path="/users" element={<SearchUsers />} />
                         <Route path="/register-admin" element={<AdminRegistration />} />
                         <Route path="/create-center" element={<CreateCenter />} />
+                        <Route path="/list-centers" element={<AllCenters />} />
+                        <Route path="/fill-questionnaire" element={<CreateQuestionnaire />} />
                     </Routes>
                 </div>
             </Router>

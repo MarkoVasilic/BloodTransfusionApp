@@ -8,7 +8,7 @@ import axiosApi from "../api/axios";
 
 
 
-const url = '/center/all/';
+const url = '/center/create/';
 
 function CreateCenterForm() {
     const [name, setName] = useState('');
@@ -32,7 +32,7 @@ function CreateCenterForm() {
 
     return (
         <div>
-            <Typography variant="h3" color={green[800]} marginTop={2}>
+            <Typography component="h1" variant="h4"  color={green[800]} marginTop={2}>
                 Create a Center
             </Typography>
             <Grid

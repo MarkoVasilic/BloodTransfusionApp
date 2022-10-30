@@ -1,15 +1,27 @@
-from django.shortcuts import render
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from tranfusion_center.models import TranfusionCenter
 from tranfusion_center.serializer import TranfusionCenterSerializer 
-from rest_framework.filters import OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, mixins, generics
 
-class TranfusionCenterAPIView(ModelViewSet):
+class CreateTranfusionCenterAPIView(generics.CreateAPIView):
     queryset = TranfusionCenter.objects.all()
     serializer_class = TranfusionCenterSerializer
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    filter_backends = [OrderingFilter]
-    ordering_fields = '__all__'
-    ordering = ['name']
+
+class RetrieveUpdateDestroyTranfusionCenterAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = TranfusionCenter.objects.all()
+    serializer_class = TranfusionCenterSerializer
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+
+class RetrieveTranfusionCenterAPIView(generics.RetrieveAPIView):
+    queryset = TranfusionCenter.objects.all()
+    serializer_class = TranfusionCenterSerializer
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+
+class ListTranfusionCenterGetAPIView(generics.ListAPIView):
+    queryset = TranfusionCenter.objects.all()
+    serializer_class = TranfusionCenterSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ['=name', '=description', '=country', '=city', '=street', '=building_number']
 

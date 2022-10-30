@@ -30,7 +30,8 @@ class Command(BaseCommand):
         fake.add_provider(Provider)
 
         for _ in range(1):
-            TranfusionCenter.objects.create(name=fake.company(), description=fake.text(), address=fake.address())
+            TranfusionCenter.objects.create(name=fake.company(), description=fake.text(), country=fake.country(),
+             city=fake.city(), address=fake.address())
 
         for _ in range(1):
             tc = TranfusionCenter.objects.all()

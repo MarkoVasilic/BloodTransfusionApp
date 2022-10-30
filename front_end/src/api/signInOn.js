@@ -7,10 +7,15 @@ export async function sumbitRegistration(data, userRole){
                 console.log(response)
                 return response     
         }
+        else if(userRole === "TranfusionCenterStaff"){
+                const response = await axiosApi.post('/account/register/staff/', data)
+                console.log(response)
+                return response     
+        }
         else{
-        const response = await axiosApi.post('/account/register/user/', data)
-        console.log(response)
-        return response
+                const response = await axiosApi.post('/account/register/user/', data)
+                console.log(response)
+                return response
         }
 }
 

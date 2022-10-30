@@ -12,96 +12,60 @@ import axiosApi from "../api/axios";
 
 
 const columns = [
-    { field: "id", headerName: "ID", width: 50 },
+    { field: "id", headerName: "ID", width: 80 },
     {
-        field: "first_name",
-        headerName: "First Name",
+        field: "name",
+        headerName: "Name",
         type: "string",
-        width: 100,
+        width: 200,
         editable: false,
-    },
-    {
-        field: "last_name",
-        headerName: "Last Name",
-        type: "string",
-        width: 100,
-        editable: false,
-    },
-    {
-        field: "email",
-        headerName: "Email",
-        type: "string",
-        width: 180,
-        editable: false,
-    },
-    {
-        field: "address",
-        headerName: "Address",
-        type: "object",
-        width: 180,
-        editable: false,
-        valueGetter: (params) => {return params.row.userprofile.address}
-    },
-    {
-        field: "city",
-        headerName: "City",
-        type: "string",
-        width: 120,
-        editable: false,
-        valueGetter: (params) => {return params.row.userprofile.city}
     },
     {
         field: "country",
         headerName: "Country",
         type: "string",
-        width: 100,
-        editable: false,
-        valueGetter: (params) => {return params.row.userprofile.country}
+        width: 200,
+        editable: false
     },
     {
-        field: "phone_number",
-        headerName: "Phone Number",
+        field: "city",
+        headerName: "City",
         type: "string",
-        width: 120,
-        editable: false,
-        valueGetter: (params) => {return params.row.userprofile.phone_number}
+        width: 200,
+        editable: false
     },
     {
-        field: "jmbg",
-        headerName: "JMBG",
+        field: "street",
+        headerName: "Street",
         type: "string",
-        width: 140,
+        width: 200,
         editable: false,
-        valueGetter: (params) => {return params.row.userprofile.jmbg}
     },
     {
-        field: "profession",
-        headerName: "Profession",
+        field: "building_number",
+        headerName: "Building number",
         type: "string",
-        width: 100,
+        width: 150,
         editable: false,
-        valueGetter: (params) => {return params.row.userprofile.profession}
     },
     {
-        field: "workplace",
-        headerName: "Workplace",
+        field: "description",
+        headerName: "Description",
         type: "string",
-        width: 260,
+        width: 300,
         editable: false,
-        valueGetter: (params) => {return params.row.userprofile.workplace}
     },
     {
-        field: "gender",
-        headerName: "Gender",
+        field: "average_grade",
+        headerName: "Average grade",
         type: "string",
-        width: 65,
+        width: 150,
         editable: false,
-        valueGetter: (params) => {return params.row.userprofile.gender}
-    },
+    }
 ];
 
 function DataGridSearchComponent() {
-    const [korisnici, setKorisnici] = useState([]);
+    const [centers, setCenters] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
@@ -111,18 +75,15 @@ function DataGridSearchComponent() {
     let getData = async () => {
         if (searchTerm === "") {
             axiosApi
-                .get("/account/users/")
+                .get("/center/list")
                 .then((response) => {
-                    setKorisnici(response.data);
-                    console.log(axiosApi.defaults.headers.common);
+                    setCenters(response.data);
                 });
         } else
             axiosApi
-                .get(`/account/users?search=${searchTerm}`)
+                .get(`/center/list?search=${searchTerm}`)
                 .then((response) => {
-                    console.log("Search", searchTerm);
-                    setKorisnici(response.data);
-                    console.log("Search", response.data);
+                    setCenters(response.data);
                 });
     };
 
@@ -136,7 +97,7 @@ function DataGridSearchComponent() {
                     marginBottom={3}
                     marginTop={1}
                 >
-                    Users
+                    Transfusion Centers
                 </Typography>
             </Stack>
             <Stack direction={"row"} sx={{ justifyContent: "start"}} p={2}>
@@ -162,16 +123,14 @@ function DataGridSearchComponent() {
             <Paper>
                 <Box sx={{ height: 700, width: "100%" }}>
                     <DataGrid
-                        rows={korisnici}
+                        rows={centers}
                         columns={columns}
                         autoHeight
                         density="comfortable"
                         disableSelectionOnClick
                         rowHeight={50}
                         pageSize={5}
-                        headerHeight={35}
-                        
-                        
+                        headerHeight={35}                     
                     />
                 </Box>
             </Paper>

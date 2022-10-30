@@ -26,7 +26,7 @@ export default function AdminRegistration() {
     console.log("GRUPA: ",korisnik.groups);
     return (
     <Stack height={"170vh"} justifyContent={"center"}>
-        <Typography variant="h3" component="h2" color={green[800]}>
+        <Typography component="h1" variant="h4"  color={green[800]}>
             Register Center Admin
         </Typography>
         <RegistrationForm userRole = {korisnik.groups === undefined ? "" : korisnik.groups[0]}/>

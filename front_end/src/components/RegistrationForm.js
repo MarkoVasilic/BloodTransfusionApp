@@ -26,12 +26,14 @@ const RegistrationForm = (props) => {
   const onSubmit = async(data) => {
     try{
       await sumbitRegistration(data, props.userRole)
+      setAlert(true)
     }
     catch(err){
-      setAlert(true)
       const errMes = err.response.data
       for (let key in errMes){
         setError(key, {message : errMes[key]})
+        console.log(key)
+        console.log(errMes[key])
       }
     }
   };
@@ -152,7 +154,7 @@ const RegistrationForm = (props) => {
             <Controller
                   name="gender"
                   control={control}
-                  defaultValue=""
+                  defaultValue="N"
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <FormControl variant="filled" fullWidth >
                         <InputLabel id="demo-simple-select-filled-label">Gender</InputLabel>
@@ -161,12 +163,11 @@ const RegistrationForm = (props) => {
                           labelId="demo-simple-select-filled-label"
                           id="demo-simple-select-filled"
                           value={value}
-                          
                           onChange={onChange}
                         >
                           <MenuItem value={'M'}>Male</MenuItem>
                           <MenuItem value={'F'}>Female</MenuItem>
-                          <MenuItem value={'N'}>Unknow</MenuItem>
+                          <MenuItem value={'N'}>Unknown</MenuItem>
                         </Select>
                     </FormControl>
                   )}
@@ -200,6 +201,7 @@ const RegistrationForm = (props) => {
               color="inherit"
               size="small"
               onClick={() => {
+                console.log("nesto")
                 setAlert(false);
                 navigate('/login/')
               }}
