@@ -114,15 +114,12 @@ function DataGridSearchComponent() {
                 .get("/account/users/")
                 .then((response) => {
                     setKorisnici(response.data);
-                    console.log(axiosApi.defaults.headers.common);
                 });
         } else
             axiosApi
                 .get(`/account/users?search=${searchTerm}`)
                 .then((response) => {
-                    console.log("Search", searchTerm);
                     setKorisnici(response.data);
-                    console.log("Search", response.data);
                 });
     };
 

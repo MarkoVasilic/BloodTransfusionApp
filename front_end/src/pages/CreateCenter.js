@@ -1,7 +1,11 @@
 import CreateCenterForm from "../components/CreateCenterForm";
+import Navbar from "../components/Navbar";
 
 export default function CreateCenter(){
     return(
-        <CreateCenterForm></CreateCenterForm>
+        <div>
+            <Navbar/>
+            <CreateCenterForm />
+        </div>
     );
 }

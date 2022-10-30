@@ -17,7 +17,6 @@ class RetrieveUpdateDestroyTranfusionCenterAPIView(generics.RetrieveUpdateDestro
 class RetrieveTranfusionCenterAPIView(generics.RetrieveAPIView):
     queryset = TranfusionCenter.objects.all()
     serializer_class = TranfusionCenterSerializer
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
 
 class ListTranfusionCenterGetAPIView(generics.ListAPIView):
     queryset = TranfusionCenter.objects.all()

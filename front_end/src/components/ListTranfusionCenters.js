@@ -9,7 +9,8 @@ import Stack from "@mui/material/Stack";
 import CachedIcon from "@mui/icons-material/Cached";
 import { green } from "@mui/material/colors";
 import axiosApi from "../api/axios";
-
+import ReadMoreIcon from '@mui/icons-material/ReadMore';
+import { useNavigate } from 'react-router-dom';
 
 const columns = [
     { field: "id", headerName: "ID", width: 80 },
@@ -24,7 +25,7 @@ const columns = [
         field: "country",
         headerName: "Country",
         type: "string",
-        width: 200,
+        width: 150,
         editable: false
     },
     {
@@ -64,10 +65,36 @@ const columns = [
     }
 ];
 
+function rowAction(navigate){
+    return {
+    field: "action",
+        headerName: "Action",
+        sortable: false,
+        renderCell: (params) => {
+            const onClick = (e) => {
+                e.stopPropagation(); // don't select this row after clicking
+
+                const api = params.api;
+                const thisRow = {};
+
+                api
+                    .getAllColumns()
+                    .filter((c) => c.field !== "__check__" && !!c)
+                    .forEach(
+                        (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
+                    );
+
+                return navigate('/center-details/', {state: thisRow})
+            };
+            return <IconButton onClick={onClick}> <ReadMoreIcon /> </IconButton>
+        }
+    }
+}
+
 function DataGridSearchComponent() {
     const [centers, setCenters] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-
+    const navigate = useNavigate();
     useEffect(() => {
         getData();
     }, [searchTerm]);
@@ -92,7 +119,7 @@ function DataGridSearchComponent() {
             <Stack direction={"row"} sx={{ justifyContent: "center" }}>
                 <Typography
                     component="h1"
-                    variant="h4" 
+                    variant="h4"
                     color={green[800]}
                     marginBottom={3}
                     marginTop={1}
@@ -100,7 +127,7 @@ function DataGridSearchComponent() {
                     Transfusion Centers
                 </Typography>
             </Stack>
-            <Stack direction={"row"} sx={{ justifyContent: "start"}} p={2}>
+            <Stack direction={"row"} sx={{ justifyContent: "start" }} p={2}>
                 <TextField
                     variant="standard"
                     type="text"
@@ -108,11 +135,10 @@ function DataGridSearchComponent() {
                     onKeyPress={(event) => {
                         if (event.key === "Enter")
                             setSearchTerm(event.target.value);
-                            console.log("IF:",event.target.value);
                     }}
                 ></TextField>
                 <IconButton
-                    sx={{background:"#6fbf73"}}
+                    sx={{ background: "#6fbf73" }}
                     onClick={(event) => {
                         setSearchTerm("");
                     }}
@@ -124,13 +150,13 @@ function DataGridSearchComponent() {
                 <Box sx={{ height: 700, width: "100%" }}>
                     <DataGrid
                         rows={centers}
-                        columns={columns}
+                        columns={[...columns, rowAction(navigate)]}
                         autoHeight
                         density="comfortable"
                         disableSelectionOnClick
                         rowHeight={50}
                         pageSize={5}
-                        headerHeight={35}                     
+                        headerHeight={35}
                     />
                 </Box>
             </Paper>

@@ -4,32 +4,44 @@ import { Stack } from '@mui/system';
 import { useState, useEffect } from "react";
 import axiosApi from '../api/axios';
 import RegistrationForm from "../components/RegistrationForm";
-import jwt_decode from "jwt-decode";
+import Navbar from "../components/Navbar";
 
 export default function AdminRegistration() {
-
     const [korisnik, setKorisnik] = useState("");
-    let token = localStorage.getItem("token");
-    const decoded = jwt_decode(token);
-    let user_id = decoded.user_id;
-
     const getData = async () => (
-        axiosApi.get(`account/users/${user_id}`).then((response) => {
+        axiosApi.get(`account/users/logged/`).then((response) => {
             setKorisnik(response.data);
-        })
+        }).catch(function (error) {
+            if (error.response) {
+              // Request made and server responded
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            } else if (error.request) {
+              // The request was made but no response was received
+              console.log(error.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log('Error', error.message);
+            }
+        
+          })
     )
 
     useEffect(() => {
         getData();
     }, []);
 
-    console.log("GRUPA: ",korisnik.groups);
+    console.log("GRUPA: ", korisnik.groups);
     return (
-    <Stack height={"170vh"} justifyContent={"center"}>
-        <Typography component="h1" variant="h4"  color={green[800]}>
-            Register Center Admin
-        </Typography>
-        <RegistrationForm userRole = {korisnik.groups === undefined ? "" : korisnik.groups[0]}/>
-    </Stack>
+        <div>
+            <Navbar/>
+            <Stack height={"170vh"} justifyContent={"center"}>
+                <Typography component="h1" variant="h4" color={green[800]}>
+                    Register Center Admin
+                </Typography>
+                <RegistrationForm userRole={korisnik.groups === undefined ? "" : korisnik.groups[0]} />
+            </Stack>
+        </div>
     );
-  }
+}
