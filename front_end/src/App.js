@@ -10,9 +10,11 @@ import { setAuthToken } from "./helpers/sethAuthToken";
 import AdminRegistration from "./pages/AdminRegistration";
 import AllCenters from "./pages/AllCenters";
 import CreateQuestionnaire from "./pages/CreateQuestionnaire";
+import UpdateCenter from "./pages/UpdateCenter";
 
 function App() {
-    const sideMenu = {'Inbox' : 'in', 'Starred' : 'st', 'Send email' : 'se', 'Users' : '/users', 'Create Center': '/create-center', 'Register Admin': '/register-admin'};
+    const sideMenu = {'Inbox' : 'in', 'Starred' : 'st', 'Send email' : 'se', 'Users' : '/users', 'Create Center': '/create-center', 'Update Center': '/update-center', 'Register Admin': '/register-admin'};
+
     const token = localStorage.getItem("token");
     if (token) {
         setAuthToken(token);
@@ -31,6 +33,7 @@ function App() {
                         <Route path="/create-center" element={<CreateCenter />} />
                         <Route path="/list-centers" element={<AllCenters />} />
                         <Route path="/fill-questionnaire" element={<CreateQuestionnaire />} />
+                        <Route path="/update-center" element={<UpdateCenter />} />
                     </Routes>
                 </div>
             </Router>
