@@ -8,13 +8,12 @@ import axiosApi from "../api/axios";
 
 
 
-const url = 'http://localhost:8000/center/all/';
+const url = '/center/all/';
 
 function CreateCenterForm() {
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
     const [description, setDescription] = useState('');
-    let token =localStorage.getItem("token");
     let navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -26,6 +25,7 @@ function CreateCenterForm() {
             navigate("/");
         } catch (error) {
             console.log(error.response);
+
             }
         };
     

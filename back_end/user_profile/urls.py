@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RegisterCenterUserAPIView, RegisterCenterStaffAPIView, RegisterCenterAdminAPIView, UserViewSet, UserUpdateViewSet
+from .views import RegisterCenterUserAPIView, RegisterCenterStaffAPIView, RegisterCenterAdminAPIView,UserViewSet, UserUpdateViewSet
 from rest_framework.routers import DefaultRouter
 
 urlpatterns = [

@@ -103,7 +103,6 @@ const columns = [
 function DataGridSearchComponent() {
     const [korisnici, setKorisnici] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    let token =localStorage.getItem("token");
 
     useEffect(() => {
         getData();
