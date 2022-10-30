@@ -12,15 +12,18 @@ import axiosApi from "../api/axios";
 
 function UpdateCenterForm() {
     const [name, setName] = useState('');
-    const [address, setAddress] = useState('');
+    const [country, setCountry] = useState('');
+    const [city, setCity] = useState('');
+    const [street, setStreet] = useState('');
+    const [building_number, setBuildingNumber] = useState('');
     const [description, setDescription] = useState('');
     let navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(name,address,description);
+        console.log(name,country, city, street, building_number, description);
         try {
-            const resp = await axiosApi.put('/center/all/1/' ,{name, description, address});
+            const resp = await axiosApi.put('/center/update-delete/2/' ,{name, country, city, street, building_number, description});
             console.log(resp.data);
             navigate("/");
         } catch (error) {
@@ -43,7 +46,16 @@ function UpdateCenterForm() {
                     <TextField value={name}  variant="filled" label="name" onChange={(e)=> setName(e.target.value)} autoFocus fullWidth/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={address} variant="filled" label="address"  onChange={(e)=> setAddress(e.target.value)} fullWidth/>
+                    <TextField value={country} variant="filled" label="country"  onChange={(e)=> setCountry(e.target.value)} fullWidth/>
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField value={city} variant="filled" label="city"  onChange={(e)=> setCity(e.target.value)} fullWidth/>
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField value={street} variant="filled" label="street"  onChange={(e)=> setStreet(e.target.value)} fullWidth/>
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField value={building_number} variant="filled" label="building_number"  onChange={(e)=> setBuildingNumber(e.target.value)} fullWidth/>
                 </Grid>
                 <Grid item xs={12}>
                     <TextField value={description} variant="filled" label="description" onChange={(e)=> setDescription(e.target.value)} fullWidth/>
