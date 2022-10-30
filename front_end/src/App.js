@@ -10,6 +10,7 @@ import AdminRegistration from "./pages/AdminRegistration";
 import AllCenters from "./pages/AllCenters";
 import CreateQuestionnaire from "./pages/CreateQuestionnaire";
 import CenterDetails from "./pages/CenterDetails";
+import UpdateCenter from "./pages/UpdateCenter";
 
 function App() {
     const token = localStorage.getItem("token");

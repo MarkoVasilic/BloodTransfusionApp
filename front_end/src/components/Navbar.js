@@ -147,7 +147,7 @@ const chooseSideMenu = (group) => {
     }
     else if (group[0] === "TranfusionCenterUser") {
         return {
-            'Check Transfusion Centers': '/list-centers',
+            'List Transfusion Centers': '/list-centers',
             'Fill Questionnaire': "/fill-questionnaire",
             "Create New Admin": "/register-admin",
             "List Users": "/users"
