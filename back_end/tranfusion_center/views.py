@@ -1,8 +1,8 @@
-from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions, AllowAny
 from tranfusion_center.models import TranfusionCenter
 from tranfusion_center.serializer import TranfusionCenterSerializer 
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, mixins, generics
+from rest_framework import filters, generics
 
 class CreateTranfusionCenterAPIView(generics.CreateAPIView):
     queryset = TranfusionCenter.objects.all()
@@ -17,6 +17,7 @@ class RetrieveUpdateDestroyTranfusionCenterAPIView(generics.RetrieveUpdateDestro
 class RetrieveTranfusionCenterAPIView(generics.RetrieveAPIView):
     queryset = TranfusionCenter.objects.all()
     serializer_class = TranfusionCenterSerializer
+    permission_classes = []
 
 class ListTranfusionCenterGetAPIView(generics.ListAPIView):
     queryset = TranfusionCenter.objects.all()

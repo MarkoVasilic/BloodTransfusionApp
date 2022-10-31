@@ -11,6 +11,7 @@ import { green } from "@mui/material/colors";
 import axiosApi from "../api/axios";
 
 
+
 const columns = [
     { field: "id", headerName: "ID", width: 50 },
     {
@@ -37,7 +38,7 @@ const columns = [
     {
         field: "address",
         headerName: "Address",
-        type: "object",
+        type: "string",
         width: 180,
         editable: false,
         valueGetter: (params) => {return params.row.userprofile.address}
@@ -103,10 +104,12 @@ const columns = [
 function DataGridSearchComponent() {
     const [korisnici, setKorisnici] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    
 
     useEffect(() => {
         getData();
     }, [searchTerm]);
+
 
     let getData = async () => {
         if (searchTerm === "") {
@@ -144,7 +147,6 @@ function DataGridSearchComponent() {
                     onKeyPress={(event) => {
                         if (event.key === "Enter")
                             setSearchTerm(event.target.value);
-                            console.log("IF:",event.target.value);
                     }}
                 ></TextField>
                 <IconButton
@@ -166,6 +168,7 @@ function DataGridSearchComponent() {
                         disableSelectionOnClick
                         rowHeight={50}
                         pageSize={5}
+                        rowsPerPageOptions={[5]}
                         headerHeight={35}
                         
                         

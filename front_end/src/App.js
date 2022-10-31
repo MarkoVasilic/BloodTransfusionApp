@@ -17,6 +17,7 @@ function App() {
     if (token) {
         setAuthToken(token);
     }
+    
     return (
         <div className="App">
             <Router>

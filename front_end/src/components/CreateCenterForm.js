@@ -21,7 +21,6 @@ function CreateCenterForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(name,country, city, street, building_number, description);
         try {
             const resp = await axiosApi.post(url,{name, country, city, street, building_number, description});
             console.log(resp.data);
@@ -56,7 +55,7 @@ function CreateCenterForm() {
                     <TextField value={street} variant="filled" label="street"  onChange={(e)=> setStreet(e.target.value)} fullWidth/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={building_number} variant="filled" label="building_number"  onChange={(e)=> setBuildingNumber(e.target.value)} fullWidth/>
+                    <TextField value={building_number} variant="filled" label="building number"  onChange={(e)=> setBuildingNumber(e.target.value)} fullWidth/>
                 </Grid>
                 <Grid item xs={12}>
                     <TextField value={description} variant="filled" label="description" onChange={(e)=> setDescription(e.target.value)} fullWidth/>

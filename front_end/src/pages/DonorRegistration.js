@@ -5,7 +5,6 @@ import RegistrationForm from "../components/RegistrationForm";
 import Navbar from "../components/Navbar";
 
 export default function DonorRegistration() {
-
     return (
         <div>
             <Navbar />
