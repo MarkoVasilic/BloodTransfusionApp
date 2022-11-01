@@ -9,7 +9,7 @@ export default function CreateCenter(props) {
         <div>
             <Navbar />
             <Stack marginTop={"100px"} justifyContent={"center"}>
-            <Typography  marginBottom={"100px"}  component="h1" variant="h4" color={green[800]}>
+            <Typography  marginBottom={"40px"}  component="h1" variant="h4" color={green[800]}>
                 Details
             </Typography>
             <CenterDetailsCard props></CenterDetailsCard>

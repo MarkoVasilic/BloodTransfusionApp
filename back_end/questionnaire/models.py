@@ -21,3 +21,6 @@ class Questionnaire(models.Model):
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add = True)
     updated = models.DateTimeField(auto_now = True)
+
+    def __str__(self):
+        return "ID:" + str(self.id)

@@ -12,41 +12,39 @@ import ListItemButton from "@mui/material/ListItemButton";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import { useState, useEffect, useMemo } from "react";
-import axiosApi from '../api/axios';
-
+import axiosApi from "../api/axios";
 
 export default function Navbar() {
     const [state, setState] = React.useState(false);
     let navigate = useNavigate();
     const [user, setUser] = useState("");
 
-    const getData = async () => (
-        axiosApi.get(`account/users/logged/`).then((response) => {
-            setUser(response.data);
-        }).catch(function (error) {
-            if (error.response) {
-              // Request made and server responded
-              console.log(error.response.data);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-            } else if (error.request) {
-              // The request was made but no response was received
-              console.log(error.request);
-            } else {
-              // Something happened in setting up the request that triggered an Error
-              console.log('Error', error.message);
-            }
-        
-          })
-    )
+    const getData = async () =>
+        axiosApi
+            .get(`account/users/logged/`)
+            .then((response) => {
+                setUser(response.data);
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    // Request made and server responded
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    console.log(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log("Error", error.message);
+                }
+            });
     useEffect(() => {
         getData();
-
     }, []);
     const sidemenu = useMemo(() => chooseSideMenu(user.groups), [user.groups]);
     const button1 = useMemo(() => chooseButton1(user.groups), [user.groups]);
     const button2 = useMemo(() => chooseButton2(user.groups), [user.groups]);
-
 
     const toggleDrawer = (anchor, open) => (event) => {
         if (
@@ -86,51 +84,51 @@ export default function Navbar() {
                                     onKeyDown={toggleDrawer("left", false)}
                                 >
                                     <List>
-                                        {
-                                            Object.keys(sidemenu).map((k) => (
-                                                <ListItem key={k} disablePadding>
-                                                    <ListItemButton>
-                                                        <ListItemText
-                                                            primary={k}
-                                                            onClick={() =>
-                                                                navigate(
-                                                                    sidemenu[k]
-                                                                )
-                                                            }
-                                                        />
-                                                    </ListItemButton>
-                                                </ListItem>
-                                            ))}
+                                        {Object.keys(sidemenu).map((k) => (
+                                            <ListItem key={k} disablePadding>
+                                                <ListItemButton>
+                                                    <ListItemText
+                                                        primary={k}
+                                                        onClick={() =>
+                                                            navigate(
+                                                                sidemenu[k]
+                                                            )
+                                                        }
+                                                    />
+                                                </ListItemButton>
+                                            </ListItem>
+                                        ))}
                                     </List>
                                 </Box>
                             </Drawer>
                         </div>
                     }
-                    <Button color="inherit" onClick={() =>
-                        navigate(
-                            '/'
-                        )
-                    }>Home</Button>
-                    <Button color="inherit" sx={{ marginLeft: "auto" }} onClick={() => {
-                        if (button1.name === "LogOut") {
-                            localStorage.removeItem("token");
-                            delete axiosApi.defaults.headers.common["Authorization"];
-                            navigate(
-                                '/login/'
-                            )
-                        }
-                        else {
-                            navigate(
-                                button1.url
-                            )
-                        }
-                    }
-                    }>{button1.name}</Button>
-                    <Button color="inherit" onClick={() =>
-                        navigate(
-                            button2.url
-                        )
-                    }>{button2.name}</Button>
+                    <Button color="inherit" onClick={() => navigate("/")}>
+                        Home
+                    </Button>
+                    <Button
+                        color="inherit"
+                        sx={{ marginLeft: "auto" }}
+                        onClick={() => {
+                            if (button1.name === "LogOut") {
+                                localStorage.removeItem("token");
+                                delete axiosApi.defaults.headers.common[
+                                    "Authorization"
+                                ];
+                                navigate("/login/");
+                            } else {
+                                navigate(button1.url);
+                            }
+                        }}
+                    >
+                        {button1.name}
+                    </Button>
+                    <Button
+                        color="inherit"
+                        onClick={() => navigate(button2.url)}
+                    >
+                        {button2.name}
+                    </Button>
                 </Toolbar>
             </AppBar>
         </Box>
@@ -138,47 +136,42 @@ export default function Navbar() {
 }
 
 const chooseSideMenu = (group) => {
-    if (!group)
-        return { 'Check Transfusion Centers': '/list-centers' };
+    if (!group) return { "Check Transfusion Centers": "/list-centers" };
     if (group[0] === "Admin") {
-        return { 'Check Transfusion Centers': '/list-centers', 'Create Transfusion Centers': '/create-center', };
+        return {
+            "Check Transfusion Centers": "/list-centers",
+            "Create Transfusion Centers": "/create-center",
+            "Create New Admin": "/register-admin",
+            "List Users": "/users",
+        };
         //button1 = { name: 'Login', url: '/login' }
         //button2 = { name: 'SignUp', url: '/donor-register' }
-    }
-    else if (group[0] === "TranfusionCenterUser") {
+    } else if (group[0] === "TranfusionCenterUser") {
         return {
-            'List Transfusion Centers': '/list-centers',
-            'Fill Questionnaire': "/fill-questionnaire",
-            "Create New Admin": "/register-admin",
-            "List Users": "/users"
+            "List Transfusion Centers": "/list-centers",
+            "Fill Questionnaire": "/fill-questionnaire",
         };
-    }
-    else if (group[0] === "TranfusionCenterStaff") {
-        return {};
-    }
-    else {
-        return { 'Check Transfusion Centers': '/list-centers' };
+    } else if (group[0] === "TranfusionCenterStaff") {
+        return { "List Transfusion Centers": "/list-centers" };
+    } else {
+        return { "Check Transfusion Centers": "/list-centers" };
     }
 };
 
 const chooseButton1 = (group) => {
-    if (!group)
-        return { name: 'Login', url: '/login' }
+    if (!group) return { name: "Login", url: "/login" };
     else {
-        return { name: 'LogOut', url: '/logout' }
+        return { name: "LogOut", url: "/logout" };
     }
 };
 
 const chooseButton2 = (group) => {
-    if (!group)
-        return { name: 'Register', url: '/donor-register' }
-    else if (group[0] === 'Admin') {
-        return { name: 'Profile', url: '/admin-profile' }
-    }
-    else if (group[0] === 'TranfusionCenterStaff') {
-        return { name: 'Profile', url: '/staff-profile' }
-    }
-    else {
-        return { name: 'Profile', url: '/user-profile' }
+    if (!group) return { name: "Register", url: "/donor-register" };
+    else if (group[0] === "Admin") {
+        return { name: "Profile", url: "/admin-profile" };
+    } else if (group[0] === "TranfusionCenterStaff") {
+        return { name: "Profile", url: "/staff-profile" };
+    } else {
+        return { name: "Profile", url: "/user-profile" };
     }
 };
