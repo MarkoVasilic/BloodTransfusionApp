@@ -24,7 +24,7 @@ function App() {
                 <div className="content">
                     <Routes>
                         <Route path="/" element={<Dashboard />} />
-                        <Route path="/donor-register" element={<DonorRegistration />} />
+                        <Route path="/register-donor" element={<DonorRegistration />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/users" element={<SearchUsers />} />
                         <Route path="/register-admin" element={<AdminRegistration />} />

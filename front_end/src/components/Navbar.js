@@ -23,6 +23,7 @@ export default function Navbar() {
         axiosApi
             .get(`account/users/logged/`)
             .then((response) => {
+                console.log(response.data)
                 setUser(response.data);
             })
             .catch(function (error) {
@@ -136,6 +137,7 @@ export default function Navbar() {
 }
 
 const chooseSideMenu = (group) => {
+    console.log(group)
     if (!group) return { "Check Transfusion Centers": "/list-centers" };
     if (group[0] === "Admin") {
         return {
@@ -144,8 +146,6 @@ const chooseSideMenu = (group) => {
             "Create New Admin": "/register-admin",
             "List Users": "/users",
         };
-        //button1 = { name: 'Login', url: '/login' }
-        //button2 = { name: 'SignUp', url: '/donor-register' }
     } else if (group[0] === "TranfusionCenterUser") {
         return {
             "List Transfusion Centers": "/list-centers",

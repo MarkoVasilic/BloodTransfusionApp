@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 import AllowedUsers from "../components/AllowedUsers";
 
 export default function CreateQuestionnaire() {
-    const listOfAllowedUsers = ["Admin", "TranfusionCenterStaff","TranfusionCenterUser", "UnknownUser"];
+    const listOfAllowedUsers = ["TranfusionCenterUser"];
     return (
         <div>
             <Navbar />

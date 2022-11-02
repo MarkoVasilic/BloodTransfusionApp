@@ -25,6 +25,7 @@ const RegistrationForm = (props) => {
 
   const onSubmit = async(data) => {
     try{
+      console.log("test")
       await sumbitRegistration(data, props.userRole)
       setAlert(true)
     }
@@ -32,8 +33,6 @@ const RegistrationForm = (props) => {
       const errMes = err.response.data
       for (let key in errMes){
         setError(key, {message : errMes[key]})
-        console.log(key)
-        console.log(errMes[key])
       }
     }
   };

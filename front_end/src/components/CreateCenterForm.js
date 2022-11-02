@@ -64,7 +64,7 @@ function CreateCenterForm() {
                     <TextField
                         value={name}
                         variant="filled"
-                        label="name"
+                        label="Name"
                         onChange={(e) => setName(e.target.value)}
                         autoFocus
                         fullWidth
@@ -75,43 +75,47 @@ function CreateCenterForm() {
                     <TextField
                         value={country}
                         variant="filled"
-                        label="country"
+                        label="Country"
                         onChange={(e) => setCountry(e.target.value)}
                         fullWidth
+                        required
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
                         value={city}
                         variant="filled"
-                        label="city"
+                        label="City"
                         onChange={(e) => setCity(e.target.value)}
                         fullWidth
+                        required
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
                         value={street}
                         variant="filled"
-                        label="street"
+                        label="Street"
                         onChange={(e) => setStreet(e.target.value)}
                         fullWidth
+                        required
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
                         value={building_number}
                         variant="filled"
-                        label="building number"
+                        label="Building Number"
                         onChange={(e) => setBuildingNumber(e.target.value)}
                         fullWidth
+                        required
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
                         value={description}
                         variant="filled"
-                        label="description"
+                        label="Description"
                         onChange={(e) => setDescription(e.target.value)}
                         fullWidth
                     />

@@ -24,7 +24,7 @@ const AllowedUsers = (props) => {
               // Something happened in setting up the request that triggered an Error
               console.log('Error', error.message);
             }
-        
+            navigate('/');
           })
     )
 

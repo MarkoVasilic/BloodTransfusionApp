@@ -45,7 +45,7 @@ const RegistrationForm = () => {
     const onSubmit = async (data) => {
         try {
             data.user_profile = user.id
-            await axiosApi.post('/questionnaire/all/', data)
+            await axiosApi.post('/questionnaire/create/', data)
             setAlert(true)
         }
         catch (err) {
