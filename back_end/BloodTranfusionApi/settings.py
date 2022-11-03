@@ -45,7 +45,13 @@ INSTALLED_APPS = [
     'django_seed',
     'tranfusion_center',
     'user_profile',
-    'questionnaire'
+    'questionnaire',
+    'appointment',
+    'complaints',
+    'grade', 
+    'blood_packet',
+    'appointment_report',
+    'equipment'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True

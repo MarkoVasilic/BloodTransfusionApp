@@ -11,6 +11,7 @@ import AllCenters from "./pages/AllCenters";
 import CreateQuestionnaire from "./pages/CreateQuestionnaire";
 import CenterDetails from "./pages/CenterDetails";
 import UpdateCenter from "./pages/UpdateCenter";
+import AllCentersAdmin from "./pages/AllCentersAdmin";
 
 function App() {
     const token = localStorage.getItem("token");
@@ -31,8 +32,9 @@ function App() {
                         <Route path="/create-center" element={<CreateCenter />} />
                         <Route path="/list-centers" element={<AllCenters />} />
                         <Route path="/fill-questionnaire" element={<CreateQuestionnaire />} />
-                        <Route path="/update-center" element={<UpdateCenter />} />
                         <Route path="/center-details" element={<CenterDetails />} />
+                        <Route path="/update-center/:center" element={<UpdateCenter />} />
+                        <Route path="/list-centers-update" element={<AllCentersAdmin />} />
                     </Routes>
                 </div>
             </Router>
