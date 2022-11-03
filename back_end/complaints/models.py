@@ -4,7 +4,6 @@ from tranfusion_center.models import TranfusionCenter
 
 
 class Complaints(models.Model):
-
     text = models.TextField(max_length=500)
     user_profile = models.ForeignKey(UserProfile, on_delete = models.CASCADE, related_name = 'user_profile')
     transfusion_center = models.ForeignKey(TranfusionCenter, on_delete = models.CASCADE)

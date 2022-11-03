@@ -7,7 +7,7 @@ class TranfusionCenter(models.Model):
     country = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
     street = models.CharField(max_length=150)
-    building_number = models.CharField(max_length=15)
+    building_number = models.CharField(max_length=16)
     description = models.TextField(max_length=350, blank=True, null=True)
     average_grade = models.FloatField(default=0,
     validators=[MinValueValidator(0.0), MaxValueValidator(10.0)])
