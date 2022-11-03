@@ -11,6 +11,7 @@ import AdminRegistration from "./pages/AdminRegistration";
 import AllCenters from "./pages/AllCenters";
 import CreateQuestionnaire from "./pages/CreateQuestionnaire";
 import UpdateCenter from "./pages/UpdateCenter";
+import AllCentersAdmin from "./pages/AllCentersAdmin";
 
 function App() {
     const sideMenu = {'Inbox' : 'in', 'Starred' : 'st', 'Send email' : 'se', 'Users' : '/users', 'Create Center': '/create-center', 'Update Center': '/update-center', 'Register Admin': '/register-admin'};
@@ -33,7 +34,8 @@ function App() {
                         <Route path="/create-center" element={<CreateCenter />} />
                         <Route path="/list-centers" element={<AllCenters />} />
                         <Route path="/fill-questionnaire" element={<CreateQuestionnaire />} />
-                        <Route path="/update-center" element={<UpdateCenter />} />
+                        <Route path="/update-center/:center" element={<UpdateCenter />} />
+                        <Route path="/list-centers-update" element={<AllCentersAdmin />} />
                     </Routes>
                 </div>
             </Router>

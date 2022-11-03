@@ -27,8 +27,6 @@ class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    
-
 
 class RegisterCenterUserAPIView(APIView):
     queryset = User.objects.all()
@@ -64,3 +62,4 @@ def post_new_user(request, group, isActive, is_superuser, is_staff):
             return Response(user_profile_serializer.data, status=status.HTTP_201_CREATED)
         return Response(user_profile_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response(register_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
