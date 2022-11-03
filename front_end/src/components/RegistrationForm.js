@@ -25,7 +25,6 @@ const RegistrationForm = (props) => {
 
   const onSubmit = async(data) => {
     try{
-      console.log("test")
       await sumbitRegistration(data, props.userRole)
       setAlert(true)
     }
