@@ -118,6 +118,7 @@ function CreateCenterForm() {
                         label="Description"
                         onChange={(e) => setDescription(e.target.value)}
                         fullWidth
+                        
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -126,7 +127,7 @@ function CreateCenterForm() {
                             sx={{ visibility: successAlert }}
                             severity="success"
                         >
-                            Center was successfully created!
+                            Center was created successfully!
                         </Alert>
                     ) : (
                         <Alert sx={{ visibility: errorAlert }} severity="error">
@@ -145,6 +146,11 @@ function CreateCenterForm() {
                             mb: 2,
                             background: "#6fbf73",
                             height: "30",
+                            "&.MuiButtonBase-root": {
+                                "&:hover": {
+                                    backgroundColor: green[600]
+                                }
+                                }
                         }}
                     >
                         Submit
