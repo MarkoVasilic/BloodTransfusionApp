@@ -3,7 +3,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class TranfusionCenter(models.Model):
-    name = models.CharField(max_length=50,blank=True, null=True)
+    name = models.CharField(max_length=50, blank = True, null = True)
     country = models.CharField(max_length=50, blank=True, null=True)
     city = models.CharField(max_length=50, blank=True, null=True)
     street = models.CharField(max_length=150, blank=True, null=True)

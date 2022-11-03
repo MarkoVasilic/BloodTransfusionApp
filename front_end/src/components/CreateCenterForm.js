@@ -78,6 +78,7 @@ function CreateCenterForm() {
                         label="country"
                         onChange={(e) => setCountry(e.target.value)}
                         fullWidth
+                        required
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -87,6 +88,7 @@ function CreateCenterForm() {
                         label="city"
                         onChange={(e) => setCity(e.target.value)}
                         fullWidth
+                        required
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -96,6 +98,7 @@ function CreateCenterForm() {
                         label="street"
                         onChange={(e) => setStreet(e.target.value)}
                         fullWidth
+                        required
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -105,6 +108,7 @@ function CreateCenterForm() {
                         label="building number"
                         onChange={(e) => setBuildingNumber(e.target.value)}
                         fullWidth
+                        required
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -114,6 +118,7 @@ function CreateCenterForm() {
                         label="description"
                         onChange={(e) => setDescription(e.target.value)}
                         fullWidth
+                        
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -122,7 +127,7 @@ function CreateCenterForm() {
                             sx={{ visibility: successAlert }}
                             severity="success"
                         >
-                            Center was successfully created!
+                            Center was created successfully!
                         </Alert>
                     ) : (
                         <Alert sx={{ visibility: errorAlert }} severity="error">
@@ -141,6 +146,11 @@ function CreateCenterForm() {
                             mb: 2,
                             background: "#6fbf73",
                             height: "30",
+                            "&.MuiButtonBase-root": {
+                                "&:hover": {
+                                    backgroundColor: green[600]
+                                }
+                                }
                         }}
                     >
                         Submit
