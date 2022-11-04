@@ -36,6 +36,7 @@ function CreateCenterForm() {
             setSuccessAlert("visible");
             setErrorAlert("hidden");
             setAlert("success");
+            navigate("/list-centers-update");
         } catch (error) {
             console.log(error.response);
             setErrorAlert("visible");

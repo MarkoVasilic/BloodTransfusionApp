@@ -10,7 +10,7 @@ import datetime
 import pytz
 
 GROUP_PERMISSIONS = [
-    1, 2, 4
+    1, 2, 4  #kod mene 5, 6, 7
 ]
 
 GENDER = [

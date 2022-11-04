@@ -7,9 +7,13 @@ import { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import CachedIcon from "@mui/icons-material/Cached";
-import { green } from "@mui/material/colors";
+import { green, red } from "@mui/material/colors";
 import axiosApi from "../api/axios";
 import { useNavigate } from "react-router-dom";
+
+function refreshPage(){
+    window.location.reload();
+}
 
 const RenderUpdateButton = (params) => {
     let navigate = useNavigate();
@@ -31,8 +35,25 @@ const RenderUpdateButton = (params) => {
 };
 
 
-/*const RenderDeleteButton = (params) => {
-};*/
+const RenderDeleteButton = (params) => {
+    let navigate = useNavigate();
+        return (
+        <strong>
+            <Button
+                variant="contained"
+                color="error"
+                size="small"
+                style={{ marginLeft: 16 }}
+                onClick={() => {
+                    axiosApi.delete(`/center/update-delete/${params.row.id}/`);
+                    refreshPage();
+                }}
+            >
+                Delete
+            </Button>
+        </strong>
+    )
+};
 
 const columns = [
     { field: "id", headerName: "ID", width: 80 },
@@ -96,7 +117,7 @@ const columns = [
         field: "delete",
         headerName: "Delete Center",
         width: 150,
-       //renderCell: RenderDeleteButton,
+        renderCell: RenderDeleteButton,
         disableClickEventBubbling: true
     }
 

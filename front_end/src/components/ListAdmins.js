@@ -12,7 +12,6 @@ import axiosApi from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 
-//proslediti ID centra i da mi dobavi administratore tog centra
 
 const columns = [
     { field: "id", headerName: "ID", width: 80 },
@@ -76,7 +75,7 @@ function DataGridSearchComponent() {
 
     let getData = async () => {
             axiosApi
-                .get("/center/list") //izmeniti url sugavi :(
+                .get("/center/list") 
                 .then((response) => {
                     setCenters(response.data);
                 });
