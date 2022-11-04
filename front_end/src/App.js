@@ -11,6 +11,8 @@ import AllCenters from "./pages/AllCenters";
 import CreateQuestionnaire from "./pages/CreateQuestionnaire";
 import CenterDetails from "./pages/CenterDetails";
 import UpdateCenter from "./pages/UpdateCenter";
+import AllCentersAdmin from "./pages/AllCentersAdmin";
+import AdminChangePassword from "./pages/AdminChangePassword";
 
 function App() {
     const token = localStorage.getItem("token");
