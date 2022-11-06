@@ -6,7 +6,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from django.contrib.auth.models import User, Group
 from user_profile.models import UserProfile
-from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer, UserUpdateSerializer
+from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer, UserUpdateSerializer, RegisteredUserSerializer
 from django.contrib.auth.models import Group, AnonymousUser
 from rest_framework import status, mixins, generics
 from django_filters.rest_framework import DjangoFilterBackend
@@ -95,4 +95,11 @@ class CurrentUserView(APIView):
         else:
             serializer = UserSerializer(request.user)
             return Response(serializer.data)
+
+class UserPersonalInformationAPIView(APIView):
+    def get(self, request):
+        user_profile_serializer = RegisteredUserSerializer(instance=request.user)
+        print(request.user)
+        return Response(user_profile_serializer.data)
+        
 

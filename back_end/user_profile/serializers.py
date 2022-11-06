@@ -39,6 +39,12 @@ class RegisterSerializer(serializers.ModelSerializer):
     user.set_password(validated_data['password'])
     return user
 
+class UserProfileSerializerA(serializers.ModelSerializer):
+    class Meta:
+      model = UserProfile
+      fields = ('address', 'city', 'country', 'phone_number',
+       'jmbg', 'gender', 'blood_type', 'profession', 'workplace', 'tranfusion_center', 'loyalty_points')  
+
 class UserProfileSerializer(serializers.ModelSerializer):
     jmbg = serializers.RegexField("^(\d{13})?$", max_length=None, min_length=None, allow_blank=False)
     class Meta:
@@ -83,3 +89,26 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         users.tranfusion_center = users_profile_data.get('tranfusion_center')
         instance.save()
         return instance
+
+class RegisteredUserSerializer(serializers.ModelSerializer):
+  userprofile = UserProfileSerializerA()
+  groups = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='name'
+     )
+  class Meta:
+    model = User
+    read_only_fields = ['email']
+    fields = '__all__'
+
+#class RegisteredUserSerializer(serializers.ModelSerializer):
+ # userprofile = UserProfileSerializer()
+  #groups = serializers.SlugRelatedField(
+   #   many=True,
+    #  read_only=True,
+     # slug_field='name'
+    #)
+  #class Meta:
+   # model = UserProfile
+    #fields = '__all__'
