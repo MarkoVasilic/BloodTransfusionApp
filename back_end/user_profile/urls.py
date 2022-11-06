@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RegisterCenterUserAPIView, RegisterCenterStaffAPIView, RegisterCenterAdminAPIView,UserViewSet, UserUpdateViewSet, CurrentUserView
+from .views import RegisterCenterUserAPIView, RegisterCenterStaffAPIView, RegisterCenterAdminAPIView,UserViewSet, UserUpdateViewSet, CurrentUserView,UserPersonalInformationAPIView
 from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
@@ -8,6 +8,7 @@ urlpatterns = [
   path('register/admin/',RegisterCenterAdminAPIView.as_view()),
   path(r'users/update/<int:pk>/', UserUpdateViewSet.as_view()),
   path('users/logged/', CurrentUserView.as_view()),
+  path('users/user-profile/', UserPersonalInformationAPIView.as_view()),
 ]
 
 router = DefaultRouter()
