@@ -28,7 +28,7 @@ function LoyaltyCardComponent() {
                     setCoupons([coupon1, coupon2, coupon4, coupon5, coupon6]);
                 }else{
                     setCategory("Regular");
-                    setCoupons([coupon1, coupon2, coupon4, coupon5, coupon6]);
+                    setCoupons([coupon1]);
                 }
                 });
     };
