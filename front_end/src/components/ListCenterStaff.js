@@ -1,17 +1,60 @@
-import { Button, IconButton, Typography } from "@mui/material";
+import { Button,Typography } from "@mui/material";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid} from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
-import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
-import CachedIcon from "@mui/icons-material/Cached";
 import { green } from "@mui/material/colors";
 import axiosApi from "../api/axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from 'react-router-dom';
 
 
+
+
+function refreshPage(){
+    window.location.reload();
+}
+
+const RenderUpdateButton = (params) => {
+    let navigate = useNavigate();
+    return (
+        <strong>
+            <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                style={{ marginLeft: 16 }}
+                onClick={() => {
+                   // navigate('/update-staff/'+params.row.id);
+                }}
+            >
+                Update
+            </Button>
+        </strong>
+    )
+};
+
+
+const RenderDeleteButton = (params) => {
+    let navigate = useNavigate();
+        return (
+        <strong>
+            <Button
+                variant="contained"
+                color="error"
+                size="small"
+                style={{ marginLeft: 16 }}
+                onClick={() => {
+                    axiosApi.delete(`/account/users/delete-user/${params.row.id}/`);
+                    refreshPage();
+                }}
+            >
+                Delete
+            </Button>
+        </strong>
+    )
+};
 
 const columns = [
     { field: "id", headerName: "ID", width: 80 },
@@ -42,20 +85,23 @@ const columns = [
         type: "string",
         width: 200,
         editable: false,
+        valueGetter: (params) => {return params.row.userprofile.phone_number}
     },
     {
         field: "address",
         headerName: "Address",
         type: "string",
-        width: 150,
+        width: 400,
         editable: false,
+        valueGetter: (params) => {return params.row.userprofile.address}
     },
     {
         field: "city",
         headerName: "City",
         type: "string",
-        width: 300,
+        width: 150,
         editable: false,
+        valueGetter: (params) => {return params.row.userprofile.city}
     },
     {
         field: "country",
@@ -63,21 +109,39 @@ const columns = [
         type: "string",
         width: 150,
         editable: false,
+        valueGetter: (params) => {return params.row.userprofile.country}
+    }, 
+    {
+        field: "update",
+        headerName: "Update",
+        width: 150,
+        renderCell: RenderUpdateButton,
+        disableClickEventBubbling: true  
+    },
+    {
+        field: "delete",
+        headerName: "Delete",
+        width: 150,
+        renderCell: RenderDeleteButton,
+        disableClickEventBubbling: true  
     }
 ];
 
-function DataGridSearchComponent() {
+function DataGridCenterStaff() {
     const [centers, setCenters] = useState([]);
+    const params = useParams();
 
     useEffect(() => {
         getData();
-    }, [searchTerm]);
+    },
+    []);
 
     let getData = async () => {
             axiosApi
-                .get("/center/list") 
+                .get(`/account/users/center/${params.centar}/`) 
                 .then((response) => {
                     setCenters(response.data);
+                    console.log(response.data);
                 });
       
     };
@@ -96,24 +160,6 @@ function DataGridSearchComponent() {
                 </Typography>
             </Stack>
             <Stack direction={"row"} sx={{ justifyContent: "start"}} p={2}>
-                <TextField
-                    variant="standard"
-                    type="text"
-                    placeholder="Search..."
-                    onKeyPress={(event) => {
-                        if (event.key === "Enter")
-                            setSearchTerm(event.target.value);
-                            console.log("IF:",event.target.value);
-                    }}
-                ></TextField>
-                <IconButton
-                    sx={{background:"#6fbf73"}}
-                    onClick={(event) => {
-                        setSearchTerm("");
-                    }}
-                >
-                    <CachedIcon />
-                </IconButton>
             </Stack>
             <Paper>
                 <Box sx={{ height: 700, width: "100%" }}>
@@ -133,4 +179,4 @@ function DataGridSearchComponent() {
     );
 }
 
-export default DataGridSearchComponent;
+export default DataGridCenterStaff;

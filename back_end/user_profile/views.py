@@ -12,6 +12,8 @@ from rest_framework import status, mixins, generics
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions
 from rest_framework.decorators import api_view
+from tranfusion_center.models import TranfusionCenter
+from rest_framework import viewsets
 
 class IsAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -95,4 +97,24 @@ class CurrentUserView(APIView):
         else:
             serializer = UserSerializer(request.user)
             return Response(serializer.data)
+
+class ListCenterStaff(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserProfileSerializer
+
+    def retrieve(self, request, pk):
+        queryset = TranfusionCenter.objects.prefetch_related("userprofile_set__user__groups").get(id = pk).userprofile_set.all()
+        serialized_users = UserSerializer(instance = [pu.user for pu in queryset if pu.user.groups.filter(name = "TranfusionCenterStaff")], many = True)
+        serialized_data = UserProfileSerializer(instance=queryset, many = True)
+        return Response(serialized_users.data)
+
+
+class UserDestroyAPIView(generics.DestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+
 
