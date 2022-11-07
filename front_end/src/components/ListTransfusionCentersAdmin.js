@@ -55,6 +55,25 @@ const RenderDeleteButton = (params) => {
     )
 };
 
+const RenderGetCenterAdministratorsButton = (params) =>{
+    let navigate = useNavigate();
+    return (
+        <strong>
+            <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                style={{ marginLeft: 16 }}
+                onClick={() => {
+                    navigate('/center-staff-list/'+params.row.id);
+                }}
+            >
+                Details
+            </Button>
+        </strong>
+    )
+};
+
 const columns = [
     { field: "id", headerName: "ID", width: 80 },
     {
@@ -119,6 +138,14 @@ const columns = [
         width: 150,
         renderCell: RenderDeleteButton,
         disableClickEventBubbling: true
+    }, 
+    {
+        field: "staff",
+        headerName: "Center Administrators", 
+        width: 150,
+        renderCell: RenderGetCenterAdministratorsButton,
+        disableClickEventBubbling: true
+
     }
 
 ];
