@@ -44,10 +44,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
       model = UserProfile
       fields = ('address', 'city', 'country', 'phone_number',
-       'jmbg', 'gender', 'blood_type', 'profession', 'workplace', 'tranfusion_center')       
+       'jmbg', 'gender', 'blood_type', 'profession', 'workplace', 'tranfusion_center', "is_activated")       
 
 class UserSerializer(serializers.ModelSerializer):
-  userprofile = UserProfileSerializer()
+  userprofile = UserProfileSerializer(read_only = True)
   groups = serializers.SlugRelatedField(
         many=True,
         read_only=True,
@@ -83,3 +83,25 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         users.tranfusion_center = users_profile_data.get('tranfusion_center')
         instance.save()
         return instance
+
+class UserUpdatePasswordSerializer(serializers.ModelSerializer):
+  userprofile = UserProfileSerializer()
+  confirm_password = serializers.CharField(write_only=True, required=True)
+  class Meta:
+    model = User
+    fields = ["password","confirm_password", 'userprofile']
+
+  def validate(self, attrs):
+    if attrs['password'] != attrs['confirm_password']:
+      raise serializers.ValidationError(
+        {"password": "Password fields didn't match."})
+    return attrs
+
+  def update(self, instance, validated_data):
+    users_profile_data = validated_data.pop('userprofile')
+    users = instance.userprofile
+    instance.set_password(validated_data[("password")])
+    users.is_activated = True
+    instance.save()
+    return instance
+

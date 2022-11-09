@@ -1,5 +1,6 @@
 import axiosApi from "./axios";
 
+
 export async function sumbitRegistration(data, userRole){
         if(userRole === "Admin"){
                 const response = await axiosApi.post('/account/register/admin/', data)

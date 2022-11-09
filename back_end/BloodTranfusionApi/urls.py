@@ -27,4 +27,5 @@ urlpatterns = [
     path('account/',include('user_profile.urls')),
     path('center/',include('tranfusion_center.urls')),
     path('questionnaire/',include('questionnaire.urls')),
+    path('complaints/',include('complaints.urls')),
 ]

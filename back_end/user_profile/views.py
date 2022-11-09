@@ -1,17 +1,20 @@
 from atexit import register
 from django.shortcuts import render
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from django.contrib.auth.models import User, Group
-from user_profile.models import UserProfile
-from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer, UserUpdateSerializer
+from user_profile.models import UserProfile, TranfusionCenter
+from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer, UserUpdatePasswordSerializer, UserUpdateSerializer
 from django.contrib.auth.models import Group, AnonymousUser
 from rest_framework import status, mixins, generics
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions
 from rest_framework.decorators import api_view
+from rest_framework import viewsets
+
 
 class IsAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -47,6 +50,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
         return super(self.__class__, self).get_permissions()
 
 
+
 class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
@@ -59,9 +63,10 @@ class RegisterCenterUserAPIView(APIView):
 
 class RegisterCenterStaffAPIView(APIView):
     queryset = User.objects.all()
-    permission_classes = [IsAuthenticated, IsStaff, IsAdmin]
+    permission_classes = [IsAuthenticated, IsAdmin]
     def post(self, request, format=None):
-        return post_new_user(request, Group.objects.get(name="TranfusionCenterStaff"), True, False, False, request.user.c)
+        print(request.user)
+        return post_new_user(request, Group.objects.get(name="TranfusionCenterStaff"), True, False, False,request.user.c) #request.user.prefetch_related("userprofile__tranfusion_center__id"))
 
 class RegisterCenterAdminAPIView(APIView):
     queryset = User.objects.all()
@@ -95,4 +100,9 @@ class CurrentUserView(APIView):
         else:
             serializer = UserSerializer(request.user)
             return Response(serializer.data)
+
+class UserUpdatePasswordView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserUpdatePasswordSerializer
+    permission_classes = [IsAuthenticated]
 

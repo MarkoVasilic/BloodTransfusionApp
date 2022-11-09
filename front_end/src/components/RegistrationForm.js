@@ -301,7 +301,13 @@ const RegistrationForm = (props) => {
                                 onClick={() => {
                                     console.log("nesto");
                                     setAlert(false);
-                                    navigate("/login/");
+                                    if((props.userRole === "Admin") | (props.userRole === "TranfusionCenterStaff")){
+                                        navigate("/users");
+                                    }
+                                    else
+                                    {
+                                        navigate("/login");
+                                    }
                                 }}
                             >
                                 <CloseIcon fontSize="inherit" />

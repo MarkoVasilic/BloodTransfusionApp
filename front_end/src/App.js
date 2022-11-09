@@ -11,6 +11,12 @@ import AllCenters from "./pages/AllCenters";
 import CreateQuestionnaire from "./pages/CreateQuestionnaire";
 import CenterDetails from "./pages/CenterDetails";
 import UpdateCenter from "./pages/UpdateCenter";
+import AdminChangePassword from "./pages/AdminChangePassword";
+import MyCalendar from "./pages/MyCalendar";
+import AllComplaints from "./pages/AllComplaints";
+import ComplaintReplyPage from "./pages/ComplaintReply";
+import UserDetails from "./pages/UserDetails";
+
 
 function App() {
     const token = localStorage.getItem("token");
@@ -24,6 +30,8 @@ function App() {
                 <div className="content">
                     <Routes>
                         <Route path="/" element={<Dashboard />} />
+                        <Route path="/list-complaints/" element={<AllComplaints />} />
+                        <Route path="/complaint-reply/:id" element={<ComplaintReplyPage />} />
                         <Route path="/register-donor" element={<DonorRegistration />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/users" element={<SearchUsers />} />
@@ -34,7 +42,9 @@ function App() {
                         <Route path="/center-details" element={<CenterDetails />} />
                         <Route path="/change-password" element={<AdminChangePassword />} />
                         <Route path="/update-center/:center" element={<UpdateCenter />} />
-                        <Route path="/list-centers-update" element={<AllCentersAdmin />} />
+                        <Route path="/list-centers-update" element={<AllCenters />} />
+                        <Route path="/calendar" element={<MyCalendar />} />
+                        <Route path="/user-details/:id" element={<UserDetails />} />
                     </Routes>
                 </div>
             </Router>

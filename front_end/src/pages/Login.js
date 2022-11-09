@@ -18,12 +18,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 import { green } from "@mui/material/colors";
 import Navbar from "../components/Navbar";
+
 const theme = createTheme();
 
 export default function Login() {
     const { handleSubmit, control, getValues } = useForm();
     const [alert, setAlert] = React.useState(false);
     let navigate = useNavigate();
+
     const onSubmit = async (data) => {
         try {
             const response = await sumbitLogin(data);
@@ -132,7 +134,11 @@ export default function Login() {
                                     type="submit"
                                     fullWidth
                                     variant="contained"
-                                    sx={{ mt: 3, mb: 2, background: "#6fbf73" }}
+                                    sx={{ mt: 3, mb: 2, background: "#6fbf73",  "&.MuiButtonBase-root": {
+                                        "&:hover": {
+                                            backgroundColor: green[600]
+                                        }
+                                        }}}
                                 >
                                     Sign In
                                 </Button>

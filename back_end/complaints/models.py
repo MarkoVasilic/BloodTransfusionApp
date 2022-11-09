@@ -8,3 +8,7 @@ class Complaints(models.Model):
     user_profile = models.ForeignKey(UserProfile, on_delete = models.CASCADE, related_name = 'user_profile')
     transfusion_center = models.ForeignKey(TranfusionCenter, on_delete = models.CASCADE)
     staff = models.ForeignKey(UserProfile, on_delete = models.CASCADE, related_name = 'staff', blank=True, null=True)
+
+
+    def __str__(self) -> str:
+        return "ID:" + str(self.id) + " " + self.text
