@@ -53,9 +53,3 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
-
-# def __str__(self):
-#         return "%s (%s)" % (
-#             self.first_name,
-#             ", ".join(tranfusion_center.id for tranfusion_center in self.tranfusion_center.all()),
-#         )
