@@ -49,7 +49,7 @@ function App() {
                         <Route path="/center-details" element={<CenterDetails />} />
                         <Route path="/change-password" element={<AdminChangePassword />} />
                         <Route path="/update-center/:center" element={<UpdateCenter />} />
-                        <Route path="/list-centers-update" element={<AllCenters />} />
+                        <Route path="/list-centers-update" element={<AllCentersAdmin />} />
                         <Route path="/calendar" element={<MyCalendar />} />
                         <Route path="/user-details/:id" element={<UserDetails />} />
                         <Route path="/user-profile" element={<UserProfile />} />
