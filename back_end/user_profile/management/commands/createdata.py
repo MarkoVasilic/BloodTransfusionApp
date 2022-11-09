@@ -14,7 +14,11 @@ GROUP_PERMISSIONS = [
 ]
 
 GENDER = [
-    1, 2, 3
+    'M', 'F', 'N'
+]
+
+BLOOD_TYPE = [
+    'A_POS', 'A_NEG', 'B_POS', 'B_NEG', 'AB_POS', 'AB_NEG', 'O_POS', 'O_NEG', 'N'
 ]
 
 class Provider(faker.providers.BaseProvider):
@@ -23,6 +27,9 @@ class Provider(faker.providers.BaseProvider):
     
     def genders(self):
         return self.random_element(GENDER)
+
+    def blood_types(self):
+        return self.random_element(BLOOD_TYPE)
 
 class Command(BaseCommand):
     help = "Command information"
@@ -49,6 +56,7 @@ class Command(BaseCommand):
             user.userprofile.phone_number=fake.phone_number()
             user.userprofile.jmbg=fake.msisdn()
             user.userprofile.gender=fake.genders()
+            user.userprofile.blood_type=fake.blood_types()
             user.userprofile.profession=fake.job()
             user.userprofile.workplace=fake.text()
             if gr_per == 2:

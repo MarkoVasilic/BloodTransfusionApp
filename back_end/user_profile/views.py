@@ -129,4 +129,9 @@ class RetrieveUserAPIView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+class UserUpdatePasswordView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserUpdatePasswordSerializer
+    permission_classes = [IsAuthenticated]
+
 
