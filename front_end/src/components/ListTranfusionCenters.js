@@ -108,7 +108,7 @@ function DataGridSearchComponent() {
                 });
         } else
             axiosApi
-                .get(`/center/list?search=${searchTerm}`)
+                .get(`/center/list?search=${searchTerm}`) //.get(`/center/list?${searchTerm !="" ? `search=${searchTerm}&` : ""}${grade !="" ? `grade=${grade}&` : ""}`)
                 .then((response) => {
                     setCenters(response.data);
                 });

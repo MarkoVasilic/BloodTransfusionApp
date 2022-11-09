@@ -76,6 +76,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         users_profile_data = validated_data.pop('userprofile')
         print(users_profile_data)
+        instance.first_name = validated_data.get('first_name')
+        instance.last_name = validated_data.get('last_name')
         users = instance.userprofile
         users.address = users_profile_data.get('address')
         users.city = users_profile_data.get('city')

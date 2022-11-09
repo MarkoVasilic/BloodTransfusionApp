@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 import { Button, Typography } from "@mui/material";
 import { green } from "@mui/material/colors";
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axiosApi from "../api/axios";
 import { useForm } from "react-hook-form";
 import InputTextField from "./InputTextField";
@@ -70,7 +70,7 @@ function UpdateCenterForm() {
                         fullWidth
                     />
                 </Grid>
-                <Grid item xs={12}>
+                {/*<Grid item xs={12}>
                 <InputTextField
                         name="userprofile.jmbg"
                         control={control}
@@ -78,7 +78,7 @@ function UpdateCenterForm() {
                         label="JMBG"
                         fullWidth
                     />
-                </Grid>
+    </Grid>*/}
                 <Grid item xs={12}>
                 <InputTextField
                         name="userprofile.address"

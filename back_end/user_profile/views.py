@@ -29,7 +29,7 @@ class IsOwner(permissions.BasePermission):
             if request.user.is_superuser:
                 return True
             else:
-                return obj.owner == request.user
+                return obj.id == request.user.id
         else:
             return False
 
@@ -52,7 +52,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
 class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
-    permission_classes = [IsAuthenticated] #IsOwner sta je ovo Marko?!?!?!?
+    permission_classes = [IsAuthenticated, IsOwner] #IsOwner sta je ovo Marko?!?!?!?
     
 class RegisterCenterUserAPIView(APIView):
     queryset = User.objects.all()
