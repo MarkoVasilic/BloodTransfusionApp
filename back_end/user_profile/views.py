@@ -7,7 +7,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from django.contrib.auth.models import User, Group
 from user_profile.models import UserProfile
-from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer, UserUpdateSerializer, RegisteredUserSerializer,UserUpdatePasswordSerializer
+from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer, UserUpdateSerializer, UserUpdatePasswordSerializer
 from django.contrib.auth.models import Group, AnonymousUser
 from rest_framework import status, mixins, generics
 from django_filters.rest_framework import DjangoFilterBackend
@@ -44,17 +44,15 @@ class UserViewSet(mixins.RetrieveModelMixin,
     search_fields = ['=first_name', '=last_name']
     def get_permissions(self):
         if self.action == 'list':
-            self.permission_classes = [IsAdmin, ]
+            self.permission_classes = [IsAdmin]
         elif self.action == 'retrieve':
-            self.permission_classes = [IsOwner]
+            self.permission_classes = [IsOwner | IsAdmin]
         return super(self.__class__, self).get_permissions()
-
-
 
 class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
-    permission_classes = [IsAuthenticated, IsOwner] #IsOwner sta je ovo Marko?!?!?!?
+    permission_classes = [IsAuthenticated, IsOwner]
     
 class RegisterCenterUserAPIView(APIView):
     queryset = User.objects.all()
@@ -98,18 +96,12 @@ class CurrentUserView(APIView):
             return Response(status=404)
         else:
             serializer = UserSerializer(request.user)
-            return Response(serializer.data)
+            return Response(serializer.data)   
 
-class UserPersonalInformationAPIView(APIView):
-    def get(self, request):
-        user_profile_serializer = RegisteredUserSerializer(instance=request.user)
-        print(request.user)
-        return Response(user_profile_serializer.data)
-        
 class ListCenterStaff(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
-
+    permission_classes = [IsAuthenticated, IsStaff]
     def retrieve(self, request, pk):
         queryset = TranfusionCenter.objects.prefetch_related("userprofile_set__user__groups").get(id = pk).userprofile_set.all()
         serialized_users = UserSerializer(instance = [pu.user for pu in queryset if pu.user.groups.filter(name = "TranfusionCenterStaff")], many = True)
@@ -121,17 +113,23 @@ class UserDestroyAPIView(generics.DestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'pk'
-
     def perform_destroy(self, instance):
         super().perform_destroy(instance)
 
 class RetrieveUserAPIView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+    def get_permissions(self):
+        if self.action == 'list':
+            self.permission_classes = [IsAdmin]
+        elif self.action == 'retrieve':
+            self.permission_classes = [IsOwner | IsAdmin]
+        return super(self.__class__, self).get_permissions()
 
 class UserUpdatePasswordView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdatePasswordSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner]
 
 

@@ -37,20 +37,14 @@ class RegisterSerializer(serializers.ModelSerializer):
       last_name=validated_data['last_name']
     )
     user.set_password(validated_data['password'])
-    return user
-
-class UserProfileSerializerA(serializers.ModelSerializer):
-    class Meta:
-      model = UserProfile
-      fields = ('address', 'city', 'country', 'phone_number',
-       'jmbg', 'gender', 'blood_type', 'profession', 'workplace', 'tranfusion_center', 'loyalty_points')  
+    return user 
 
 class UserProfileSerializer(serializers.ModelSerializer):
     jmbg = serializers.RegexField("^(\d{13})?$", max_length=None, min_length=None, allow_blank=False)
     class Meta:
       model = UserProfile
       fields = ('address', 'city', 'country', 'phone_number',
-       'jmbg', 'gender', 'blood_type', 'profession', 'workplace', 'tranfusion_center', "is_activated")       
+       'jmbg', 'gender', 'blood_type', 'profession', 'workplace', 'tranfusion_center', "loyalty_points", "is_activated")       
 
 class UserSerializer(serializers.ModelSerializer):
   userprofile = UserProfileSerializer(read_only = True)
@@ -112,17 +106,3 @@ class UserUpdatePasswordSerializer(serializers.ModelSerializer):
     users.is_activated = True
     instance.save()
     return instance
-
-
-
-class RegisteredUserSerializer(serializers.ModelSerializer):
-  userprofile = UserProfileSerializerA()
-  groups = serializers.SlugRelatedField(
-        many=True,
-        read_only=True,
-        slug_field='name'
-     )
-  class Meta:
-    model = User
-    read_only_fields = ['email']
-    fields = '__all__'
