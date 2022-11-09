@@ -14,12 +14,9 @@ import UpdateCenter from "./pages/UpdateCenter";
 import AllCentersAdmin from "./pages/AllCentersAdmin";
 import AdminChangePassword from "./pages/AdminChangePassword";
 import UserProfile from "./pages/UserProfile";
-<<<<<<< HEAD
 import CenterStaff from "./pages/CenterStaff";
 import UpdateStaff from "./pages/UpdateStaff";
-=======
 import UpdateUser from "./pages/UpdateUser";
->>>>>>> feature-update-user
 
 function App() {
     const token = localStorage.getItem("token");
