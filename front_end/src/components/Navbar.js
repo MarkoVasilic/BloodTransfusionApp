@@ -23,7 +23,6 @@ export default function Navbar() {
         axiosApi
             .get(`account/users/logged/`)
             .then((response) => {
-                console.log(response.data)
                 setUser(response.data);
             })
             .catch(function (error) {
@@ -137,7 +136,6 @@ export default function Navbar() {
 }
 
 const chooseSideMenu = (group) => {
-    console.log(group)
     if (!group) return { "Check Transfusion Centers": "/list-centers" };
     if (group[0] === "Admin") {
         return {
@@ -145,6 +143,7 @@ const chooseSideMenu = (group) => {
             "Create Transfusion Centers": "/create-center",
             "Create New Admin": "/register-admin",
             "List Users": "/users",
+            "Complaints": "/list-complaints",
         };
     } else if (group[0] === "TranfusionCenterUser") {
         return {
@@ -152,7 +151,10 @@ const chooseSideMenu = (group) => {
             "Fill Questionnaire": "/fill-questionnaire",
         };
     } else if (group[0] === "TranfusionCenterStaff") {
-        return { "List Transfusion Centers": "/list-centers" };
+        return {
+            "List Transfusion Centers": "/list-centers",
+            Calendar: "/calendar",
+        };
     } else {
         return { "Check Transfusion Centers": "/list-centers" };
     }
@@ -166,7 +168,7 @@ const chooseButton1 = (group) => {
 };
 
 const chooseButton2 = (group) => {
-    if (!group) return { name: "Register", url: "/donor-register" };
+    if (!group) return { name: "Register", url: "/register-donor" };
     else if (group[0] === "Admin") {
         return { name: "Profile", url: "/admin-profile" };
     } else if (group[0] === "TranfusionCenterStaff") {

@@ -1,4 +1,4 @@
-import { IconButton, Typography } from "@mui/material";
+import { IconButton,Button, Typography } from "@mui/material";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
@@ -9,8 +9,8 @@ import Stack from "@mui/material/Stack";
 import CachedIcon from "@mui/icons-material/Cached";
 import { green } from "@mui/material/colors";
 import axiosApi from "../api/axios";
-import ReadMoreIcon from '@mui/icons-material/ReadMore';
-import { useNavigate } from 'react-router-dom';
+import ReadMoreIcon from "@mui/icons-material/ReadMore";
+import { useNavigate } from "react-router-dom";
 
 const columns = [
     { field: "id", headerName: "ID", width: 80 },
@@ -26,14 +26,14 @@ const columns = [
         headerName: "Country",
         type: "string",
         width: 150,
-        editable: false
+        editable: false,
     },
     {
         field: "city",
         headerName: "City",
         type: "string",
         width: 200,
-        editable: false
+        editable: false,
     },
     {
         field: "street",
@@ -62,13 +62,15 @@ const columns = [
         type: "string",
         width: 150,
         editable: false,
-    }
+    },
 ];
 
-function rowAction(navigate){
+function rowAction(navigate) {
     return {
         field: "action",
         headerName: "Action",
+        align: "center",
+        headerAlign: "center",
         sortable: false,
         renderCell: (params) => {
             const onClick = (e) => {
@@ -77,18 +79,31 @@ function rowAction(navigate){
                 const api = params.api;
                 const thisRow = {};
 
-                api
-                    .getAllColumns()
+                api.getAllColumns()
                     .filter((c) => c.field !== "__check__" && !!c)
                     .forEach(
-                        (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
+                        (c) =>
+                            (thisRow[c.field] = params.getValue(
+                                params.id,
+                                c.field
+                            ))
                     );
 
-                return navigate('/center-details/', {state: thisRow})
+                return navigate("/center-details/", { state: thisRow });
             };
-            return <IconButton onClick={onClick}> <ReadMoreIcon /> </IconButton>
-        }
-    }
+            return (
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    size="small"
+                    onClick={onClick}
+                >
+                    {" "}
+                    <ReadMoreIcon />{" "}
+                </Button>
+            );
+        },
+    };
 }
 
 function DataGridSearchComponent() {
@@ -101,11 +116,9 @@ function DataGridSearchComponent() {
 
     let getData = async () => {
         if (searchTerm === "") {
-            axiosApi
-                .get("/center/list")
-                .then((response) => {
-                    setCenters(response.data);
-                });
+            axiosApi.get("/center/list").then((response) => {
+                setCenters(response.data);
+            });
         } else
             axiosApi
                 .get(`/center/list?search=${searchTerm}`) //.get(`/center/list?${searchTerm !="" ? `search=${searchTerm}&` : ""}${grade !="" ? `grade=${grade}&` : ""}`)
