@@ -22,6 +22,7 @@ import CenterStaff from "./pages/CenterStaff";
 import UpdateStaff from "./pages/UpdateStaff";
 import CenterAdministratorProfile from "./pages/CenterAdministratorProfile";
 import UpdateUser from "./pages/UpdateUser";
+import UserChangePassword from "./pages/UserChangePassword";
 import UpdateCenterAdministrator from "./pages/UpdateCenterAdministrator";
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
                         <Route path="/user-profile/update/:user" element={<UpdateUser />} />
                         <Route path="/staff-profile/update/:user" element={<UpdateCenterAdministrator />} />
                         <Route path="/user-profile/update/:user" element={<UpdateUser />} />
+
                     </Routes>
                 </div>
             </Router>

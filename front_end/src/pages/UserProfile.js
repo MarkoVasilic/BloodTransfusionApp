@@ -30,6 +30,11 @@ export default function UserProfile() {
         navigate(path);
       }
 
+    const changePasswordRoute = () =>{ 
+        let path = '/user-profile/password/'; 
+        navigate(path);
+      }
+
     return (
         <div>
             <AllowedUsers userRole = {listOfAllowedUsers}/>
@@ -44,7 +49,8 @@ export default function UserProfile() {
                         style={{
                             width: 200,
                             marginLeft: 1300,
-                            marginBottom: 0
+                            marginBottom: 10,
+                            marginTop: -45
                         }}
                         sx={{
                             background: "#6fbf73",
@@ -57,6 +63,26 @@ export default function UserProfile() {
                         }}
                     >
                         Update profile
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={changePasswordRoute}
+                        style={{
+                            width: 200,
+                            marginLeft: 1300,
+                            marginBottom: -10
+                        }}
+                        sx={{
+                            background: "#6fbf73",
+                            height: "100",
+                            "&.MuiButtonBase-root": {
+                                "&:hover": {
+                                    backgroundColor: green[600],
+                                },
+                            },
+                        }}
+                    >
+                        Change password
                     </Button>
             <Typography align="left" marginTop={"-10px"} marginLeft={"110px"} marginBottom={"5px"} component="h4" variant="h4" color={green[800]}>
                 Personal information
