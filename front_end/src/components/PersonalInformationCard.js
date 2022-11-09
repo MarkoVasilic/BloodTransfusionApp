@@ -24,6 +24,34 @@ function PersonalInformationCardComponent() {
                     default:
                         response.data.userprofile.gender = "UNKNOWN";
                 }
+                switch(response.data.userprofile.blood_type){
+                    case 'A_POS':
+                        response.data.userprofile.blood_type = "A POSITIVE";
+                        break;
+                    case 'A_NEG':
+                        response.data.userprofile.blood_type = "A NEGATIVE";
+                        break;
+                    case 'B_POS':
+                        response.data.userprofile.blood_type = "B POSITIVE";
+                        break;
+                    case 'B_NEG':
+                        response.data.userprofile.blood_type = "B NEGATIVE";
+                        break;
+                    case 'AB_POS':
+                        response.data.userprofile.blood_type = "AB POSITIVE";
+                        break;
+                    case 'AB_NEG':
+                        response.data.userprofile.blood_type = "AB NEGATIVE";
+                        break;
+                    case 'O_POS':
+                        response.data.userprofile.blood_type = "O POSITIVE";
+                        break;
+                    case 'O_NEG':
+                        response.data.userprofile.blood_type = "O NEGATIVE";
+                        break;
+                    default:
+                        response.data.userprofile.blood_type = "UNKNOWN";
+                }
                 });
     };
 
@@ -52,7 +80,7 @@ function PersonalInformationCardComponent() {
             <Typography variant="h5" align='left' marginLeft={"100px"}>JMBG: </Typography>
             </Grid>
             <Grid item xs={9}>
-            <Typography variant="h5" color="text.secondary" align='left' marginLeft={"80px"}>{profile.last_name}</Typography>
+            <Typography variant="h5" color="text.secondary" align='left' marginLeft={"80px"}>{userprofile.jmbg}</Typography>
             </Grid>
             <Grid item xs={3}>
             <Typography variant="h5" align='left' marginLeft={"100px"}>Email: </Typography>
@@ -89,6 +117,12 @@ function PersonalInformationCardComponent() {
             </Grid>
             <Grid item xs={9}>
             <Typography variant="h5" color="text.secondary" align='left' marginLeft={"80px"}>{userprofile.gender}</Typography>
+            </Grid>
+            <Grid item xs={3}>
+            <Typography variant="h5" align='left' marginLeft={"100px"}>Blood type: </Typography>
+            </Grid>
+            <Grid item xs={9}>
+            <Typography variant="h5" color="text.secondary" align='left' marginLeft={"80px"}>{userprofile.blood_type}</Typography>
             </Grid>
             <Grid item xs={3}>
             <Typography variant="h5" align='left' marginLeft={"100px"}>Profession: </Typography>

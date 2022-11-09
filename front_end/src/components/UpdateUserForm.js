@@ -2,33 +2,34 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import { Button, Typography } from "@mui/material";
 import { green } from "@mui/material/colors";
-import { useEffect} from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosApi from "../api/axios";
-import {useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import InputTextField from "./InputTextField";
+
 
 function UpdateCenterForm() {
 
-
     let navigate = useNavigate();
-    const params = useParams();
     const {control, handleSubmit, reset} = useForm();
+    const [user, setUser] = useState({});
 
     const handleUpdate = async (data) => {
         try {
-            const resp = await axiosApi.put(`/center/update-delete/${params.center}/` ,data);
+            const resp = await axiosApi.put(`/account/users/update/${user.id}/`, data);
             console.log(resp.data);
-            navigate('/list-centers-update');
+            navigate('/user-profile/');
         } catch (error) {
             console.log(error.response);
         }
     };
 
-    const getCenter = async (e) => {
+    const getUser = async (e) => {
         try {
-            const res = await axiosApi.get(`/center/get/${params.center}/`);
-            console.log("Centar",res.data);
+            const res = await axiosApi.get('/account/users/user-profile/');
+            console.log("User update",res.data);
+            setUser(res.data);
             return res.data;
         } catch (error) {
             console.log(error.response);
@@ -36,73 +37,99 @@ function UpdateCenterForm() {
     };
 
     useEffect(() => {
-        getCenter().then(reset);
+        getUser().then(reset);
     },[]);
-
-
 
     return (
         <div>
             <Typography variant="h4" color={green[800]} marginTop={2}>
-                Update a Center
+                Update profile
             </Typography>
             <Grid
                 container
+                marginTop={"-40px"}
                 rowSpacing={2}
                 sx={{ padding: "55px 550px 0px 550px" }}
             >
                 <Grid item xs={12}>
                     <InputTextField
-                        name="name"
+                        name="first_name"
                         control={control}
                         variant="filled"
-                        label="name"
+                        label="First name"
                         autoFocus
                         fullWidth
                     />
                 </Grid>
                 <Grid item xs={12}>
                 <InputTextField
-                        name="country"
+                        name="last_name"
                         control={control}
                         variant="filled"
-                        label="country"
+                        label="Last name"
                         fullWidth
                     />
                 </Grid>
                 <Grid item xs={12}>
                 <InputTextField
-                        name="city"
+                        name="userprofile.jmbg"
                         control={control}
                         variant="filled"
-                        label="city"
+                        label="JMBG"
                         fullWidth
                     />
                 </Grid>
                 <Grid item xs={12}>
                 <InputTextField
-                        name="street"
+                        name="userprofile.address"
                         control={control}
                         variant="filled"
-                        label="street"
+                        label="Address"
                         fullWidth
                     />
                 </Grid>
                 <Grid item xs={12}>
                 <InputTextField
-                        name="building_number"
+                        name="userprofile.city"
                         control={control}
                         variant="filled"
-                        label="building number"
+                        label="City"
                         fullWidth
                     />
                 </Grid>
                 <Grid item xs={12}>
                 <InputTextField
-                        name="description"
+                        name="userprofile.country"
                         control={control}
                         variant="filled"
-                        label="description"
+                        label="Country"
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                <InputTextField
+                        name="userprofile.phone_number"
+                        control={control}
+                        variant="filled"
+                        label="Phone number"
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                <InputTextField
+                        name="userprofile.profession"
+                        control={control}
+                        variant="filled"
+                        label="Profession"
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                <InputTextField
+                        name="userprofile.workplace"
+                        control={control}
+                        variant="filled"
+                        label="Workplace"
                         fullWidth
                     />
                 </Grid>
