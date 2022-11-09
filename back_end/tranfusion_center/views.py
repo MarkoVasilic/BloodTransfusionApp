@@ -41,7 +41,6 @@ class ListTranfusionCenterGetAPIView(generics.ListAPIView):
 class TransfusionCenterAPIView(generics.RetrieveAPIView):
     queryset = TranfusionCenter.objects.all()
     serializer_class = TranfusionCenterSerializer
-
     def findCenter(request, self):
         queryset = TranfusionCenter.objects.get(id = request.user.userprofile.tranfusion_center_id)
         serializer = TranfusionCenterSerializer

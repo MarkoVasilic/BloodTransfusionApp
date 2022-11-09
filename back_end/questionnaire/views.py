@@ -6,6 +6,8 @@ from questionnaire.serializer import QuestionnaireSerializer
 from rest_framework.filters import OrderingFilter
 from rest_framework import permissions, generics, mixins
 from rest_framework.response import Response
+import datetime
+import pytz
 
 class IsViewAllowedForLoggedUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -19,6 +21,10 @@ class CreateQuestionnaireAPIView(generics.CreateAPIView):
     queryset = Questionnaire.objects.all()
     serializer_class = QuestionnaireSerializer
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    def post(self, request, *args, **kwargs):
+        request.data['created'] = datetime.datetime.now(tz=pytz.timezone('Europe/Belgrade'))
+        request.data['updated'] = datetime.datetime.now(tz=pytz.timezone('Europe/Belgrade'))
+        return self.create(request, *args, **kwargs)
 
 class RetrieveUpdateDestroyQuestionnaireAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Questionnaire.objects.all()

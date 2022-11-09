@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Button from "@material-ui/core/Button";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import RadioButtonField from "./RadioButtonField";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
+import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
 import Collapse from "@mui/material/Collapse";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 import axiosApi from "../api/axios";
@@ -47,6 +51,8 @@ const RegistrationForm = () => {
         try {
             data.user_profile = user.id
             await axiosApi.post('/questionnaire/create/', data)
+            user.userprofile.blood_type = data.blood_type
+            await axiosApi.put(`/account/users/update/${user.id}/`, user);
             setAlert(true)
         }
         catch (err) {
@@ -209,6 +215,61 @@ const RegistrationForm = () => {
                                 control={control}
                                 label="Are you pregnant?"
                                 rules={{ required: "This field is required" }}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Grid item>
+                            <Controller
+                                name="blood_type"
+                                control={control}
+                                defaultValue="N"
+                                render={({
+                                    field: { onChange, value },
+                                    fieldState: { error },
+                                }) => (
+                                    <FormControl variant="filled" fullWidth>
+                                        <InputLabel id="demo-simple-select-filled-label">
+                                            Blood Type
+                                        </InputLabel>
+                                        <Select
+                                            fullWidth
+                                            labelId="demo-simple-select-filled-label"
+                                            id="demo-simple-select-filled"
+                                            value={value}
+                                            onChange={onChange}
+                                        >
+                                            <MenuItem value={"A_POS"}>
+                                                A POSITIVE
+                                            </MenuItem>
+                                            <MenuItem value={"A_NEG"}>
+                                                A NEGATIVE
+                                            </MenuItem>
+                                            <MenuItem value={"B_POS"}>
+                                                B POSITIVE
+                                            </MenuItem>
+                                            <MenuItem value={"B_NEG"}>
+                                                B NEGATIVE
+                                            </MenuItem>
+                                            <MenuItem value={"AB_POS"}>
+                                                AB POSITIVE
+                                            </MenuItem>
+                                            <MenuItem value={"AB_NEG"}>
+                                                AB NEGATIVE
+                                            </MenuItem>
+                                            <MenuItem value={"O_POS"}>
+                                                0 POSITIVE
+                                            </MenuItem>
+                                            <MenuItem value={"O_NEG"}>
+                                                0 NEGATIVE
+                                            </MenuItem>
+                                            <MenuItem value={"N"}>
+                                                Unknown
+                                            </MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                    
+                                )}
                             />
                         </Grid>
                     </Grid>
