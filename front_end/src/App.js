@@ -59,6 +59,7 @@ function App() {
                         <Route path="/staff-profile" element={<CenterAdministratorProfile />} />
                         <Route path="/user-profile/update/:user" element={<UpdateUser />} />
                         <Route path="/staff-profile/update/:user" element={<UpdateCenterAdministrator />} />
+                        <Route path="/user-profile/update/:user" element={<UpdateUser />} />
                     </Routes>
                 </div>
             </Router>

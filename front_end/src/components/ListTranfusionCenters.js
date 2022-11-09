@@ -68,7 +68,7 @@ const columns = [
 function rowAction(navigate) {
     return {
         field: "action",
-        headerName: "Action",
+        headerName: "Details",
         align: "center",
         headerAlign: "center",
         sortable: false,
@@ -163,6 +163,7 @@ function DataGridSearchComponent() {
                 <Box sx={{ height: 700, width: "100%" }}>
                     <DataGrid
                         rows={centers}
+                        
                         columns={[...columns, rowAction(navigate)]}
                         autoHeight
                         density="comfortable"

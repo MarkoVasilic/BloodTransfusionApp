@@ -65,8 +65,7 @@ class RegisterCenterStaffAPIView(APIView):
     queryset = User.objects.all()
     permission_classes = [IsAuthenticated, IsAdmin]
     def post(self, request, format=None):
-        print(request.user)
-        return post_new_user(request, Group.objects.get(name="TranfusionCenterStaff"), True, False, False,request.user.c) #request.user.prefetch_related("userprofile__tranfusion_center__id"))
+        return post_new_user(request, Group.objects.get(name="TranfusionCenterStaff"), True, False, False, request.user.tranfusion_center)
 
 class RegisterCenterAdminAPIView(APIView):
     queryset = User.objects.all()
@@ -130,8 +129,4 @@ class RetrieveUserAPIView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-class UserUpdatePasswordView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserUpdatePasswordSerializer
-    permission_classes = [IsAuthenticated]
 

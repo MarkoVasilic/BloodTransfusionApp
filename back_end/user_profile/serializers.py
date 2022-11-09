@@ -126,14 +126,3 @@ class RegisteredUserSerializer(serializers.ModelSerializer):
     model = User
     read_only_fields = ['email']
     fields = '__all__'
-
-#class RegisteredUserSerializer(serializers.ModelSerializer):
- # userprofile = UserProfileSerializer()
-  #groups = serializers.SlugRelatedField(
-   #   many=True,
-    #  read_only=True,
-     # slug_field='name'
-    #)
-  #class Meta:
-   # model = UserProfile
-    #fields = '__all__'
