@@ -16,9 +16,7 @@ import MyCalendar from "./pages/MyCalendar";
 import AllComplaints from "./pages/AllComplaints";
 import ComplaintReplyPage from "./pages/ComplaintReply";
 import UserDetails from "./pages/UserDetails";
-
 import AllCentersAdmin from "./pages/AllCentersAdmin";
-import AdminChangePassword from "./pages/AdminChangePassword";
 import UserProfile from "./pages/UserProfile";
 import CenterStaff from "./pages/CenterStaff";
 import UpdateStaff from "./pages/UpdateStaff";
