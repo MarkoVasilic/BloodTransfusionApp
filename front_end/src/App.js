@@ -45,6 +45,7 @@ function App() {
                         <Route path="/user-profile" element={<UserProfile />} />
                         <Route path="/center-staff-list/:centar" element={<CenterStaff />} />
                         <Route path="/update-staff" element={<UpdateStaff />} />
+                        <Route path="/user-profile/update/:user" element={<UpdateUser />} />
                     </Routes>
                 </div>
             </Router>

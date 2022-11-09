@@ -166,7 +166,7 @@ const chooseButton1 = (group) => {
 };
 
 const chooseButton2 = (group) => {
-    if (!group) return { name: "Register", url: "/donor-register" };
+    if (!group) return { name: "Register", url: "/register-donor" };
     else if (group[0] === "Admin") {
         return { name: "Profile", url: "/admin-profile" };
     } else if (group[0] === "TranfusionCenterStaff") {
