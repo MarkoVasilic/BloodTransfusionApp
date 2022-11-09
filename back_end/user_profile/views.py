@@ -52,7 +52,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
 class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated]
     
 class RegisterCenterUserAPIView(APIView):
     queryset = User.objects.all()
@@ -122,5 +122,9 @@ class UserDestroyAPIView(generics.DestroyAPIView):
 
     def perform_destroy(self, instance):
         super().perform_destroy(instance)
+
+class RetrieveUserAPIView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 

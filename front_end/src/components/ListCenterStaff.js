@@ -16,7 +16,7 @@ function refreshPage(){
     window.location.reload();
 }
 
-const RenderUpdateButton = (params) => {
+/*const RenderUpdateButton = (params) => {
     let navigate = useNavigate();
     return (
         <strong>
@@ -26,17 +26,17 @@ const RenderUpdateButton = (params) => {
                 size="small"
                 style={{ marginLeft: 16 }}
                 onClick={() => {
-                   // navigate('/update-staff/'+params.row.id);
+                    navigate('/update-staff/'+params.row.id);
                 }}
             >
                 Update
             </Button>
         </strong>
     )
-};
+};*/
 
 
-const RenderDeleteButton = (params) => {
+/*const RenderDeleteButton = (params) => {
     let navigate = useNavigate();
         return (
         <strong>
@@ -54,7 +54,7 @@ const RenderDeleteButton = (params) => {
             </Button>
         </strong>
     )
-};
+};*/
 
 const columns = [
     { field: "id", headerName: "ID", width: 80 },
@@ -111,7 +111,7 @@ const columns = [
         editable: false,
         valueGetter: (params) => {return params.row.userprofile.country}
     }, 
-    {
+    /*{
         field: "update",
         headerName: "Update",
         width: 150,
@@ -124,7 +124,7 @@ const columns = [
         width: 150,
         renderCell: RenderDeleteButton,
         disableClickEventBubbling: true  
-    }
+    }*/
 ];
 
 function DataGridCenterStaff() {

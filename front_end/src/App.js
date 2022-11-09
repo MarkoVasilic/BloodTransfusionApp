@@ -16,6 +16,7 @@ import AdminChangePassword from "./pages/AdminChangePassword";
 import UserProfile from "./pages/UserProfile";
 import CenterStaff from "./pages/CenterStaff";
 import UpdateStaff from "./pages/UpdateStaff";
+import CenterAdministratorProfile from "./pages/CenterAdministratorProfile";
 
 function App() {
     const token = localStorage.getItem("token");
@@ -42,7 +43,9 @@ function App() {
                         <Route path="/list-centers-update" element={<AllCentersAdmin />} />
                         <Route path="/user-profile" element={<UserProfile />} />
                         <Route path="/center-staff-list/:centar" element={<CenterStaff />} />
-                        <Route path="/update-staff" element={<UpdateStaff />} />
+                        <Route path="/update-staff/:staff" element={<UpdateStaff />} />
+                        <Route path="/staff-profile" element={<CenterAdministratorProfile />} />
+
                     </Routes>
                 </div>
             </Router>

@@ -17,22 +17,25 @@ function UpdateStaffForm() {
 
     const handleUpdate = async (data) => {
         try {
-            //const resp = await axiosApi.put(`/center/update-delete/${params.center}/` ,data);
-           // console.log(resp.data);
-            navigate('/center-staff-list');
+            console.log("User", params);
+            const resp = await axiosApi.put(`/account/users/update/${params.staff}/` ,data);
+            console.log(resp.data);
+            navigate(-1);//prebacuje na prethodnu stranicu
         } catch (error) {
             console.log(error.response);
         }
     };
 
+  
     const getStaff = async (e) => {
         try {
-            //const res = await axiosApi.get(`/center/get/${params.center}/`);
-           // console.log("Staff",res.data);
-            //return res.data;
+            const res = await axiosApi.get(`/account/users/get/${params.staff}/`);
+            console.log("Staff",res.data);
+            return res.data;
         } catch (error) {
             console.log(error.response);
         }
+
     };
 
     useEffect(() => {
@@ -72,7 +75,7 @@ function UpdateStaffForm() {
                 </Grid>
                 <Grid item xs={12}>
                 <InputTextField
-                        name="phone_number"
+                        name="userprofile.phone_number"
                         control={control}
                         variant="filled"
                         label="phone number"
@@ -81,7 +84,7 @@ function UpdateStaffForm() {
                 </Grid>
                 <Grid item xs={12}>
                 <InputTextField
-                        name="address"
+                        name="userprofile.address"
                         control={control}
                         variant="filled"
                         label="address"
@@ -90,7 +93,7 @@ function UpdateStaffForm() {
                 </Grid>
                 <Grid item xs={12}>
                 <InputTextField
-                        name="city"
+                        name="userprofile.city"
                         control={control}
                         variant="filled"
                         label="city"
@@ -99,7 +102,7 @@ function UpdateStaffForm() {
                 </Grid>
                 <Grid item xs={12}>
                 <InputTextField
-                        name="country"
+                        name="userprofile.country"
                         control={control}
                         variant="filled"
                         label="country"
