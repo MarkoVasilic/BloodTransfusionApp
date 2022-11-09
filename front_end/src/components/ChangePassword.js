@@ -11,14 +11,14 @@ function ChangePassword() {
         <div>
             <Stack spacing={2}>
                 <InputTextField
-                    name="first_name"
+                    name="password"
                     label="password"
                     control={control}
                     rules={{ required: "Password is required" }}
                 />
 
                 <InputTextField
-                    name="first_name"
+                    name="password"
                     label="confirm password"
                     control={control}
                     rules={{ required: "Confirmed passsword is  required" }}

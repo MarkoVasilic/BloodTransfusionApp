@@ -4,6 +4,7 @@ import AllowedUsers from "../components/AllowedUsers";
 
 
 
+
 export default function UpdateUser(){
     const listOfAllowedUsers = ["TranfusionCenterUser"];
     
