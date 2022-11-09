@@ -35,7 +35,7 @@ const RenderUpdateButton = (params) => {
 };
 
 
-const RenderDeleteButton = (params) => {
+/*const RenderDeleteButton = (params) => {
     let navigate = useNavigate();
         return (
         <strong>
@@ -53,7 +53,7 @@ const RenderDeleteButton = (params) => {
             </Button>
         </strong>
     )
-};
+};*/
 
 const RenderGetCenterAdministratorsButton = (params) =>{
     let navigate = useNavigate();
@@ -132,13 +132,13 @@ const columns = [
         renderCell: RenderUpdateButton,
         disableClickEventBubbling: true   
     },
-    {
+    /*{
         field: "delete",
         headerName: "Delete Center",
         width: 150,
         renderCell: RenderDeleteButton,
         disableClickEventBubbling: true
-    }, 
+    }, */
     {
         field: "staff",
         headerName: "Center Administrators", 
@@ -151,27 +151,37 @@ const columns = [
 ];
 
 function DataGridSearchComponent() {
-    const [centers, setCenters] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
+    const[user, setUser] = useState("");
+    const [center, setCenter] = useState();
+    const [centerID, setCenterID] = useState(null);
+
+    let getUser = async() => {
+        return axiosApi.get('/account/users/user-profile')
+        .then((response)=> {
+            setUser(response.data);
+            console.log("TR ID", response.data.userprofile.tranfusion_center);
+            setCenterID(response.data.userprofile.tranfusion_center);
+            return response.data.userprofile.tranfusion_center
+        })
+    }
+
+ let getData = async (tcId) => {
+    console.log("USER: -------", user);
+        return axiosApi
+            .get(`/center/find/${tcId}/`)
+            .then((response) => {
+                setCenter(response.data);
+                console.log("Centar", response.data);
+            }) 
+}; 
+
 
     useEffect(() => {
-        getData();
-    }, [searchTerm]);
+        getUser().then((tcId) => getData(tcId));
+    }, []);
 
-    let getData = async () => {
-        if (searchTerm === "") {
-            axiosApi
-                .get("/center/list")
-                .then((response) => {
-                    setCenters(response.data);
-                });
-        } else
-            axiosApi
-                .get(`/center/list?search=${searchTerm}`)
-                .then((response) => {
-                    setCenters(response.data);
-                });
-    };
+
+
 
     return (
         <div>
@@ -186,30 +196,10 @@ function DataGridSearchComponent() {
                     Transfusion Centers
                 </Typography>
             </Stack>
-            <Stack direction={"row"} sx={{ justifyContent: "start"}} p={2}>
-                <TextField
-                    variant="standard"
-                    type="text"
-                    placeholder="Search..."
-                    onKeyPress={(event) => {
-                        if (event.key === "Enter")
-                            setSearchTerm(event.target.value);
-                            console.log("IF:",event.target.value);
-                    }}
-                ></TextField>
-                <IconButton
-                    sx={{background:"#6fbf73"}}
-                    onClick={(event) => {
-                        setSearchTerm("");
-                    }}
-                >
-                    <CachedIcon />
-                </IconButton>
-            </Stack>
             <Paper>
                 <Box sx={{ height: 700, width: "100%" }}>
                     <DataGrid
-                        rows={centers}
+                        rows={center ? [center]: []}
                         columns={columns}
                         autoHeight
                         density="comfortable"

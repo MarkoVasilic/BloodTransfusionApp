@@ -9,6 +9,7 @@ from rest_framework import filters, generics, permissions
 from django.contrib.auth.models import User
 from user_profile.models import UserProfile
 from tranfusion_center.models import TranfusionCenter
+from rest_framework.response import Response
 
 class IsUpdateAllowedForLoggedUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -37,3 +38,15 @@ class ListTranfusionCenterGetAPIView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     search_fields = ['name', '^description', 'country', 'city', 'street', 'building_number']
 
+class TransfusionCenterAPIView(generics.RetrieveAPIView):
+    queryset = TranfusionCenter.objects.all()
+    serializer_class = TranfusionCenterSerializer
+
+    def findCenter(request, self):
+        queryset = TranfusionCenter.objects.get(id = request.user.userprofile.tranfusion_center_id)
+        serializer = TranfusionCenterSerializer
+        return Response(serializer.data)
+
+
+
+        

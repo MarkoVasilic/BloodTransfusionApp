@@ -16,6 +16,7 @@ import AdminChangePassword from "./pages/AdminChangePassword";
 import UserProfile from "./pages/UserProfile";
 import CenterStaff from "./pages/CenterStaff";
 import UpdateStaff from "./pages/UpdateStaff";
+import CenterAdministratorProfile from "./pages/CenterAdministratorProfile";
 import UpdateUser from "./pages/UpdateUser";
 
 function App() {
@@ -44,8 +45,6 @@ function App() {
                         <Route path="/user-profile" element={<UserProfile />} />
                         <Route path="/center-staff-list/:centar" element={<CenterStaff />} />
                         <Route path="/update-staff" element={<UpdateStaff />} />
-                        <Route path="/user-profile/update/:user" element={<UpdateUser />} />
-
                     </Routes>
                 </div>
             </Router>
