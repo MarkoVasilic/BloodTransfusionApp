@@ -1,4 +1,4 @@
-import { IconButton,Button, Typography } from "@mui/material";
+import { IconButton, Button, Typography } from "@mui/material";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
@@ -13,12 +13,21 @@ import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import { useNavigate } from "react-router-dom";
 
 const columns = [
-    { field: "id", headerName: "ID", width: 80 },
+    {
+        field: "id",
+        headerName: "ID",
+        width: 80,
+        sortable: false,
+        filterable: false,
+        editable: false,
+    },
     {
         field: "name",
         headerName: "Name",
         type: "string",
         width: 200,
+        sortable: false,
+        filterable: false,
         editable: false,
     },
     {
@@ -26,6 +35,8 @@ const columns = [
         headerName: "Country",
         type: "string",
         width: 150,
+        sortable: false,
+        filterable: false,
         editable: false,
     },
     {
@@ -33,6 +44,8 @@ const columns = [
         headerName: "City",
         type: "string",
         width: 200,
+        sortable: false,
+        filterable: false,
         editable: false,
     },
     {
@@ -40,6 +53,8 @@ const columns = [
         headerName: "Street",
         type: "string",
         width: 200,
+        sortable: false,
+        filterable: false,
         editable: false,
     },
     {
@@ -47,6 +62,8 @@ const columns = [
         headerName: "Building number",
         type: "string",
         width: 150,
+        sortable: false,
+        filterable: false,
         editable: false,
     },
     {
@@ -54,6 +71,8 @@ const columns = [
         headerName: "Description",
         type: "string",
         width: 300,
+        sortable: false,
+        filterable: false,
         editable: false,
     },
     {
@@ -61,6 +80,8 @@ const columns = [
         headerName: "Average grade",
         type: "string",
         width: 150,
+        sortable: false,
+        filterable: false,
         editable: false,
     },
 ];
@@ -83,10 +104,10 @@ function rowAction(navigate) {
                     .filter((c) => c.field !== "__check__" && !!c)
                     .forEach(
                         (c) =>
-                            (thisRow[c.field] = params.getValue(
-                                params.id,
-                                c.field
-                            ))
+                        (thisRow[c.field] = params.getValue(
+                            params.id,
+                            c.field
+                        ))
                     );
 
                 return navigate("/center-details/", { state: thisRow });
@@ -121,7 +142,7 @@ function DataGridSearchComponent() {
             });
         } else
             axiosApi
-                .get(`/center/list?search=${searchTerm}`) //.get(`/center/list?${searchTerm !="" ? `search=${searchTerm}&` : ""}${grade !="" ? `grade=${grade}&` : ""}${sortby !="" ? 'sort=${sortTerm}' : ""}`)
+                .get(`/center/list?search=${searchTerm}`) //.get(`/center/list?${searchTerm !="" ? `search=${searchTerm}&` : ""}${grade !="" ? `grade=${grade}&` : ""}${sortby !="" ? 'ordering=${sortTerm}' : ""}`)
                 .then((response) => {
                     setCenters(response.data);
                 });
@@ -163,7 +184,7 @@ function DataGridSearchComponent() {
                 <Box sx={{ height: 700, width: "100%" }}>
                     <DataGrid
                         rows={centers}
-                        
+                        disableColumnFilter
                         columns={[...columns, rowAction(navigate)]}
                         autoHeight
                         density="comfortable"
