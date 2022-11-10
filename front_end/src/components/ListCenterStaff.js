@@ -8,6 +8,7 @@ import Stack from "@mui/material/Stack";
 import { green } from "@mui/material/colors";
 import axiosApi from "../api/axios";
 import { useNavigate, useParams } from 'react-router-dom';
+import ReadMoreIcon from "@mui/icons-material/ReadMore";
 
 
 
@@ -55,6 +56,26 @@ function refreshPage(){
         </strong>
     )
 };*/
+
+/*const RenderDetailsButton = (params) => {
+    let navigate = useNavigate();
+    return (
+        <strong>
+            <Button
+                variant="contained"
+                color="secondary"
+                size="small"
+                style={{ marginLeft: 16 }}
+                onClick={() => {
+                    navigate('/user-details/'+params.row.id);
+                }}
+            >
+                Details
+            </Button>
+        </strong>
+    )
+};*/
+
 
 const columns = [
     { field: "id", headerName: "ID", width: 80 },
@@ -127,9 +148,55 @@ const columns = [
     }*/
 ];
 
+function rowAction(navigate) {
+    return {
+        field: "action",
+        headerName: "Details",
+        align: "center",
+        headerAlign: "center",
+        sortable: false,
+        renderCell: (params) => {
+            const onClick = (e) => {
+                e.stopPropagation(); // don't select this row after clicking
+
+                const api = params.api;
+                const thisRow = {};
+
+                api.getAllColumns()
+                    .filter((c) => c.field !== "__check__" && !!c)
+                    .forEach(
+                        (c) =>
+                            (thisRow[c.field] = params.getValue(
+                                params.id,
+                                c.field
+                            ))
+                    );
+                console.log("Staff--: ", params.row);
+
+                return navigate('/staff-details/'+ params.row.id);
+            };
+            return (
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    size="small"
+                    onClick={onClick}
+                >
+                    {" "}
+                    <ReadMoreIcon />{" "}
+                </Button>
+            );
+        },
+    };
+}
+
+
+
+
 function DataGridCenterStaff() {
     const [centers, setCenters] = useState([]);
     const params = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         getData();
@@ -165,7 +232,7 @@ function DataGridCenterStaff() {
                 <Box sx={{ height: 700, width: "100%" }}>
                     <DataGrid
                         rows={centers}
-                        columns={columns}
+                        columns={[...columns, rowAction(navigate)]}
                         autoHeight
                         density="comfortable"
                         disableSelectionOnClick
