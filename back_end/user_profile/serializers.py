@@ -49,7 +49,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     jmbg = serializers.RegexField("^(\d{13})?$", max_length=None, min_length=None, allow_blank=False)
     class Meta:
       model = UserProfile
-      fields = ('address', 'city', 'country', 'phone_number',
+      fields = ('id','address', 'city', 'country', 'phone_number',
        'jmbg', 'gender', 'blood_type', 'profession', 'workplace', 'tranfusion_center', "is_activated")       
 
 class UserSerializer(serializers.ModelSerializer):

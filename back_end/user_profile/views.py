@@ -46,7 +46,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
         if self.action == 'list':
             self.permission_classes = [IsAdmin, ]
         elif self.action == 'retrieve':
-            self.permission_classes = [IsOwner]
+            self.permission_classes = [IsOwner | IsAdmin]
         return super(self.__class__, self).get_permissions()
 
 
@@ -54,7 +54,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
 class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
-    permission_classes = [IsAuthenticated, IsOwner] #IsOwner sta je ovo Marko?!?!?!?
+    permission_classes = [IsAuthenticated] #IsOwner sta je ovo Marko?!?!?!?
     
 class RegisterCenterUserAPIView(APIView):
     queryset = User.objects.all()
@@ -65,7 +65,7 @@ class RegisterCenterStaffAPIView(APIView):
     queryset = User.objects.all()
     permission_classes = [IsAuthenticated, IsAdmin]
     def post(self, request, format=None):
-        return post_new_user(request, Group.objects.get(name="TranfusionCenterStaff"), True, False, False, request.user.tranfusion_center)
+        return post_new_user(request, Group.objects.get(name="TranfusionCenterStaff"), True, False, False, None)
 
 class RegisterCenterAdminAPIView(APIView):
     queryset = User.objects.all()
@@ -134,4 +134,7 @@ class UserUpdatePasswordView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserUpdatePasswordSerializer
     permission_classes = [IsAuthenticated]
 
-
+class UserUpdateStaffView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserUpdateSerializer
+    permission_classes = [IsAuthenticated]
