@@ -35,7 +35,7 @@ class RetrieveTranfusionCenterAPIView(generics.RetrieveAPIView):
 class ListTranfusionCenterGetAPIView(generics.ListAPIView):
     queryset = TranfusionCenter.objects.all()
     serializer_class = TranfusionCenterSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', '^description', 'country', 'city', 'street', 'building_number']
 
 class TransfusionCenterAPIView(generics.RetrieveAPIView):
