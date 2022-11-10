@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosApi from "../api/axios";
 import { TextField } from "@mui/material";
-
+import axios from "axios";
 
 function UpdateComplaintForm() {
     let navigate = useNavigate();
@@ -13,12 +13,21 @@ function UpdateComplaintForm() {
     const params = useParams();
     const [complaint, setComplaint] = useState({});
     const [reply, setReply] = useState("");
+    const [center, setCenter] = useState({});
+    const [user, setUser] = useState(false);
 
     const handleUpdate = async (data) => {
         try {
             console.log("COMPLAINT: ", complaint);
             console.log("REPLY: ", reply);
-            const resp = await axiosApi.put(`/complaints/${params.id}/`, {id: complaint.id, text: complaint.text, transfusion_center: complaint.transfusion_center, user_profile: complaint.user_profile, staff: complaint.staff, response: reply});
+            const resp = await axiosApi.put(`/complaints/${params.id}/`, {
+                id: complaint.id,
+                text: complaint.text,
+                transfusion_center: complaint.transfusion_center,
+                user_profile: complaint.user_profile,
+                staff: complaint.staff,
+                response: reply,
+            });
             console.log(resp.data);
             navigate("/list-complaints");
         } catch (error) {
@@ -30,6 +39,22 @@ function UpdateComplaintForm() {
         try {
             axiosApi.get(`/complaints/${params.id}/`).then((response) => {
                 setComplaint(response.data);
+                console.log(
+                    "response.data.transfusion_center: ",
+                    response.data.transfusion_center
+                );
+                axiosApi
+                    .get(`/center/get/${response.data.transfusion_center}`)
+                    .then((res) => {
+                        setCenter(res.data);
+                        console.log(res.data);
+                    });
+                axiosApi
+                    .get(`/account/users/${response.data.staff}`)
+                    .then((res) => {
+                        setUser(res.data);
+                        console.log(res.data);
+                    });
             });
         } catch (error) {
             console.log(error.response);
@@ -40,8 +65,7 @@ function UpdateComplaintForm() {
         getComplaint();
     }, []);
 
-    useEffect(() => {
-    }, [reply]);
+    useEffect(() => {}, [reply]);
 
     return (
         <div>
@@ -49,9 +73,20 @@ function UpdateComplaintForm() {
                 <Typography variant="h5" color={green[900]} align={"left"}>
                     ID: {complaint.id}
                 </Typography>
+                {center && (
+                    <Typography variant="h6" color={green[900]} align={"left"}>
+                        Complaint for Center: {center.name}
+                    </Typography>
+                )}
+                {user  && (
+                    <Typography variant="h6" color={green[900]} align={"left"}>
+                        Complaint for Staff: {user.first_name} {user.last_name}
+                    </Typography>
+                ) }
                 <Typography variant="h7" color={green[700]} align={"left"}>
                     {complaint.text}
                 </Typography>
+
                 <Typography variant="h5" color={green[900]} align={"left"}>
                     Reply:
                 </Typography>
