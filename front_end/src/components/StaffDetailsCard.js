@@ -12,7 +12,7 @@ function StaffDetailsCard() {
 
     let getData = async () => {
         axiosApi
-            .get(`/account/users/get/${params.id}/`)
+            .get(`/account/users/${params.id}/`)
             .then((response) => {
                 setProfile(response.data);
                 setUserprofile(response.data.userprofile);

@@ -3,12 +3,16 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Controller } from "react";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import CachedIcon from "@mui/icons-material/Cached";
 import { green } from "@mui/material/colors";
+import FormControl from "@mui/material/FormControl";
 import axiosApi from "../api/axios";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import { useNavigate } from "react-router-dom";
 
@@ -130,23 +134,33 @@ function rowAction(navigate) {
 function DataGridSearchComponent() {
     const [centers, setCenters] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [sortby, setSortBy] = React.useState('');
+    const [direction, setDirection] = React.useState('');
     const navigate = useNavigate();
     useEffect(() => {
         getData();
-    }, [searchTerm]);
+    }, [searchTerm, sortby, direction]);
 
     let getData = async () => {
-        if (searchTerm === "") {
+        if (searchTerm === "" && sortby === 0) {
             axiosApi.get("/center/list").then((response) => {
                 setCenters(response.data);
             });
         } else
             axiosApi
-                .get(`/center/list?search=${searchTerm}`) //.get(`/center/list?${searchTerm !="" ? `search=${searchTerm}&` : ""}${grade !="" ? `grade=${grade}&` : ""}${sortby !="" ? 'ordering=${sortTerm}' : ""}`)
+                .get(`/center/list?${searchTerm !="" ? `search=${searchTerm}&` : ""}${sortby !="" ? `ordering=${direction}${sortby}&` : ""}`) //${grade !="" ? `grade=${grade}&` : ""}
                 .then((response) => {
                     setCenters(response.data);
                 });
     };
+
+    const handleChange = (event) => {
+        setSortBy(event.target.value);
+      };
+
+    const handleDirection = (event) => {
+        setDirection(event.target.value);
+      };
 
     return (
         <div>
@@ -180,6 +194,45 @@ function DataGridSearchComponent() {
                     <CachedIcon />
                 </IconButton>
             </Stack>
+            <Stack direction={"row"} sx={{ justifyContent: "start" }} p={1}>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
+                    <InputLabel id="demo-simple-select-standard-label">SortBy</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        value={sortby}
+                        onChange={handleChange}
+                        defaultValue={0}
+                    >
+                        <MenuItem value={0}>
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={"id"}>Id</MenuItem>
+                        <MenuItem value={"name"}>Name</MenuItem>
+                        <MenuItem value={"country"}>Country</MenuItem>
+                        <MenuItem value={"city"}>City</MenuItem>
+                        <MenuItem value={"street"}>Street</MenuItem>
+                        <MenuItem value={"building_number"}>Building number</MenuItem>
+                        <MenuItem value={"description"}>Description</MenuItem>
+                        <MenuItem value={"average_grade"}>Average grade</MenuItem>
+                    </Select>
+                </FormControl>
+                </Stack>
+                <Stack direction={"row"} sx={{ justifyContent: "start" }} p={1}>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
+                    <InputLabel id="demo-simple-select-standard-label">Order</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        value={direction}
+                        onChange={handleDirection}
+                        defaultValue={"+"}
+                    >
+                        <MenuItem value={"+"}>Ascending</MenuItem>
+                        <MenuItem value={"-"}>Descending</MenuItem>
+                    </Select>
+                </FormControl>
+                </Stack>
             <Paper>
                 <Box sx={{ height: 700, width: "100%" }}>
                     <DataGrid

@@ -52,7 +52,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
 class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
-    permission_classes = [IsAuthenticated] #IsOwner sta je ovo Marko?!?!?!?
+    permission_classes = [IsAuthenticated, IsOwner]
     
 class RegisterCenterUserAPIView(APIView):
     queryset = User.objects.all()
@@ -81,7 +81,7 @@ def post_new_user(request, group, isActive, is_superuser, is_staff, tranfusion_c
             instance.groups.add(group)
             instance.is_superuser = is_superuser
             instance.is_staff = is_staff
-            instance.userprofile.is_activated  = False
+            instance.userprofile.is_activated = isActive
             instance.tranfusion_center = tranfusion_center
             instance.save()
             user_profile_serializer.instance = instance.userprofile
@@ -116,17 +116,6 @@ class UserDestroyAPIView(generics.DestroyAPIView):
     def perform_destroy(self, instance):
         super().perform_destroy(instance)
 
-class RetrieveUserAPIView(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
-    def get_permissions(self):
-        if self.action == 'list':
-            self.permission_classes = [IsAdmin]
-        elif self.action == 'retrieve':
-            self.permission_classes = [IsOwner | IsAdmin]
-        return super(self.__class__, self).get_permissions()
-
 class UserUpdatePasswordView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdatePasswordSerializer
@@ -136,3 +125,5 @@ class UserUpdateStaffView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
     permission_classes = [IsAuthenticated]
+
+

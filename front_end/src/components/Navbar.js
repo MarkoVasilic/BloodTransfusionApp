@@ -139,7 +139,7 @@ const chooseSideMenu = (group) => {
     if (!group) return { "Check Transfusion Centers": "/list-centers" };
     if (group[0] === "Admin") {
         return {
-            "Check Transfusion Centers": "/list-centers",
+            "List Transfusion Centers": "/list-centers",
             "Create Transfusion Centers": "/create-center",
             "Create New Admin": "/register-admin",
             "Create New Staff": "/register-staff",
@@ -157,7 +157,7 @@ const chooseSideMenu = (group) => {
             Calendar: "/calendar",
         };
     } else {
-        return { "Check Transfusion Centers": "/list-centers" };
+        return { "List Transfusion Centers": "/list-centers" };
     }
 };
 

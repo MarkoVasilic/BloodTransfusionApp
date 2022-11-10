@@ -41,6 +41,7 @@ export default function CenterAdministratorProfile() {
     return (
         <div>
             <Navbar />
+            <AllowedUsers userRole = {listOfAllowedUsers}/>
             <Stack marginTop={"10px"} justifyContent={"center"}>
             <Typography align="center"  marginBottom={"20px"}  component="h1" variant="h4" color={green[800]}>
                 Profile
