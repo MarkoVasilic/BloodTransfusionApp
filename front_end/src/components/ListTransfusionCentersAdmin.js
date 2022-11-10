@@ -10,6 +10,7 @@ import CachedIcon from "@mui/icons-material/Cached";
 import { green, red } from "@mui/material/colors";
 import axiosApi from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import ReadMoreIcon from "@mui/icons-material/ReadMore";
 
 function refreshPage(){
     window.location.reload();
@@ -73,6 +74,7 @@ const RenderGetCenterAdministratorsButton = (params) =>{
         </strong>
     )
 };
+
 
 const columns = [
     { field: "id", headerName: "ID", width: 80 },
@@ -150,10 +152,52 @@ const columns = [
 
 ];
 
+function rowAction(navigate) {
+    return {
+        field: "action",
+        headerName: "Details",
+        align: "center",
+        headerAlign: "center",
+        sortable: false,
+        renderCell: (params) => {
+            const onClick = (e) => {
+                e.stopPropagation(); // don't select this row after clicking
+
+                const api = params.api;
+                const thisRow = {};
+
+                api.getAllColumns()
+                    .filter((c) => c.field !== "__check__" && !!c)
+                    .forEach(
+                        (c) =>
+                            (thisRow[c.field] = params.getValue(
+                                params.id,
+                                c.field
+                            ))
+                    );
+
+                return navigate("/center-details/", { state: thisRow });
+            };
+            return (
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    size="small"
+                    onClick={onClick}
+                >
+                    {" "}
+                    <ReadMoreIcon />{" "}
+                </Button>
+            );
+        },
+    };
+}
+
 function DataGridSearchComponent() {
     const[user, setUser] = useState("");
     const [center, setCenter] = useState();
     const [centerID, setCenterID] = useState(null);
+    const navigate = useNavigate();
 
     let getUser = async() => {
         return axiosApi.get('/account/users/user-profile')
@@ -183,6 +227,7 @@ function DataGridSearchComponent() {
 
 
 
+
     return (
         <div>
             <Stack direction={"row"} sx={{ justifyContent: "center" }}>
@@ -200,7 +245,7 @@ function DataGridSearchComponent() {
                 <Box sx={{ height: 700, width: "100%" }}>
                     <DataGrid
                         rows={center ? [center]: []}
-                        columns={columns}
+                        columns={[...columns, rowAction(navigate)]}
                         autoHeight
                         density="comfortable"
                         disableSelectionOnClick

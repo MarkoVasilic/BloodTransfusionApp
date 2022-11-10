@@ -9,7 +9,6 @@ urlpatterns = [
   path(r'users/update/<int:pk>/', UserUpdateViewSet.as_view()),
   path(r'users/change-password/<int:pk>/', UserUpdatePasswordView.as_view()),
   path('users/logged/', CurrentUserView.as_view()),
-
   path('users/user-profile/', UserPersonalInformationAPIView.as_view()),
   path('users/center/<int:pk>/', ListCenterStaff.as_view()),
   path('users/delete-user/<int:pk>/', UserDestroyAPIView.as_view()),

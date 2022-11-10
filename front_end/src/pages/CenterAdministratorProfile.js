@@ -33,8 +33,8 @@ export default function CenterAdministratorProfile() {
           }
 
         const routeChange2 = () =>{ 
-            //let path = `/staff-profile/update/${id}/`; 
-            //navigate(path);
+            let path = `/change-password-staff/`; 
+            navigate(path);
           }
 
 
