@@ -81,7 +81,7 @@ def post_new_user(request, group, isActive, is_superuser, is_staff, tranfusion_c
             instance.groups.add(group)
             instance.is_superuser = is_superuser
             instance.is_staff = is_staff
-            instance.userprofile.is_activated = isActive
+            instance.userprofile.is_activated  = False
             instance.tranfusion_center = tranfusion_center
             instance.save()
             user_profile_serializer.instance = instance.userprofile
