@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RegisterCenterUserAPIView,RegisterCenterStaffAPIView,RegisterCenterAdminAPIView, UserUpdatePasswordView,UserViewSet, UserUpdateViewSet, CurrentUserView, ListCenterStaff, UserDestroyAPIView, RetrieveUserAPIView
+from .views import RegisterCenterUserAPIView,RegisterCenterStaffAPIView,RegisterCenterAdminAPIView, UserUpdatePasswordView,UserViewSet, UserUpdateViewSet, CurrentUserView, UserPersonalInformationAPIView, ListCenterStaff, UserDestroyAPIView, RetrieveUserAPIView,UserUpdateStaffView
 from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
@@ -13,6 +13,7 @@ urlpatterns = [
   path('users/center/<int:pk>/', ListCenterStaff.as_view()),
   path('users/delete-user/<int:pk>/', UserDestroyAPIView.as_view()),
   path(r'users/get/<int:pk>/', RetrieveUserAPIView.as_view()),
+  path(r'users/update-staff/<int:pk>/', UserUpdateStaffView.as_view()),
 ]
 
 router = DefaultRouter()

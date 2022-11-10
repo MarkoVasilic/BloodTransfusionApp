@@ -142,6 +142,7 @@ const chooseSideMenu = (group) => {
             "Check Transfusion Centers": "/list-centers",
             "Create Transfusion Centers": "/create-center",
             "Create New Admin": "/register-admin",
+            "Create New Staff": "/register-staff",
             "List Users": "/users",
             "Complaints": "/list-complaints",
         };

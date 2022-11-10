@@ -110,7 +110,7 @@ const columns = [
         field: "workplace",
         headerName: "Workplace",
         type: "string",
-        width: 200,
+        width: 150,
         editable: false,
         valueGetter: (params) => {return params.row.userprofile.workplace}
     },
@@ -123,11 +123,19 @@ const columns = [
         valueGetter: (params) => {return params.row.userprofile.gender}
     },
     {
+        field: "blood_type",
+        headerName: "Blood Type",
+        type: "string",
+        width: 65,
+        editable: false,
+        valueGetter: (params) => {return params.row.userprofile.blood_type}
+    },
+    {
         field: "details",
         headerName: "Details",
         headerAlign: "center",
         align: "center",
-        width: 150,
+        width: 100,
         renderCell: RenderDetailsButton,
         disableClickEventBubbling: true   
     }
