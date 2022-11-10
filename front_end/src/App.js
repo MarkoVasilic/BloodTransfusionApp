@@ -22,6 +22,7 @@ import CenterStaff from "./pages/CenterStaff";
 import UpdateStaff from "./pages/UpdateStaff";
 import CenterAdministratorProfile from "./pages/CenterAdministratorProfile";
 import UpdateUser from "./pages/UpdateUser";
+import UserChangePassword from "./pages/UserChangePassword";
 import UpdateCenterAdministrator from "./pages/UpdateCenterAdministrator";
 
 function App() {
@@ -48,7 +49,7 @@ function App() {
                         <Route path="/center-details" element={<CenterDetails />} />
                         <Route path="/change-password" element={<AdminChangePassword />} />
                         <Route path="/update-center/:center" element={<UpdateCenter />} />
-                        <Route path="/list-centers-update" element={<AllCenters />} />
+                        <Route path="/list-centers-update" element={<AllCentersAdmin />} />
                         <Route path="/calendar" element={<MyCalendar />} />
                         <Route path="/user-details/:id" element={<UserDetails />} />
                         <Route path="/user-profile" element={<UserProfile />} />
@@ -58,6 +59,7 @@ function App() {
                         <Route path="/user-profile/update/:user" element={<UpdateUser />} />
                         <Route path="/staff-profile/update/:user" element={<UpdateCenterAdministrator />} />
                         <Route path="/user-profile/update/:user" element={<UpdateUser />} />
+
                     </Routes>
                 </div>
             </Router>
