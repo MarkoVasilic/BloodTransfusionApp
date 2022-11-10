@@ -16,7 +16,9 @@ function UpdateComplaintForm() {
 
     const handleUpdate = async (data) => {
         try {
-            const resp = await axiosApi.put(`/complaints/${params.id}/`, {id: 2, text:"mojtekst", transfusion_center: 17, user_profile: 28});
+            console.log("COMPLAINT: ", complaint);
+            console.log("REPLY: ", reply);
+            const resp = await axiosApi.put(`/complaints/${params.id}/`, {id: complaint.id, text: complaint.text, transfusion_center: complaint.transfusion_center, user_profile: complaint.user_profile, staff: complaint.staff, response: reply});
             console.log(resp.data);
             navigate("/list-complaints");
         } catch (error) {

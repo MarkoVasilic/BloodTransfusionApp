@@ -1,15 +1,13 @@
 import { Button, Typography } from "@mui/material";
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { DataGrid} from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import Stack from "@mui/material/Stack";
 import { green } from "@mui/material/colors";
 import axiosApi from "../api/axios";
 import { useNavigate } from "react-router-dom";
-
-
 
 const RenderUpdateButton = (params) => {
     let navigate = useNavigate();
@@ -21,18 +19,23 @@ const RenderUpdateButton = (params) => {
                 size="small"
                 style={{ marginLeft: 16 }}
                 onClick={() => {
-                    navigate('/complaint-reply/'+params.row.id);
+                    navigate("/complaint-reply/" + params.row.id);
                 }}
             >
                 Reply
             </Button>
         </strong>
-    )
+    );
 };
 
-
 const columns = [
-    { field: "id", headerName: "ID", width: 150, align: "left", headerAlign: "left"},
+    {
+        field: "id",
+        headerName: "ID",
+        width: 150,
+        align: "left",
+        headerAlign: "left",
+    },
     {
         field: "text",
         headerName: "Content",
@@ -47,8 +50,8 @@ const columns = [
         align: "center",
         width: 150,
         renderCell: RenderUpdateButton,
-        disableClickEventBubbling: true   
-    }
+        disableClickEventBubbling: true,
+    },
 ];
 
 function DataGridSearchComponent() {
@@ -59,13 +62,14 @@ function DataGridSearchComponent() {
     }, []);
 
     let getData = async () => {
-            axiosApi
-                .get("/complaints/")
-                .then((response) => {
-                    setComplaints(response.data);
-                    console.log(response.data);
-                }); 
-
+        axiosApi.get("/complaints/").then((response) => {
+            console.log(response.data);
+            console.log(response);
+            let list = [];
+            list = response.data.filter(function(complaint) { return complaint.response === ""; });
+            setComplaints(list);
+            console.log(list);
+        });
     };
 
     return (
@@ -73,7 +77,7 @@ function DataGridSearchComponent() {
             <Stack direction={"row"} sx={{ justifyContent: "center" }}>
                 <Typography
                     component="h1"
-                    variant="h4" 
+                    variant="h4"
                     color={green[800]}
                     marginBottom={3}
                     marginTop={1}
@@ -92,7 +96,7 @@ function DataGridSearchComponent() {
                         disableSelectionOnClick
                         rowHeight={50}
                         pageSize={5}
-                        headerHeight={35}                     
+                        headerHeight={35}
                     />
                 </Box>
             </Paper>
