@@ -18,7 +18,7 @@ const columns = [
         field: "name",
         headerName: "Name",
         type: "string",
-        width: 200,
+        width: 180,
         editable: false,
     },
     {

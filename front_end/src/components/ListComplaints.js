@@ -15,7 +15,7 @@ const RenderUpdateButton = (params) => {
         <strong>
             <Button
                 variant="contained"
-                color="primary"
+                color="secondary"
                 size="small"
                 style={{ marginLeft: 16 }}
                 onClick={() => {
