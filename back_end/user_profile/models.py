@@ -27,7 +27,7 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=50, blank=True, null=True)
     country = models.CharField(max_length=50, blank=True, null=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
-    jmbg = models.CharField(max_length=13, blank=True, null=True, validators=[MinLengthValidator(13), MaxLengthValidator(13)])
+    jmbg = models.CharField(max_length=13, blank=True, null=False, validators=[MinLengthValidator(13), MaxLengthValidator(13)])
     gender = models.CharField(
         max_length=1,
         choices=Gender.choices,

@@ -1,25 +1,53 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
-import { Button, Typography } from "@mui/material";
-import { green } from "@mui/material/colors";
+import { Button, TextField, Typography } from "@mui/material";
+import { green, red } from "@mui/material/colors";
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axiosApi from "../api/axios";
 import { useForm } from "react-hook-form";
 import InputTextField from "./InputTextField";
+
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+const schema = yup
+  .object()
+  .shape({
+    first_name: yup.string().min(3, "please enter first name").required(),
+    last_name: yup.string().min(3, "please enter last name").required(),
+  }).required();
 
 
 function UpdateCenterForm() {
 
     let navigate = useNavigate();
-    const {control, handleSubmit, reset} = useForm();
+    const {control, handleSubmit, reset} = useForm({
+        resolver: yupResolver(schema)
+    });
     const [user, setUser] = useState({});
+    const [error, setError] = useState("");
+    const [successAlert, setSuccessAlert] = useState("hidden");
+    const [errorAlert, setErrorAlert] = useState("hidden");
+    const [alert, setAlert] = useState("");
 
     const handleUpdate = async (data) => {
         try {
+            if(data.first_name === "" || data.last_name === ""){
+                setError("Please enter first and last name");
+                setError(error.resp.data.password[0]);
+                    setAlert("error");
+                    setSuccessAlert("hidden");
+                    setErrorAlert("visible");
+                    console.log("errr", error.resp.data);
+            }else{
             const resp = await axiosApi.put(`/account/users/update/${user.id}/`, data);
             console.log(resp.data);
+            setAlert("success");
+                    setSuccessAlert("visible");
+                    setErrorAlert("hidden");
+                    setError("");
             navigate('/user-profile/');
+            }
         } catch (error) {
             console.log(error.response);
         }
@@ -59,7 +87,20 @@ function UpdateCenterForm() {
                         label="First name"
                         autoFocus
                         fullWidth
-                    />
+                        rules={{ required: "First name is required!"}}
+                />
+{alert === "success" ? (
+                        <Typography
+                            sx={{ visibility: successAlert, color: green[400], height:5 }}
+                            
+                        >
+                            Password changed successfully!
+                        </Typography>
+                    ) : (
+                        <Typography sx={{ visibility: errorAlert, color: red[400], height:5 }} >
+                            {error}
+                        </Typography>
+                    )}
                 </Grid>
                 <Grid item xs={12}>
                 <InputTextField
@@ -70,15 +111,6 @@ function UpdateCenterForm() {
                         fullWidth
                     />
                 </Grid>
-                {/*<Grid item xs={12}>
-                <InputTextField
-                        name="userprofile.jmbg"
-                        control={control}
-                        variant="filled"
-                        label="JMBG"
-                        fullWidth
-                    />
-    </Grid>*/}
                 <Grid item xs={12}>
                 <InputTextField
                         name="userprofile.address"

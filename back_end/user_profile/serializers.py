@@ -61,6 +61,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     userprofile = UserProfileSerializer()
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
     class Meta:
         model = User
         read_only_fields = ['email']
