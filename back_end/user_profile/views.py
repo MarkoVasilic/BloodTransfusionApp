@@ -119,6 +119,7 @@ class UserDestroyAPIView(generics.DestroyAPIView):
 class RetrieveUserAPIView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+   
     permission_classes = [IsAuthenticated]
     def get_permissions(self):
         if self.action == 'list':
