@@ -52,7 +52,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
 class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated & (IsAdmin | IsOwner)]
     
 class RegisterCenterUserAPIView(APIView):
     queryset = User.objects.all()
@@ -86,6 +86,7 @@ def post_new_user(request, group, isActive, is_superuser, is_staff, tranfusion_c
             instance.save()
             user_profile_serializer.instance = instance.userprofile
             user_profile_serializer.save()
+            user_profile_serializer.instance.id = instance.id
             return Response(user_profile_serializer.data, status=status.HTTP_201_CREATED)
         return Response(user_profile_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response(register_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -125,5 +126,9 @@ class UserUpdateStaffView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
     permission_classes = [IsAuthenticated]
+
+
+class UserStaffByEmail(generics.RetrieveUpdateDestroyAPIView):
+        queryset = User.objects.all()
 
 
