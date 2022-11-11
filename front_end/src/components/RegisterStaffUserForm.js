@@ -47,10 +47,13 @@ const RegistrationForm = (props) => {
 
     const onSubmit = async (data) => {
         try {
+            console.log("DATA1 : ",data);
             sumbitRegistration(data, "TranfusionCenterStaff")
             .then((response)=>{
+            console.log("DATA2 : ",response.data);
                 axiosApi.get(`/account/users/${response.data.id}`)
                 .then((response) => {
+            console.log("DATA3 : ",response.data);
                     response.data.userprofile.tranfusion_center = centerId
                     axiosApi.put(`/account/users/update/${response.data.id}/`,response.data)
                     .then((response) => {
@@ -287,7 +290,7 @@ const RegistrationForm = (props) => {
                         <InputLabel id="demo-simple-select-filled-label">
                                             Select Center
                                         </InputLabel>
-                            <Select label="Select Center" color={"primary"} value={centerId} onChange={handleChange} fullWidth>
+                            <Select required rules={{required : "Please select a center"}} label="Select Center" color={"primary"} value={centerId} onChange={handleChange} fullWidth>
                                 {centers?.map((center) => {
                                     return (
                                         <MenuItem
