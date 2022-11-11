@@ -29,7 +29,7 @@ const columns = [
         field: "name",
         headerName: "Name",
         type: "string",
-        width: 200,
+        width: 180,
         sortable: false,
         filterable: false,
         editable: false,
