@@ -24,6 +24,15 @@ class IsStaff(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user and request.user.groups.values_list('name',flat = True)[0] == 'TranfusionCenterStaff'
 
+class IsStaffInCenter(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        staff_in_center = TranfusionCenter.objects.prefetch_related("userprofile_set__user__groups").get(id = request.user.userprofile.tranfusion_center.id).userprofile_set.all()
+        ids = []
+        for sic in staff_in_center:
+            ids.append(sic.id)
+        return request.user and request.user.groups.values_list('name',flat = True)[0] == 'TranfusionCenterStaff' and (obj.id in ids)
+        
+
 class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.user:
@@ -46,7 +55,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
         if self.action == 'list':
             self.permission_classes = [IsAdmin]
         elif self.action == 'retrieve':
-            self.permission_classes = [IsOwner | IsAdmin]
+            self.permission_classes = [IsOwner | IsAdmin | IsStaffInCenter]
         return super(self.__class__, self).get_permissions()
 
 class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
