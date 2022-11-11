@@ -94,6 +94,14 @@ const columns = [
         editable: false
     },
     {
+        field: "jmbg",
+        headerName: "JMBG",
+        type: "string",
+        width: 200,
+        editable: false,
+        valueGetter: (params) => {return params.row.userprofile.jmbg}
+    },
+    {
         field: "email",
         headerName: "Email",
         type: "string",
