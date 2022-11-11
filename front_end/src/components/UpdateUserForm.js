@@ -46,7 +46,7 @@ function UpdateCenterForm() {
                     setSuccessAlert("visible");
                     setErrorAlert("hidden");
                     setError("");
-            navigate('/user-profile/');
+            navigate(-1);
             }
         } catch (error) {
             console.log(error.response);
