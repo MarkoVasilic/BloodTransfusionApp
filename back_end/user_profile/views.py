@@ -54,7 +54,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
 class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
-    permission_classes = [IsAuthenticated, IsOwner] #IsOwner sta je ovo Marko?!?!?!?
+    permission_classes = [IsAuthenticated, IsOwner]
     
 class RegisterCenterUserAPIView(APIView):
     queryset = User.objects.all()

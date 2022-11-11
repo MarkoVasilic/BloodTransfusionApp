@@ -7,8 +7,8 @@ import { green } from "@mui/material/colors";
 
 
 
-function UserChangePassword() {
-    var allowedUsers = ["TranfusionCenterUser"]
+function AdminProfileChangePassword() {
+    var allowedUsers = ["Admin"]
   return (
     <div>
         <AllowedUsers userRole = {allowedUsers}></AllowedUsers>
@@ -31,4 +31,4 @@ function UserChangePassword() {
   )
 }
 
-export default UserChangePassword
+export default AdminProfileChangePassword
