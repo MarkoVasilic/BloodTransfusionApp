@@ -7,7 +7,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from django.contrib.auth.models import User, Group
 from user_profile.models import UserProfile
-from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer, UserUpdateSerializer, UserUpdatePasswordSerializer,UserActivateSerializer
+from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer, UserUpdateSerializer, UserUpdatePasswordSerializer, UserActivateSerializer
 from django.contrib.auth.models import Group, AnonymousUser
 from rest_framework import status, mixins, generics
 from django_filters.rest_framework import DjangoFilterBackend
@@ -106,14 +106,14 @@ class CurrentUserView(APIView):
             return Response(status=404)
         else:
             serializer = UserSerializer(request.user)
-            return Response(serializer.data) 
+            return Response(serializer.data)   
 
 class ListCenterStaff(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated & (IsStaff | IsAdmin)]
     def retrieve(self, request, pk):
-        queryset = UserProfile.objects.prefetch_related("email_token").get(id = pk).userprofile_set.all()
+        queryset = TranfusionCenter.objects.prefetch_related("userprofile_set__user__groups").get(id = pk).userprofile_set.all()
         serialized_users = UserSerializer(instance = [pu.user for pu in queryset if pu.user.groups.filter(name = "TranfusionCenterStaff")], many = True)
         serialized_data = UserProfileSerializer(instance=queryset, many = True)
         return Response(serialized_users.data)
@@ -141,5 +141,4 @@ class ActivateUserView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserActivateSerializer
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
-
 
