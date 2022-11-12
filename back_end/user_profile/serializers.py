@@ -44,7 +44,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
       model = UserProfile
       fields = ('id','address', 'city', 'country', 'phone_number',
-       'jmbg', 'gender', 'blood_type', 'profession', 'workplace', 'tranfusion_center', "is_activated")       
+       'jmbg', 'gender', 'blood_type', 'profession', 'workplace','loyalty_points', 'tranfusion_center', "is_activated")       
 
 class UserSerializer(serializers.ModelSerializer):
   userprofile = UserProfileSerializer(read_only = True)
