@@ -111,7 +111,7 @@ class CurrentUserView(APIView):
 class ListCenterStaff(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
-    permission_classes = [IsAuthenticated, IsStaff]
+    permission_classes = [IsAuthenticated & (IsStaff | IsAdmin)]
     def retrieve(self, request, pk):
         queryset = TranfusionCenter.objects.prefetch_related("userprofile_set__user__groups").get(id = pk).userprofile_set.all()
         serialized_users = UserSerializer(instance = [pu.user for pu in queryset if pu.user.groups.filter(name = "TranfusionCenterStaff")], many = True)
