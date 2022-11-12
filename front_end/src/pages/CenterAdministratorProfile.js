@@ -18,7 +18,6 @@ export default function CenterAdministratorProfile() {
             axiosApi
             .get('/account/users/user-profile/')
             .then((response) => {
-                console.log(response.data);
                 setId(response.data.id);
             })
         }

@@ -157,7 +157,6 @@ function DataGridSearchComponent() {
                 .get("/account/users/")
                 .then((response) => {
                     setKorisnici(response.data);
-                    console.log(response.data);
                 });
         } else
             axiosApi

@@ -12,7 +12,6 @@ export async function sumbitRegistration(data, userRole){
         }
         else{
                 const response = await axiosApi.post('/account/register/user/', data)
-                console.log(response.data)
                 const email_data = {'token' : '', 'user' : response.data.id, 'email' : response.data.address}
                 await axiosApi.post('/send-email/create/', email_data)
                 return response

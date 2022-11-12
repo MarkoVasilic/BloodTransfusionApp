@@ -35,7 +35,6 @@ const RegistrationForm = (props) => {
 
     let getData = async () => {
         axiosApi.get("/center/list/").then((response) => {
-            console.log(response.data);
             setCenters(response.data);
         
         });
@@ -287,7 +286,7 @@ const RegistrationForm = (props) => {
                         <InputLabel id="demo-simple-select-filled-label">
                                             Select Center
                                         </InputLabel>
-                            <Select label="Select Center" color={"primary"} value={centerId} onChange={handleChange} fullWidth>
+                            <Select required rules={{required : "Please select a center"}} label="Select Center" color={"primary"} value={centerId} onChange={handleChange} fullWidth>
                                 {centers?.map((center) => {
                                     return (
                                         <MenuItem
@@ -350,7 +349,6 @@ const RegistrationForm = (props) => {
                                 color="inherit"
                                 size="small"
                                 onClick={() => {
-                                    console.log("nesto");
                                     setAlert(false);
                                     if (
                                         (props.userRole === "Admin") |

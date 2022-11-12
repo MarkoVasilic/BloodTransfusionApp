@@ -94,6 +94,14 @@ const columns = [
         editable: false
     },
     {
+        field: "jmbg",
+        headerName: "JMBG",
+        type: "string",
+        width: 200,
+        editable: false,
+        valueGetter: (params) => {return params.row.userprofile.jmbg}
+    },
+    {
         field: "email",
         headerName: "Email",
         type: "string",
@@ -171,7 +179,6 @@ function rowAction(navigate) {
                                 c.field
                             ))
                     );
-                console.log("Staff--: ", params.row);
 
                 return navigate('/staff-details/'+ params.row.id);
             };
@@ -208,7 +215,6 @@ function DataGridCenterStaff() {
                 .get(`/account/users/center/${params.centar}/`) 
                 .then((response) => {
                     setCenters(response.data);
-                    console.log(response.data);
                 });
       
     };

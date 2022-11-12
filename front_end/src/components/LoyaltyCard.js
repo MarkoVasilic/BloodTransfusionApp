@@ -37,8 +37,6 @@ function LoyaltyCardComponent() {
         getData();
     }, []);
 
-    console.log("UserProfile", userprofile);
-
     return (
         <Grid container spacing={2} marginTop="-10px" marginBottom={"10px"} alignContent={"center"}>
             <Grid item xs={3}>

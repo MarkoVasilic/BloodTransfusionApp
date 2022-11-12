@@ -61,7 +61,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
 class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
-    permission_classes = [IsAuthenticated & (IsOwner | IsAdmin)]
+    permission_classes = [IsAuthenticated & (IsAdmin | IsOwner)]
     
 class RegisterCenterUserAPIView(APIView):
     queryset = User.objects.all()
@@ -111,7 +111,7 @@ class CurrentUserView(APIView):
 class ListCenterStaff(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
-    permission_classes = [IsAuthenticated, IsStaff]
+    permission_classes = [IsAuthenticated & (IsStaff | IsAdmin)]
     def retrieve(self, request, pk):
         queryset = UserProfile.objects.prefetch_related("email_token").get(id = pk).userprofile_set.all()
         serialized_users = UserSerializer(instance = [pu.user for pu in queryset if pu.user.groups.filter(name = "TranfusionCenterStaff")], many = True)

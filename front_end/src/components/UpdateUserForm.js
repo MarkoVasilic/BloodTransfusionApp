@@ -41,7 +41,6 @@ function UpdateCenterForm() {
                     console.log("errr", error.resp.data);
             }else{
             const resp = await axiosApi.put(`/account/users/update/${user.id}/`, data);
-            console.log(resp.data);
             setAlert("success");
                     setSuccessAlert("visible");
                     setErrorAlert("hidden");

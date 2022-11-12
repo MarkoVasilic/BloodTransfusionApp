@@ -154,7 +154,8 @@ const chooseSideMenu = (group) => {
     } else if (group[0] === "TranfusionCenterStaff") {
         return {
             "List Transfusion Centers": "/list-centers",
-            Calendar: "/calendar",
+            "My Center": "/list-centers-update",
+            "Calendar": "/calendar",
         };
     } else {
         return { "List Transfusion Centers": "/list-centers" };

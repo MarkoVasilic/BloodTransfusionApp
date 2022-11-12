@@ -23,9 +23,6 @@ function StaffDetailsCard() {
         getData();
     }, []);
 
-    console.log("Profil", profile);
-    console.log("UserProfile", userprofile);
-
     return (
         <Grid container spacing={2} marginTop="-10px" marginBottom="0px" alignContent={"center"}>
             <Grid item xs={3}>
@@ -39,6 +36,12 @@ function StaffDetailsCard() {
             </Grid>
             <Grid item xs={9}>
             <Typography variant="h5" color="text.secondary" align='left' marginLeft={"80px"}>{profile.last_name}</Typography>
+            </Grid>
+            <Grid item xs={3}>
+            <Typography variant="h5" align='left' marginLeft={"100px"}>JMBG: </Typography>
+            </Grid>
+            <Grid item xs={9}>
+            <Typography variant="h5" color="text.secondary" align='left' marginLeft={"80px"}>{userprofile.jmbg}</Typography>
             </Grid>
             <Grid item xs={3}>
             <Typography variant="h5" align='left' marginLeft={"100px"}>Email: </Typography>

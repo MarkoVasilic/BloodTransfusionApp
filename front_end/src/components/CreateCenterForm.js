@@ -32,13 +32,11 @@ function CreateCenterForm() {
                 building_number,
                 description,
             });
-            console.log(resp.data);
             setSuccessAlert("visible");
             setErrorAlert("hidden");
             setAlert("success");
             navigate("/list-centers");
         } catch (error) {
-            console.log(error.response);
             setErrorAlert("visible");
             setSuccessAlert("hidden");
             setAlert("error");

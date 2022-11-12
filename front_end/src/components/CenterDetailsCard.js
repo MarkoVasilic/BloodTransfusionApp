@@ -5,7 +5,6 @@ import Grid from '@mui/material/Grid';
 
 export default function MediaCard(props) {
     const { state } = useLocation();
-    console.log(state)
     return (
         <Grid container spacing={2} marginTop="0px" marginBottom="10px" alignContent={"center"}>
             <Grid item xs={3}>
