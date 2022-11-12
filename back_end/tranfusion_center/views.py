@@ -5,6 +5,7 @@ from tranfusion_center import serializer
 from tranfusion_center.models import TranfusionCenter
 from tranfusion_center.serializer import TranfusionCenterSerializer 
 from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import NumberFilter, FilterSet
 from rest_framework import filters, generics, permissions
 from django.contrib.auth.models import User
 from user_profile.models import UserProfile
@@ -36,8 +37,11 @@ class ListTranfusionCenterGetAPIView(generics.ListAPIView):
     queryset = TranfusionCenter.objects.all()
     serializer_class = TranfusionCenterSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['name', '^description', 'country', 'city', 'street', 'building_number']
+    search_fields = ['name', 'country', 'city', 'street', 'building_number']
     ordering_fields = '__all__'
+    filterset_fields = {
+        'average_grade' : ['gte', 'lte']
+    }
 
 class TransfusionCenterAPIView(generics.RetrieveAPIView):
     queryset = TranfusionCenter.objects.all()

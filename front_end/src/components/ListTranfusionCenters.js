@@ -136,19 +136,22 @@ function DataGridSearchComponent() {
     const [searchTerm, setSearchTerm] = useState("");
     const [sortby, setSortBy] = React.useState('');
     const [direction, setDirection] = React.useState('');
+    const [ gradeGte, setGradeGte ] = React.useState('');
+    const [ gradeLte, setGradeLte] = React.useState('');
+
     const navigate = useNavigate();
     useEffect(() => {
         getData();
-    }, [searchTerm, sortby, direction]);
+    }, [searchTerm, sortby, direction, gradeGte, gradeLte]);
 
     let getData = async () => {
-        if (searchTerm === "" && sortby === 0) {
+        if (searchTerm === "" && sortby === 0 && gradeGte === "" && gradeLte === "") {
             axiosApi.get("/center/list").then((response) => {
                 setCenters(response.data);
             });
         } else
             axiosApi
-                .get(`/center/list?${searchTerm !="" ? `search=${searchTerm}&` : ""}${sortby !="" ? `ordering=${direction}${sortby}&` : ""}`) //${grade !="" ? `grade=${grade}&` : ""}
+                .get(`/center/list?${searchTerm !="" ? `search=${searchTerm}&` : ""}${sortby !="" ? `ordering=${direction}${sortby}&` : ""}${gradeGte !="" ? `average_grade__gte=${gradeGte}&` : ""}${gradeLte !="" ? `average_grade__lte=${gradeLte}&` : ""}`) //${grade !="" ? `grade=${grade}&` : ""}
                 .then((response) => {
                     setCenters(response.data);
                 });
@@ -160,6 +163,14 @@ function DataGridSearchComponent() {
 
     const handleDirection = (event) => {
         setDirection(event.target.value);
+      };
+
+    const handleGradeLessThan = (event) => {
+        setGradeLte(event.target.value);
+      };
+
+    const handleGradeGraterThan = (event) => {
+        setGradeGte(event.target.value);
       };
 
     return (
@@ -194,7 +205,7 @@ function DataGridSearchComponent() {
                     <CachedIcon />
                 </IconButton>
             </Stack>
-            <Stack direction={"row"} sx={{ justifyContent: "start" }} p={1}>
+            <Stack direction={"row"} sx={{ justifyContent: "start" }} p={1} marginTop={"-89px"} marginLeft={"260px"}>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
                     <InputLabel id="demo-simple-select-standard-label">SortBy</InputLabel>
                     <Select
@@ -218,7 +229,7 @@ function DataGridSearchComponent() {
                     </Select>
                 </FormControl>
                 </Stack>
-                <Stack direction={"row"} sx={{ justifyContent: "start" }} p={1}>
+                <Stack direction={"row"} sx={{ justifyContent: "start" }} p={1} marginTop={"-80px"} marginLeft={"490px"}>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
                     <InputLabel id="demo-simple-select-standard-label">Order</InputLabel>
                     <Select
@@ -230,6 +241,58 @@ function DataGridSearchComponent() {
                     >
                         <MenuItem value={"+"}>Ascending</MenuItem>
                         <MenuItem value={"-"}>Descending</MenuItem>
+                    </Select>
+                </FormControl>
+                </Stack>
+                <Stack direction={"row"} sx={{ justifyContent: "start" }} p={1} marginTop={"-80px"} marginLeft={"720px"}>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
+                    <InputLabel id="demo-simple-select-standard-label">Average grade less than</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        value={gradeLte}
+                        onChange={handleGradeLessThan}
+                        defaultValue={0}
+                    >
+                        <MenuItem value={0}>
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={"1"}>1</MenuItem>
+                        <MenuItem value={"2"}>2</MenuItem>
+                        <MenuItem value={"3"}>3</MenuItem>
+                        <MenuItem value={"4"}>4</MenuItem>
+                        <MenuItem value={"5"}>5</MenuItem>
+                        <MenuItem value={"6"}>6</MenuItem>
+                        <MenuItem value={"7"}>7</MenuItem>
+                        <MenuItem value={"8"}>8</MenuItem>
+                        <MenuItem value={"9"}>9</MenuItem>
+                        <MenuItem value={"10"}>10</MenuItem>
+                    </Select>
+                </FormControl>
+                </Stack>
+                <Stack direction={"row"} sx={{ justifyContent: "start" }} p={1} marginBottom={"30px"} marginTop={"-80px"} marginLeft={"950px"}>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
+                    <InputLabel id="demo-simple-select-standard-label">Average grade grater than</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        value={gradeGte}
+                        onChange={handleGradeGraterThan}
+                        defaultValue={0}
+                    >
+                        <MenuItem value={0}>
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={"1"}>1</MenuItem>
+                        <MenuItem value={"2"}>2</MenuItem>
+                        <MenuItem value={"3"}>3</MenuItem>
+                        <MenuItem value={"4"}>4</MenuItem>
+                        <MenuItem value={"5"}>5</MenuItem>
+                        <MenuItem value={"6"}>6</MenuItem>
+                        <MenuItem value={"7"}>7</MenuItem>
+                        <MenuItem value={"8"}>8</MenuItem>
+                        <MenuItem value={"9"}>9</MenuItem>
+                        <MenuItem value={"10"}>10</MenuItem>
                     </Select>
                 </FormControl>
                 </Stack>
