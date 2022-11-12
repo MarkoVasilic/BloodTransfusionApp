@@ -203,19 +203,16 @@ function DataGridSearchComponent() {
         return axiosApi.get('/account/users/user-profile')
         .then((response)=> {
             setUser(response.data);
-            console.log("TR ID", response.data.userprofile.tranfusion_center);
             setCenterID(response.data.userprofile.tranfusion_center);
             return response.data.userprofile.tranfusion_center
         })
     }
 
  let getData = async (tcId) => {
-    console.log("USER: -------", user);
         return axiosApi
             .get(`/center/find/${tcId}/`)
             .then((response) => {
                 setCenter(response.data);
-                console.log("Centar", response.data);
             }) 
 }; 
 

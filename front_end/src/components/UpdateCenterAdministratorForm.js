@@ -18,7 +18,6 @@ function UpdateCenterAdministratorForm() {
     const handleUpdate = async (data) => {
         try {
             const resp = await axiosApi.put(`/account/users/update/${user.id}/`, data);
-            console.log(resp.data);
             navigate('/staff-profile/');
         } catch (error) {
             console.log(error.response);

@@ -35,7 +35,6 @@ const RegistrationForm = (props) => {
 
     let getData = async () => {
         axiosApi.get("/center/list/").then((response) => {
-            console.log(response.data);
             setCenters(response.data);
         
         });
@@ -47,13 +46,10 @@ const RegistrationForm = (props) => {
 
     const onSubmit = async (data) => {
         try {
-            console.log("DATA1 : ",data);
             sumbitRegistration(data, "TranfusionCenterStaff")
             .then((response)=>{
-            console.log("DATA2 : ",response.data);
                 axiosApi.get(`/account/users/${response.data.id}`)
                 .then((response) => {
-            console.log("DATA3 : ",response.data);
                     response.data.userprofile.tranfusion_center = centerId
                     axiosApi.put(`/account/users/update/${response.data.id}/`,response.data)
                     .then((response) => {
@@ -353,7 +349,6 @@ const RegistrationForm = (props) => {
                                 color="inherit"
                                 size="small"
                                 onClick={() => {
-                                    console.log("nesto");
                                     setAlert(false);
                                     if (
                                         (props.userRole === "Admin") |

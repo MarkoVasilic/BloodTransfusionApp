@@ -63,12 +63,9 @@ function DataGridSearchComponent() {
 
     let getData = async () => {
         axiosApi.get("/complaints/").then((response) => {
-            console.log(response.data);
-            console.log(response);
             let list = [];
             list = response.data.filter(function(complaint) { return complaint.response === ""; });
             setComplaints(list);
-            console.log(list);
         });
     };
 

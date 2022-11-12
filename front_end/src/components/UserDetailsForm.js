@@ -16,7 +16,6 @@ function UserDetailsComponent() {
                 setUser(response.data);
                 setTimeout(3000);
                 setUserProfile(response.data.userprofile);
-                console.log(response.data);
             });
         } catch (error) {
             console.log(error.response);

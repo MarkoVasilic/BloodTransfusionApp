@@ -59,9 +59,6 @@ function PersonalInformationCardComponent() {
         getData();
     }, []);
 
-    console.log("Profil", profile);
-    console.log("UserProfile", userprofile);
-
     return (
         <Grid container spacing={2} marginTop="-10px" marginBottom="0px" alignContent={"center"}>
             <Grid item xs={3}>

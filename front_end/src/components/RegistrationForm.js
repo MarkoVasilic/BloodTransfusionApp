@@ -299,7 +299,6 @@ const RegistrationForm = (props) => {
                                 color="inherit"
                                 size="small"
                                 onClick={() => {
-                                    console.log("nesto");
                                     setAlert(false);
                                     if((props.userRole === "Admin") | (props.userRole === "TranfusionCenterStaff")){
                                         navigate("/users");

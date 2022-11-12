@@ -10,7 +10,7 @@ import datetime
 import pytz
 
 GROUP_PERMISSIONS = [
-    1, 2, 4  #kod mene 5, 6, 7
+    1, 2, 4
 ]
 
 GENDER = [
@@ -39,11 +39,11 @@ class Command(BaseCommand):
         fake = Faker()
         fake.add_provider(Provider)
 
-        for _ in range(1):
+        for _ in range(3):
             TranfusionCenter.objects.create(name=fake.company(), country=fake.country(),
-             city=fake.city(), street=fake.street_name(), building_number=str(fake.building_number()), description=fake.text())
+             city=fake.city(), street=fake.street_name(), building_number=str(fake.building_number()), description=fake.text(), average_grade=random.choice(range(0, 10)))
 
-        for _ in range(1):
+        for _ in range(3):
             tc = TranfusionCenter.objects.all()
             new_email=fake.email()
             gr_per = fake.group_permissions()
@@ -63,7 +63,7 @@ class Command(BaseCommand):
                 user.userprofile.tranfusion_center=random.choice(tc)
             user.save()
 
-        for _ in range(1):
+        for _ in range(3):
             tz = pytz.timezone('Europe/Belgrade')
             Questionnaire.objects.create(user_profile=random.choice(UserProfile.objects.filter(tranfusion_center=None)),
             less_than_50kg=random.choice([True, False]),

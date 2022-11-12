@@ -17,9 +17,7 @@ function UpdateStaffForm() {
 
     const handleUpdate = async (data) => {
         try {
-            console.log("User", params);
             const resp = await axiosApi.put(`/account/users/update/${params.staff}/` ,data);
-            console.log(resp.data);
             navigate(-1);//prebacuje na prethodnu stranicu
         } catch (error) {
             console.log(error.response);

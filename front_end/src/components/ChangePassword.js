@@ -64,7 +64,6 @@ function ChangePassword() {
                     { ...data, userprofile: user.userprofile }
                 )
                 .then((response) => {
-                    console.log(response);
                     setAlert("success");
                     setSuccessAlert("visible");
                     setErrorAlert("hidden");
@@ -77,7 +76,6 @@ function ChangePassword() {
                     setAlert("error");
                     setSuccessAlert("hidden");
                     setErrorAlert("visible");
-                    console.log("errr", error.response.data);
                 });
         },
         [user, navigate]

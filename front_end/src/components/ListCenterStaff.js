@@ -179,7 +179,6 @@ function rowAction(navigate) {
                                 c.field
                             ))
                     );
-                console.log("Staff--: ", params.row);
 
                 return navigate('/staff-details/'+ params.row.id);
             };
@@ -216,7 +215,6 @@ function DataGridCenterStaff() {
                 .get(`/account/users/center/${params.centar}/`) 
                 .then((response) => {
                     setCenters(response.data);
-                    console.log(response.data);
                 });
       
     };

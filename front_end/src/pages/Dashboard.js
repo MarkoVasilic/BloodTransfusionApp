@@ -13,7 +13,6 @@ export default function Dashboard() {
     axiosApi
         .get(`account/users/logged/`)
         .then((response) => {
-            console.log(response.data);
             setUser(response.data);
             if((response.data.groups[0] === "Admin") && (response.data.userprofile.is_activated === false)){
                 navigate("/change-password");

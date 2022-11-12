@@ -18,8 +18,6 @@ function UpdateComplaintForm() {
 
     const handleUpdate = async (data) => {
         try {
-            console.log("COMPLAINT: ", complaint);
-            console.log("REPLY: ", reply);
             const resp = await axiosApi.put(`/complaints/${params.id}/`, {
                 id: complaint.id,
                 text: complaint.text,
@@ -28,7 +26,6 @@ function UpdateComplaintForm() {
                 staff: complaint.staff,
                 response: reply,
             });
-            console.log(resp.data);
             navigate("/list-complaints");
         } catch (error) {
             console.log(error.response);
@@ -39,21 +36,15 @@ function UpdateComplaintForm() {
         try {
             axiosApi.get(`/complaints/${params.id}/`).then((response) => {
                 setComplaint(response.data);
-                console.log(
-                    "response.data.transfusion_center: ",
-                    response.data.transfusion_center
-                );
                 axiosApi
                     .get(`/center/get/${response.data.transfusion_center}`)
                     .then((res) => {
                         setCenter(res.data);
-                        console.log(res.data);
                     });
                 axiosApi
                     .get(`/account/users/${response.data.staff}`)
                     .then((res) => {
                         setUser(res.data);
-                        console.log(res.data);
                     });
             });
         } catch (error) {

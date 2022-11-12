@@ -18,7 +18,6 @@ function UpdateCenterForm() {
     const handleUpdate = async (data) => {
         try {
             const resp = await axiosApi.put(`/center/update-delete/${params.center}/` ,data);
-            console.log(resp.data);
             navigate('/list-centers-update');
         } catch (error) {
             console.log(error.response);
@@ -28,7 +27,6 @@ function UpdateCenterForm() {
     const getCenter = async (e) => {
         try {
             const res = await axiosApi.get(`/center/get/${params.center}/`);
-            console.log("Centar",res.data);
             return res.data;
         } catch (error) {
             console.log(error.response);
