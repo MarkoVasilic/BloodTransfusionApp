@@ -67,13 +67,13 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         model = User
         read_only_fields = ['email']
         fields = ['id', 'email', 'password', 'first_name', 'last_name',
-     'userprofile']
+     'userprofile', 'is_active']
 
     def update(self, instance, validated_data):
         users_profile_data = validated_data.pop('userprofile')
-        print(users_profile_data)
         instance.first_name = validated_data.get('first_name')
         instance.last_name = validated_data.get('last_name')
+        instance.is_active = validated_data.get('is_active')
         users = instance.userprofile
         users.address = users_profile_data.get('address')
         users.city = users_profile_data.get('city')
@@ -85,6 +85,21 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         users.profession = users_profile_data.get('profession')
         users.workplace = users_profile_data.get('workplace')
         users.tranfusion_center = users_profile_data.get('tranfusion_center')
+        instance.save()
+        return instance
+
+class UserActivateSerializer(serializers.ModelSerializer):
+    userprofile = UserProfileSerializer()
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
+    class Meta:
+        model = User
+        read_only_fields = ['email']
+        fields = ['id', 'email', 'password', 'first_name', 'last_name',
+     'userprofile', 'is_active']
+
+    def update(self, instance, validated_data):
+        instance.is_active = True
         instance.save()
         return instance
 

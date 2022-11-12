@@ -30,6 +30,7 @@ import StaffDetails from "./pages/StaffDetails";
 import AdminProfile from "./pages/AdminProfile";
 import AdminProfileChangePassword from "./pages/AdminProfileChangePassword";
 import UpdateAdminProfile from "./pages/UpdateAdminProfile";
+import VerifyEmail from "./pages/VerifyEmail";
 
 
 
@@ -74,7 +75,7 @@ function App() {
                         <Route path="/admin-profile" element={<AdminProfile />} />
                         <Route path="/admin-profile/password/" element={<AdminProfileChangePassword />} />
                         <Route path="/admin-profile/update/:admin" element={<UpdateAdminProfile />} />
-
+                        <Route path="/verify-email/:token/:id" element={<VerifyEmail />} />
                     </Routes>
                 </div>
             </Router>

@@ -206,6 +206,7 @@ const RegistrationForm = (props) => {
                                 control={control}
                                 label="JMBG"
                                 rules={{
+                                    required: "JMBG required",
                                     validate: {
                                         validateJMBG: (v) =>
                                             isValidJMBG(getValues("jmbg")) ||
@@ -299,7 +300,6 @@ const RegistrationForm = (props) => {
                                 color="inherit"
                                 size="small"
                                 onClick={() => {
-                                    console.log("nesto");
                                     setAlert(false);
                                     if((props.userRole === "Admin") | (props.userRole === "TranfusionCenterStaff")){
                                         navigate("/users");
