@@ -5,7 +5,7 @@ import AllowedUsers from "../components/AllowedUsers";
 
 
 export default function UpdateCenterAdministrator(){
-    const listOfAllowedUsers = ["TranfusionCenterStaff"];
+    const listOfAllowedUsers = ["TranfusionCenterStaff"]
     
     return(
         <div>

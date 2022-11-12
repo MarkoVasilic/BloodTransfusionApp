@@ -238,7 +238,7 @@ function DataGridSearchComponent() {
                     marginBottom={3}
                     marginTop={1}
                 >
-                    Transfusion Centers
+                    Transfusion Center
                 </Typography>
             </Stack>
             <Paper>
