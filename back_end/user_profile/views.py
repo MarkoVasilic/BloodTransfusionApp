@@ -50,10 +50,10 @@ class UserViewSet(mixins.RetrieveModelMixin,
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    search_fields = ['=first_name', '=last_name']
+    search_fields = ['first_name', 'last_name']
     def get_permissions(self):
         if self.action == 'list':
-            self.permission_classes = [IsAdmin]
+            self.permission_classes = [IsAdmin | IsStaff]
         elif self.action == 'retrieve':
             self.permission_classes = [IsOwner | IsAdmin | IsStaffInCenter]
         return super(self.__class__, self).get_permissions()
@@ -89,12 +89,11 @@ def post_new_user(request, group, isActive, is_superuser, is_staff, tranfusion_c
             instance.groups.add(group)
             instance.is_superuser = is_superuser
             instance.is_staff = is_staff
-            instance.userprofile.is_activated = isActive
+            instance.userprofile.is_activated = False
             instance.tranfusion_center = tranfusion_center
             instance.save()
             user_profile_serializer.instance = instance.userprofile
             user_profile_serializer.save()
-            user_profile_serializer.instance.id = instance.id
             return Response(user_profile_serializer.data, status=status.HTTP_201_CREATED)
         return Response(user_profile_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response(register_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
