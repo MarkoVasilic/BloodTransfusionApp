@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import AllowedUsers from "../components/AllowedUsers";
 
 export default function SearchUsers(){
-    const listOfAllowedUsers = ["Admin"];
+    const listOfAllowedUsers = ["Admin", "TranfusionCenterStaff"];
     return(
         <div>
             <Navbar/>
