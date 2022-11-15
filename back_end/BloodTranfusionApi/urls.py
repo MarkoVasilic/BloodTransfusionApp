@@ -29,4 +29,5 @@ urlpatterns = [
     path('questionnaire/',include('questionnaire.urls')),
     path('complaints/',include('complaints.urls')),
     path('send-email/',include('email_token.urls')),
+    path('appointment/',include('appointment.urls')),
 ]

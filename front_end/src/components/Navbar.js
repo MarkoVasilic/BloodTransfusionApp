@@ -150,6 +150,7 @@ const chooseSideMenu = (group) => {
         return {
             "List Transfusion Centers": "/list-centers",
             "Fill Questionnaire": "/fill-questionnaire",
+            "Make An Appointment": "/select-center/",
         };
     } else if (group[0] === "TranfusionCenterStaff") {
         return {

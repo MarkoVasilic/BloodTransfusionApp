@@ -5,7 +5,7 @@ export default function AllCenters() {
     return (
         <div>
             <Navbar/>
-            <ListTranfusionCenters title={"Transfusion Centers"} buttonName={"Details"} buttonUrl={"/center-details/"}/>
+            <ListTranfusionCenters title={"Select Transfusion Center"} buttonName={"Select"} buttonUrl={"/selected-center/"}/>
         </div>
     );
 }

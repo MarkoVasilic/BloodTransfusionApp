@@ -20,8 +20,11 @@ import AllCentersAdmin from "./pages/AllCentersAdmin";
 import UserProfile from "./pages/UserProfile";
 import CenterStaff from "./pages/CenterStaff";
 import UpdateStaff from "./pages/UpdateStaff";
+import ListCreatedAppointments from "./pages/ListCreatedAppointments"
+import SelectCenterForReservation from "./pages/SelectCenterForReservation"
 import CenterAdministratorProfile from "./pages/CenterAdministratorProfile";
 import UpdateUser from "./pages/UpdateUser";
+import SelectedCenter from "./pages/SelectedCenter";
 import UserChangePassword from "./pages/UserChangePassword";
 import UpdateCenterAdministrator from "./pages/UpdateCenterAdministrator";
 import RegisterStaff from "./pages/RegisterStaff";
@@ -31,6 +34,7 @@ import AdminProfile from "./pages/AdminProfile";
 import AdminProfileChangePassword from "./pages/AdminProfileChangePassword";
 import UpdateAdminProfile from "./pages/UpdateAdminProfile";
 import VerifyEmail from "./pages/VerifyEmail";
+import EmailVerificationDeclaration from "./pages/EmailVerificationDeclaration";
 
 
 
@@ -76,6 +80,10 @@ function App() {
                         <Route path="/admin-profile/password/" element={<AdminProfileChangePassword />} />
                         <Route path="/admin-profile/update/:admin" element={<UpdateAdminProfile />} />
                         <Route path="/verify-email/:token/:id" element={<VerifyEmail />} />
+                        <Route path="/email-declaration/" element={<EmailVerificationDeclaration />} />
+                        <Route path="/created-appointments/" element={<ListCreatedAppointments />} />
+                        <Route path="/select-center/" element={<SelectCenterForReservation />} />
+                        <Route path="/selected-center/" element={<SelectedCenter />} />
                     </Routes>
                 </div>
             </Router>

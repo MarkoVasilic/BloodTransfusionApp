@@ -306,7 +306,7 @@ const RegistrationForm = (props) => {
                                     }
                                     else
                                     {
-                                        navigate("/login");
+                                        navigate("/email-declaration");
                                     }
                                 }}
                             >

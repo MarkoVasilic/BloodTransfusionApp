@@ -90,10 +90,10 @@ const columns = [
     },
 ];
 
-function rowAction(navigate) {
+function rowAction(navigate, buttonName, buttonUrl) {
     return {
         field: "action",
-        headerName: "Details",
+        headerName: buttonName,
         align: "center",
         headerAlign: "center",
         sortable: false,
@@ -114,7 +114,7 @@ function rowAction(navigate) {
                         ))
                     );
 
-                return navigate("/center-details/", { state: thisRow });
+                return navigate(buttonUrl, { state: thisRow });
             };
             return (
                 <Button
@@ -131,14 +131,13 @@ function rowAction(navigate) {
     };
 }
 
-function DataGridSearchComponent() {
+function DataGridSearchComponent(props) {
     const [centers, setCenters] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [sortby, setSortBy] = React.useState('');
     const [direction, setDirection] = React.useState('');
     const [ gradeGte, setGradeGte ] = React.useState('');
     const [ gradeLte, setGradeLte] = React.useState('');
-
     const navigate = useNavigate();
     useEffect(() => {
         getData();
@@ -151,7 +150,7 @@ function DataGridSearchComponent() {
             });
         } else
             axiosApi
-                .get(`/center/list?${searchTerm !="" ? `search=${searchTerm}&` : ""}${sortby !="" ? `ordering=${direction}${sortby}&` : ""}${gradeGte !="" ? `average_grade__gte=${gradeGte}&` : ""}${gradeLte !="" ? `average_grade__lte=${gradeLte}&` : ""}`) //${grade !="" ? `grade=${grade}&` : ""}
+                .get(`/center/list?${searchTerm !=="" ? `search=${searchTerm}&` : ""}${sortby !=="" ? `ordering=${direction}${sortby}&` : ""}${gradeGte !="" ? `average_grade__gte=${gradeGte}&` : ""}${gradeLte !="" ? `average_grade__lte=${gradeLte}&` : ""}`) //${grade !="" ? `grade=${grade}&` : ""}
                 .then((response) => {
                     setCenters(response.data);
                 });
@@ -183,7 +182,7 @@ function DataGridSearchComponent() {
                     marginBottom={3}
                     marginTop={1}
                 >
-                    Transfusion Centers
+                    {props.title}
                 </Typography>
             </Stack>
             <Stack direction={"row"} sx={{ justifyContent: "start" }} p={2}>
@@ -301,7 +300,7 @@ function DataGridSearchComponent() {
                     <DataGrid
                         rows={centers}
                         disableColumnFilter
-                        columns={[...columns, rowAction(navigate)]}
+                        columns={[...columns, rowAction(navigate, props.buttonName, props.buttonUrl)]}
                         autoHeight
                         density="comfortable"
                         disableSelectionOnClick
