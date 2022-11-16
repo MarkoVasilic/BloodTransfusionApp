@@ -38,7 +38,7 @@ class ListCenterUsers(generics.ListAPIView):
     serializer_class = AppointmentUserSerializer
     permission_classes = [IsAuthenticated]
     def list(self, request):
-        queryset = Appointment.objects.filter(transfusion_center = request.user.userprofile.tranfusion_center) 
+        queryset = Appointment.objects.filter(transfusion_center = request.user.userprofile.tranfusion_center).exclude(user_profile = None)
         serialized_users = AppointmentUserSerializer(instance = queryset, many = True)
         return Response(serialized_users.data)
 
