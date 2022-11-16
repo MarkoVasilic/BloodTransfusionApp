@@ -13,7 +13,7 @@ function MyCalendar() {
     }, []);
 
     let getData = async () => {
-        axiosApi.get(`/appointments/users`).then((response) => {
+        axiosApi.get(`/appointment/users`).then((response) => {
             setAppointments(response.data);
         });
     };

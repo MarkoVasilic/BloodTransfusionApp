@@ -108,7 +108,7 @@ function ListCenterUsers() {
     let getData = async () => {
         if (searchTerm === "") {
             axiosApi
-                .get("/appointments/users/")
+                .get("/appointment/users/")
                 .then((response) => {
                     setKorisnici(response.data);
                     console.log("resp", response.data); 
@@ -116,7 +116,7 @@ function ListCenterUsers() {
                 });
         } else
             axiosApi
-                .get(`/appointments/search/?search=${searchTerm}`)
+                .get(`/appointment/search/?search=${searchTerm}`)
                 .then((response) => {
                     setKorisnici(response.data);
                 });
