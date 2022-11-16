@@ -34,6 +34,7 @@ import AdminProfile from "./pages/AdminProfile";
 import AdminProfileChangePassword from "./pages/AdminProfileChangePassword";
 import UpdateAdminProfile from "./pages/UpdateAdminProfile";
 import VerifyEmail from "./pages/VerifyEmail";
+import AllCenterUsers from "./pages/AllCenterUsers";
 import EmailVerificationDeclaration from "./pages/EmailVerificationDeclaration";
 
 
@@ -84,6 +85,7 @@ function App() {
                         <Route path="/created-appointments/" element={<ListCreatedAppointments />} />
                         <Route path="/select-center/" element={<SelectCenterForReservation />} />
                         <Route path="/selected-center/" element={<SelectedCenter />} />
+                        <Route path="/center/list-users" element={<AllCenterUsers />} />
                     </Routes>
                 </div>
             </Router>
