@@ -15,6 +15,7 @@ function MyCalendar() {
     let getData = async () => {
         axiosApi.get(`/appointment/users`).then((response) => {
             setAppointments(response.data);
+            console.log("DATA",response.data);
         });
     };
 
@@ -24,6 +25,7 @@ function MyCalendar() {
           endDate.setMinutes(
             appointment.duration + endDate.getMinutes()
         )
+        console.log("APPS",appointment);
             return {
                 title: appointment.user_profile.user.first_name + " " +appointment.user_profile.user.last_name + "'s Appointment",
                 startDate: new Date(appointment.date_time),
@@ -32,6 +34,7 @@ function MyCalendar() {
         });
     }, [appointments]);
 
+    console.log("TRANSFORMERD",transformedAppointents );
 
     return (
         <div>

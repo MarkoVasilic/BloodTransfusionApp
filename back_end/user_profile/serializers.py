@@ -127,4 +127,4 @@ class UserAppointmentSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = UserProfile
-        fields = '__all__'
+        fields = ['user', 'address', 'city', 'phone_number']

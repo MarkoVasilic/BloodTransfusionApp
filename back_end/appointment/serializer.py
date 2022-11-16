@@ -5,7 +5,7 @@ from user_profile.serializers import UserAppointmentSerializer
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        fields = ["id", "date_time", "duration", "user_profile", "transfusion_center", "user_profiles_that_canceled"
+        fields = ["id", "date_time", "duration", "user_profile", "transfusion_center", "user_profiles_that_canceled",
                   "staff"]
 
 class AppointmentUserSerializer(serializers.ModelSerializer):
