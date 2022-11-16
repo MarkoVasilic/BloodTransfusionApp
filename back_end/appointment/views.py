@@ -5,6 +5,19 @@ from appointment.serializer import AppointmentSerializer
 from appointment.models import Appointment
 from rest_framework.response import Response
 from datetime import datetime
+import qrcode
+import json
+from django.core.files.storage import FileSystemStorage
+
+def create_qrcode(data):
+    img = qrcode.make(json.dumps(data))
+    type(img)
+    print(img)
+    #img.save("/qrcodes/some_file.png")
+    fs = FileSystemStorage()
+    file = fs.save('some_file.png', img)
+    # the fileurl variable now contains the url to the file. This can be used to serve the file when needed.
+    fileurl = fs.url(file)
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     serializer_class = AppointmentSerializer
@@ -29,3 +42,6 @@ class AppointmentGetByCenterViewSet(generics.ListAPIView):
 class AppointmentUpdateUserProfileView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
+    def put(self, request, *args, **kwargs):
+        create_qrcode(request.data)
+        return self.update(request, *args, **kwargs)
