@@ -123,3 +123,8 @@ class UserActivateSerializer(serializers.ModelSerializer):
         instance.is_active = True
         instance.save()
         return instance
+class UserAppointmentSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    class Meta:
+        model = UserProfile
+        fields = '__all__'

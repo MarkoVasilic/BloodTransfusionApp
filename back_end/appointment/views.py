@@ -1,14 +1,17 @@
 from django.shortcuts import render
-from rest_framework import filters, generics, mixins, viewsets
+from rest_framework import filters, generics, viewsets, status, mixins, filters, permissions
 from django_filters.rest_framework import DjangoFilterBackend
-from appointment.serializer import AppointmentSerializer
+from appointment.serializer import AppointmentSerializer, AppointmentUserSerializer
 from appointment.models import Appointment
 from rest_framework.response import Response
 from datetime import datetime
+from appointment.models import Appointment
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 class AppointmentViewSet(viewsets.ModelViewSet):
-    serializer_class = AppointmentSerializer
     queryset = Appointment.objects.all()
+    serializer_class = AppointmentSerializer
 
 class AppointmentGetByCenterViewSet(generics.ListAPIView):
     queryset = Appointment.objects.all()
@@ -29,3 +32,19 @@ class AppointmentGetByCenterViewSet(generics.ListAPIView):
 class AppointmentUpdateUserProfileView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
+
+class ListCenterUsers(generics.ListAPIView):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentUserSerializer
+    permission_classes = [IsAuthenticated]
+    def list(self, request):
+        queryset = Appointment.objects.filter(transfusion_center = request.user.userprofile.tranfusion_center)  
+        serialized_users = AppointmentSerializer(instance = queryset, many = True)
+        return Response(serialized_users.data)
+
+class SearchCenterUsers(generics.ListAPIView):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentUserSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ['user_profile__user__first_name', 'user_profile__user__last_name']
