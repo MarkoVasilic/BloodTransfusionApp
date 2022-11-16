@@ -55,7 +55,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
         if self.action == 'list':
             self.permission_classes = [IsAdmin | IsStaff]
         elif self.action == 'retrieve':
-            self.permission_classes = [IsOwner | IsAdmin | IsStaffInCenter]
+            self.permission_classes = [IsOwner | IsAdmin | IsStaffInCenter | IsStaff]
         return super(self.__class__, self).get_permissions()
 
 class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):

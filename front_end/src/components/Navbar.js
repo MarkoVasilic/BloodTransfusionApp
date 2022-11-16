@@ -156,7 +156,7 @@ const chooseSideMenu = (group) => {
             "List Transfusion Centers": "/list-centers",
             "My Center": "/list-centers-update",
             "Calendar": "/calendar",
-            "Users": "/users",
+            "Center Users": "/center/list-users",
         };
     } else {
         return { "List Transfusion Centers": "/list-centers" };

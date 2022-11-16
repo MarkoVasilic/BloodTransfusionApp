@@ -31,6 +31,7 @@ import AdminProfile from "./pages/AdminProfile";
 import AdminProfileChangePassword from "./pages/AdminProfileChangePassword";
 import UpdateAdminProfile from "./pages/UpdateAdminProfile";
 import VerifyEmail from "./pages/VerifyEmail";
+import AllCenterUsers from "./pages/AllCenterUsers";
 
 
 
@@ -76,6 +77,7 @@ function App() {
                         <Route path="/admin-profile/password/" element={<AdminProfileChangePassword />} />
                         <Route path="/admin-profile/update/:admin" element={<UpdateAdminProfile />} />
                         <Route path="/verify-email/:token/:id" element={<VerifyEmail />} />
+                        <Route path="/center/list-users" element={<AllCenterUsers />} />
                     </Routes>
                 </div>
             </Router>

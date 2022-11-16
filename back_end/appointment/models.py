@@ -11,3 +11,7 @@ class Appointment(models.Model):
     user_profile = models.ForeignKey(UserProfile, on_delete = models.CASCADE)
     transfusion_center = models.ForeignKey(TranfusionCenter, on_delete = models.CASCADE)
     staff = models.ManyToManyField(UserProfile, related_name = "staff_list")
+
+
+    def __str__(self) -> str:
+        return "ID:" + str(self.id) + "center ID: " + str(self.transfusion_center_id)

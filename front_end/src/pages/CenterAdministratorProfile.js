@@ -75,7 +75,7 @@ export default function CenterAdministratorProfile() {
                         style={{
                             width: 200,
                             marginLeft: 1300,
-                            marginBottom: -10
+                            marginBottom: -10   
                         }}
                         sx={{
                             background: "#6fbf73",

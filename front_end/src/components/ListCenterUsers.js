@@ -25,7 +25,7 @@ const RenderDetailsButton = (params) => {
                 size="small"
                 style={{ marginLeft: 16 }}
                 onClick={() => {
-                    navigate('/user-details/'+params.row.id);
+                    navigate('/user-details/'+params.row.user_profile.user.id);
                 }}
             >
                 <ReadMoreIcon/>
@@ -36,76 +36,54 @@ const RenderDetailsButton = (params) => {
 
 
 const columns = [
-    { field: "id", headerName: "ID", width: 50 },
+    {
+        field: "id",
+        headerName: "ID",
+        type: "string",
+        width: 50,
+        editable: false,
+        valueGetter: (params) => {return params.row.user_profile.user.id}
+    },
     {
         field: "first_name",
         headerName: "First Name",
         type: "string",
-        width: 200,
+        width: 250,
         editable: false,
+        valueGetter: (params) => {return params.row.user_profile.user.first_name}
     },
     {
         field: "last_name",
         headerName: "Last Name",
         type: "string",
-        width: 140,
+        width: 250,
         editable: false,
-    },
-    {
-        field: "email",
-        headerName: "Email",
-        type: "string",
-        width: 200,
-        editable: false,
-    },
-    {
-        field: "city",
-        headerName: "City",
-        type: "string",
-        width: 150,
-        editable: false,
-        valueGetter: (params) => {return params.row.userprofile.city}
-    },
-    {
-        field: "country",
-        headerName: "Country",
-        type: "string",
-        width: 150,
-        editable: false,
-        valueGetter: (params) => {return params.row.userprofile.country}
+        valueGetter: (params) => {return params.row.user_profile.user.last_name}
     },
     {
         field: "phone_number",
         headerName: "Phone Number",
         type: "string",
-        width: 150,
+        width: 300,
         editable: false,
-        valueGetter: (params) => {return params.row.userprofile.phone_number}
+        valueGetter: (params) => {return params.row.user_profile.user.userprofile.phone_number}
     },
     {
-        field: "profession",
-        headerName: "Profession",
+        field: "email",
+        headerName: "Email",
         type: "string",
-        width: 150,
+        width: 300,
         editable: false,
-        valueGetter: (params) => {return params.row.userprofile.profession}
+        valueGetter: (params) => {return params.row.user_profile.user.email}
     },
     {
-        field: "gender",
-        headerName: "Gender",
+        field: "transfusion_center",
+        headerName: "Center ID",
         type: "string",
-        width: 100,
+        width: 200,
         editable: false,
-        valueGetter: (params) => {return params.row.userprofile.gender}
-    },    
-    {
-        field: "Center",
-        headerName: "Center",
-        type: "string",
-        width: 100,
-        editable: false,
-        valueGetter: (params) => {return params.row.userprofile.tranfusion_center}
     },
+
     {
         field: "details",
         headerName: "Details",
@@ -117,7 +95,7 @@ const columns = [
     }
 ];
 
-function DataGridSearchComponent() {
+function ListCenterUsers() {
     const [korisnici, setKorisnici] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     
@@ -130,14 +108,15 @@ function DataGridSearchComponent() {
     let getData = async () => {
         if (searchTerm === "") {
             axiosApi
-                .get("/account/users/")
+                .get("/appointments/users/")
                 .then((response) => {
                     setKorisnici(response.data);
+                    console.log("resp", response.data); 
 
                 });
         } else
             axiosApi
-                .get(`/account/users?search=${searchTerm}`)
+                .get(`/appointments/search/?search=${searchTerm}`)
                 .then((response) => {
                     setKorisnici(response.data);
                 });
@@ -153,7 +132,7 @@ function DataGridSearchComponent() {
                     marginBottom={3}
                     marginTop={1}
                 >
-                    Users
+                    All Users from your Center
                 </Typography>
             </Stack>
             <Stack direction={"row"} sx={{ justifyContent: "start"}} p={2}>
@@ -200,4 +179,4 @@ function DataGridSearchComponent() {
     );
 }
 
-export default DataGridSearchComponent;
+export default ListCenterUsers;
