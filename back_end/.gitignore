@@ -50,3 +50,5 @@ coverage.xml
 
 # example database
 drf_example
+
+qrcodes
