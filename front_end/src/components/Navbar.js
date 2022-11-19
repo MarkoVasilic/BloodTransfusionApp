@@ -151,6 +151,7 @@ const chooseSideMenu = (group) => {
             "List Transfusion Centers": "/list-centers",
             "Fill Questionnaire": "/fill-questionnaire",
             "Make An Appointment": "/select-center/",
+            "List Scheduled Appointments": "/user-scheduled/",
         };
     } else if (group[0] === "TranfusionCenterStaff") {
         return {

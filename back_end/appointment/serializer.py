@@ -3,6 +3,7 @@ from appointment.models import Appointment
 from user_profile.serializers import UserAppointmentSerializer
 
 class AppointmentSerializer(serializers.ModelSerializer):
+    date_time = serializers.DateTimeField()
     class Meta:
         model = Appointment
         fields = ["id", "date_time", "duration", "user_profile", "transfusion_center", "user_profiles_that_canceled",

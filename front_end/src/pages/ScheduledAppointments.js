@@ -71,7 +71,7 @@ function rowAction(navigate, user, setAlert, setFailed, setErr, alert) {
                 thisRow.date_time = thisRow.date
                 thisRow.user_profile = user.id
                 try {
-                    axiosApi.put(`appointment/update-profile/${thisRow.id}`, thisRow).then(res => {
+                    axiosApi.put(`appointment/cancel/${thisRow.id}`, thisRow).then(res => {
                         console.log(res)
                         setAlert(true)
                     }).catch(err => {
@@ -109,42 +109,42 @@ export default function ListCreatedAppointments() {
     const [failed, setFailed] = React.useState(false);
     const [err, setErr] = React.useState("");
     const navigate = useNavigate();
-    const getUser = async (e) => {
+    let getData = async () => {
         try {
-            const res = await axiosApi.get('/account/users/user-profile/');
-            setUser(res.data);
-            return res.data;
+            await axiosApi.get('/account/users/user-profile/').then((res) => {
+                console.log(res)
+                setUser(res.data);
+                if (sortby === 0) {
+                    axiosApi.get(`/appointment/user-scheduled/${res.data.id}`).then((response) => {
+                        response.data.forEach((app) => {
+                            app.date = app.date_time
+                            app.date_time = app.date_time.split("T")[0] + " " + app.date_time.split("T")[1].split("Z")[0]
+                        })
+                        setAppointments(response.data);
+                    });
+                } else {
+                    axiosApi
+                        .get(`/appointment/user-scheduled/${res.data.id}?${sortby !== "" ? `ordering=${direction}${sortby}&` : ""}`)
+                        .then((response) => {
+                            response.data.forEach((app) => {
+                                app.date = app.date_time
+                                app.date_time = app.date_time.split("T")[0] + " " + app.date_time.split("T")[1].split("Z")[0]
+                            })
+                            setAppointments(response.data);
+                        });
+                }
+                return res.data;
+            });
         } catch (error) {
             console.log(error.response);
         }
     };
-
-    let getData = async () => {
-        if (sortby === 0) {
-            console.log("********************************");
-            axiosApi.get(`/appointment/user-scheduled/${user.id}`).then((response) => {
-                response.data.forEach((app) => {
-                    app.date = app.date_time
-                    app.date_time = app.date_time.split("T")[0] + " " + app.date_time.split("T")[1].split("Z")[0]
-                })
-                setAppointments(response.data);
-            });
-        } else {
-            axiosApi
-                .get(`/appointment/user-scheduled/${user.id}?${sortby !== "" ? `ordering=${direction}${sortby}&` : ""}`)
-                .then((response) => {
-                    response.data.forEach((app) => {
-                        app.date = app.date_time
-                        app.date_time = app.date_time.split("T")[0] + " " + app.date_time.split("T")[1].split("Z")[0]
-                    })
-                    setAppointments(response.data);
-                });
-        }
-    };
     useEffect(() => {
-        getUser();
         getData();
     }, [sortby, direction]);
+    const getUser = async (e) => {
+        
+    };
 
     const handleChange = (event) => {
         setSortBy(event.target.value);
@@ -235,7 +235,7 @@ export default function ListCreatedAppointments() {
                             }
                             sx={{ mb: 2 }}
                         >
-                            Appointment reservation successfull!
+                            Appointment cancelation successfull!
                         </Alert>
                     </Collapse>
                 </Box>

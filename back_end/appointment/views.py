@@ -3,12 +3,14 @@ from rest_framework import filters, generics, viewsets, status, mixins, filters,
 from django_filters.rest_framework import DjangoFilterBackend
 from appointment.serializer import AppointmentSerializer, AppointmentUserSerializer
 from appointment.models import Appointment
+from appointment_report.models import AppointmentReport
 from questionnaire.models import Questionnaire
 from rest_framework.response import Response
 from rest_framework import status, permissions
-from datetime import datetime
+from datetime import datetime, timedelta
 import qrcode
 import json
+import pytz
 from django.core.files.storage import FileSystemStorage
 import io
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -71,9 +73,6 @@ def send_email(user_id, email, appointment_id):
         img.add_header('Content-Disposition', 'inline', filename=image)
     msg.attach(img)
     msg.send()
-from appointment.models import Appointment
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
@@ -96,6 +95,23 @@ class AppointmentGetByUserScheduledViewSet(generics.ListAPIView):
         else:
             return Response(status=404)
 
+class AppointmentCancelView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentSerializer
+    permission_classes = [permissions.IsAuthenticated & (IsAdmin | IsUser)]
+    def put(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        if serializer.validated_data.get('date_time') > datetime.now(tz=pytz.utc) + timedelta(hours=24):
+            serializer.validated_data['user_profiles_that_canceled'].append(serializer.validated_data['user_profile'])
+            serializer.validated_data['user_profile'] = None
+            self.perform_update(serializer)
+            return Response(serializer.data)
+        else:
+            return Response({"message" : "You can't cancel appointment that is happening in next 24 hours!"}, status=404)
+
 class AppointmentGetByCenterViewSet(generics.ListAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
@@ -117,27 +133,31 @@ class AppointmentUpdateUserProfileView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AppointmentSerializer
     permission_classes = [permissions.IsAuthenticated & (IsAdmin | IsUser)]
     def put(self, request, *args, **kwargs):
-        if Questionnaire.objects.filter(user_profile=request.user.id).exists():
-            create_qrcode(request.data)
-            send_email(request.data['user_profile'], 'vasilicmarko111@gmail.com', request.data['id'])
-            return self.update(request, *args, **kwargs)
+        questionnaires = Questionnaire.objects.filter(user_profile=request.user.id)
+        user_appointments = Appointment.objects.filter(user_profile=request.user.id, date_time__gte=datetime.now() - timedelta(days=60), date_time__lte=datetime.now())
+        reports = False
+        months6 = True
+        if len(user_appointments) > 0:
+            months6 = False
+        for q in questionnaires:
+            if AppointmentReport.objects.filter(questionnaire=q.id).exists() == False:
+                reports = True
+                break
+        for ua in user_appointments:
+            if AppointmentReport.objects.filter(appointment=ua.id, accepted=True).exists() == False:
+                months6 = True
+                break
+        if Questionnaire.objects.filter(user_profile=request.user.id).exists() and reports:
+            if months6:
+                if len(Appointment.objects.filter(id=request.data['id'], user_profiles_that_canceled=request.data['user_profile'])) == 0:
+                    create_qrcode(request.data)
+                    send_email(request.data['user_profile'], 'vasilicmarko111@gmail.com', request.data['id'])
+                    return self.update(request, *args, **kwargs)
+                else:
+                    return Response({"message" : "You already canceled this appointment!"}, status=404)
+            else:
+                    return Response({"message" : "You had appointment in last 6 months!"}, status=404)
         return Response({"message" : "You don't have questionnaire!"}, status=404)
-
-class ListCenterUsers(generics.ListAPIView):
-    queryset = Appointment.objects.all()
-    serializer_class = AppointmentUserSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    def list(self, request):
-        queryset = Appointment.objects.filter(transfusion_center = request.user.userprofile.tranfusion_center).exclude(user_profile = None)
-        serialized_users = AppointmentUserSerializer(instance = queryset, many = True)
-        return Response(serialized_users.data)
-
-class SearchCenterUsers(generics.ListAPIView):
-    queryset = Appointment.objects.all()
-    serializer_class = AppointmentUserSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    search_fields = ['user_profile__user__first_name', 'user_profile__user__last_name']
 
 class ListCenterUsers(generics.ListAPIView):
     queryset = Appointment.objects.all()
