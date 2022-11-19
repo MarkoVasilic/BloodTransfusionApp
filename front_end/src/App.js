@@ -14,6 +14,7 @@ import UpdateCenter from "./pages/UpdateCenter";
 import AdminChangePassword from "./pages/AdminChangePassword";
 import MyCalendar from "./pages/MyCalendar";
 import AllComplaints from "./pages/AllComplaints";
+import ScheduledAppointments from "./pages/ScheduledAppointments";
 import ComplaintReplyPage from "./pages/ComplaintReply";
 import UserDetails from "./pages/UserDetails";
 import AllCentersAdmin from "./pages/AllCentersAdmin";
@@ -84,6 +85,7 @@ function App() {
                         <Route path="/created-appointments/" element={<ListCreatedAppointments />} />
                         <Route path="/select-center/" element={<SelectCenterForReservation />} />
                         <Route path="/selected-center/" element={<SelectedCenter />} />
+                        <Route path="/user-scheduled/" element={<ScheduledAppointments />} />
                     </Routes>
                 </div>
             </Router>

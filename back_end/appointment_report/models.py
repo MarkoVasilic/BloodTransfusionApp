@@ -9,4 +9,5 @@ class AppointmentReport(models.Model):
     blood_packet = models.OneToOneField(BloodPacket, on_delete = models.CASCADE, blank=True, null=True)
     questionnaire = models.OneToOneField(Questionnaire, on_delete = models.CASCADE)
     equipment = models.ManyToManyField(Equipment, related_name = 'equipment_list')
+    accepted = models.BooleanField(default=True)
     

@@ -57,10 +57,10 @@ const columns = [
     }
 ];
 
-function rowAction(navigate, user, transfusion_center, setAlert, setFailed, setErr, alert) {
+function rowAction(navigate, user, setAlert, setFailed, setErr, alert) {
     return {
         field: "action",
-        headerName: "Select",
+        headerName: "Cancel",
         align: "center",
         headerAlign: "center",
         sortable: false,
@@ -70,7 +70,6 @@ function rowAction(navigate, user, transfusion_center, setAlert, setFailed, setE
                 const thisRow = params.row;
                 thisRow.date_time = thisRow.date
                 thisRow.user_profile = user.id
-                thisRow.transfusion_center = transfusion_center
                 try {
                     axiosApi.put(`appointment/update-profile/${thisRow.id}`, thisRow).then(res => {
                         console.log(res)
@@ -93,7 +92,7 @@ function rowAction(navigate, user, transfusion_center, setAlert, setFailed, setE
                     onClick={onClick}
                     disabled={alert}
                 >
-                    Select
+                    Cancel
                 </Button>
             );
         },
@@ -119,33 +118,33 @@ export default function ListCreatedAppointments() {
             console.log(error.response);
         }
     };
-    useEffect(() => {
-        getData();
-        getUser();
-    }, [sortby, direction]);
 
     let getData = async () => {
         if (sortby === 0) {
-            axiosApi.get(`/appointment/center/${state.id}`).then((response) => {
+            console.log("********************************");
+            axiosApi.get(`/appointment/user-scheduled/${user.id}`).then((response) => {
                 response.data.forEach((app) => {
-                    app.transfusion_center = state.name;
                     app.date = app.date_time
                     app.date_time = app.date_time.split("T")[0] + " " + app.date_time.split("T")[1].split("Z")[0]
                 })
                 setAppointments(response.data);
             });
-        } else
+        } else {
             axiosApi
-                .get(`/appointment/center/${state.id}?${sortby !== "" ? `ordering=${direction}${sortby}&` : ""}`)
+                .get(`/appointment/user-scheduled/${user.id}?${sortby !== "" ? `ordering=${direction}${sortby}&` : ""}`)
                 .then((response) => {
                     response.data.forEach((app) => {
-                        app.transfusion_center = state.name;
                         app.date = app.date_time
                         app.date_time = app.date_time.split("T")[0] + " " + app.date_time.split("T")[1].split("Z")[0]
                     })
                     setAppointments(response.data);
                 });
+        }
     };
+    useEffect(() => {
+        getUser();
+        getData();
+    }, [sortby, direction]);
 
     const handleChange = (event) => {
         setSortBy(event.target.value);
@@ -166,7 +165,7 @@ export default function ListCreatedAppointments() {
                     marginBottom={3}
                     marginTop={1}
                 >
-                    Select Appointment
+                    Your Appointments
                 </Typography>
             </Stack>
             <Stack direction={"row"} sx={{ justifyContent: "start" }} p={1}>
@@ -208,7 +207,7 @@ export default function ListCreatedAppointments() {
                     <DataGrid
                         rows={appointments}
                         disableColumnFilter
-                        columns={[...columns, rowAction(navigate, user, state.id, setAlert, setFailed, setErr, alert)]}
+                        columns={[...columns, rowAction(navigate, user, setAlert, setFailed, setErr, alert)]}
                         autoHeight
                         density="comfortable"
                         disableSelectionOnClick
