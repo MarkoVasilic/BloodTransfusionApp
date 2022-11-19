@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AppointmentViewSet, AppointmentGetByCenterViewSet, AppointmentUpdateUserProfileView, ListCenterUsers, SearchCenterUsers
+from .views import AppointmentViewSet, AppointmentGetByCenterViewSet, AppointmentUpdateUserProfileView, ListCenterUsers, SearchCenterUsers, AppointmentGetByUserScheduledViewSet
 from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
@@ -7,6 +7,7 @@ urlpatterns = [
     path(r'update-profile/<int:pk>', AppointmentUpdateUserProfileView.as_view()),
     path('users/', ListCenterUsers.as_view()),
     path('search/', SearchCenterUsers.as_view())
+    path(r'user-scheduled/<int:pk>', AppointmentGetByUserScheduledViewSet.as_view()),
 ]
 
 router = DefaultRouter()

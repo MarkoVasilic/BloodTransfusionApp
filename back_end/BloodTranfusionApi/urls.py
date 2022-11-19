@@ -19,6 +19,8 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,3 +33,5 @@ urlpatterns = [
     path('send-email/',include('email_token.urls')),
     path('appointment/',include('appointment.urls')),
 ]
+
+urlpatterns += static(settings.QRCODE_URL, document_root = settings.QRCODE_ROOT)

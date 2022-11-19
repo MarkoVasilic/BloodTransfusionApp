@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -163,3 +164,6 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'grupa.jedan.mnja@gmail.com'
 EMAIL_HOST_PASSWORD = 'aqbluhrwexzhtcde'
+
+QRCODE_ROOT = os.path.join(BASE_DIR, 'qrcodes')
+QRCODE_URL = '/qrcodes/'
