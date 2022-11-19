@@ -96,23 +96,6 @@ class AppointmentGetByUserScheduledViewSet(generics.ListAPIView):
         else:
             return Response(status=404)
 
-class AppointmentGetByUserScheduledViewSet(generics.ListAPIView):
-    queryset = Appointment.objects.all()
-    serializer_class = AppointmentSerializer
-    permission_classes = [permissions.IsAuthenticated & (IsAdmin | IsUser)]
-    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    ordering_fields = '__all__'
-    def list(self, request, *args, **kwargs):
-        if request.query_params:
-            instance = Appointment.objects.filter(user_profile=kwargs['pk'], date_time__gte=datetime.now()).order_by(request.query_params['ordering'])
-        else:
-            instance = Appointment.objects.filter(user_profile=kwargs['pk'], date_time__gte=datetime.now())
-        if instance:
-            serializer = self.get_serializer(instance, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=404)
-
 class AppointmentGetByCenterViewSet(generics.ListAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer

@@ -6,7 +6,7 @@ urlpatterns = [
     path(r'center/<int:pk>', AppointmentGetByCenterViewSet.as_view()),
     path(r'update-profile/<int:pk>', AppointmentUpdateUserProfileView.as_view()),
     path('users/', ListCenterUsers.as_view()),
-    path('search/', SearchCenterUsers.as_view())
+    path('search/', SearchCenterUsers.as_view()),
     path(r'user-scheduled/<int:pk>', AppointmentGetByUserScheduledViewSet.as_view()),
 ]
 
