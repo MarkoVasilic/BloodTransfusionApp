@@ -83,21 +83,21 @@ const columns = [
         field: "first_name",
         headerName: "First name",
         type: "string",
-        width: 200,
+        width: 150,
         editable: false,
     },
     {
         field: "last_name",
         headerName: "Last name",
         type: "string",
-        width: 200,
+        width: 150,
         editable: false
     },
     {
         field: "jmbg",
         headerName: "JMBG",
         type: "string",
-        width: 200,
+        width: 150,
         editable: false,
         valueGetter: (params) => {return params.row.userprofile.jmbg}
     },
@@ -105,14 +105,14 @@ const columns = [
         field: "email",
         headerName: "Email",
         type: "string",
-        width: 200,
+        width: 150,
         editable: false
     },
     {
         field: "phone_number",
         headerName: "Phone number",
         type: "string",
-        width: 200,
+        width: 150,
         editable: false,
         valueGetter: (params) => {return params.row.userprofile.phone_number}
     },
@@ -120,7 +120,7 @@ const columns = [
         field: "address",
         headerName: "Address",
         type: "string",
-        width: 400,
+        width: 150,
         editable: false,
         valueGetter: (params) => {return params.row.userprofile.address}
     },

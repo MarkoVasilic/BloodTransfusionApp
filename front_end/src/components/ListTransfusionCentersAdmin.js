@@ -82,28 +82,28 @@ const columns = [
         field: "name",
         headerName: "Name",
         type: "string",
-        width: 200,
+        width: 150,
         editable: false,
     },
     {
         field: "country",
         headerName: "Country",
         type: "string",
-        width: 200,
+        width: 150,
         editable: false
     },
     {
         field: "city",
         headerName: "City",
         type: "string",
-        width: 200,
+        width: 150,
         editable: false
     },
     {
         field: "street",
         headerName: "Street",
         type: "string",
-        width: 200,
+        width: 150,
         editable: false,
     },
     {
@@ -117,14 +117,14 @@ const columns = [
         field: "description",
         headerName: "Description",
         type: "string",
-        width: 300,
+        width: 150,
         editable: false,
     },
     {
         field: "average_grade",
         headerName: "Average grade",
         type: "string",
-        width: 150,
+        width: 120,
         editable: false,
     },
     {

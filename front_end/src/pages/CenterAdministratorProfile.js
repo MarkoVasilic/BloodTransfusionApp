@@ -53,7 +53,7 @@ export default function CenterAdministratorProfile() {
                         onClick={routeChange1}
                         style={{
                             width: 200,
-                            marginLeft: 1300,
+                            marginLeft: 1800,
                             marginBottom: 10,
                             marginTop: -45
                         }}
@@ -74,8 +74,8 @@ export default function CenterAdministratorProfile() {
                         onClick={routeChange2}
                         style={{
                             width: 200,
-                            marginLeft: 1300,
-                            marginBottom: -10   
+                            marginLeft: 1800,
+                            marginBottom: 30
                         }}
                         sx={{
                             background: "#6fbf73",
