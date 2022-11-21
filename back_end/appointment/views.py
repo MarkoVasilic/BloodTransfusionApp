@@ -151,7 +151,7 @@ class AppointmentUpdateUserProfileView(generics.RetrieveUpdateDestroyAPIView):
             if months6:
                 if len(Appointment.objects.filter(id=request.data['id'], user_profiles_that_canceled=request.data['user_profile'])) == 0:
                     create_qrcode(request.data)
-                    send_email(request.data['user_profile'], 'vasilicmarko111@gmail.com', request.data['id'])
+                    send_email(request.data['user_profile'], request.user.email, request.data['id'])
                     return self.update(request, *args, **kwargs)
                 else:
                     return Response({"message" : "You already canceled this appointment!"}, status=404)
