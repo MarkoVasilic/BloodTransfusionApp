@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CreateQuestionnaireAPIView, RetrieveUpdateDestroyQuestionnaireAPIView, RetrieveQuestionnaireAPIView, RetrieveQuestionnaireByUserAPIView, ListQuestionnaireGetAPIView
+from .views import CreateQuestionnaireAPIView, RetrieveUpdateDestroyQuestionnaireAPIView, RetrieveQuestionnaireAPIView, RetrieveQuestionnaireByUserAPIView, ListQuestionnaireGetAPIView, RetrieveQuestionnaireByUser
 from rest_framework.routers import DefaultRouter
 
 
@@ -9,4 +9,5 @@ urlpatterns = [
   path('list/',ListQuestionnaireGetAPIView.as_view()),
   path('last/',RetrieveQuestionnaireByUserAPIView.as_view()),
   path(r'get/<int:pk>/', RetrieveQuestionnaireAPIView.as_view()),
+  path(r'get-quest/<int:pk>/', RetrieveQuestionnaireByUser.as_view()),
 ]

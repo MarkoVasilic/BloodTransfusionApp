@@ -32,6 +32,9 @@ urlpatterns = [
     path('complaints/',include('complaints.urls')),
     path('send-email/',include('email_token.urls')),
     path('appointment/',include('appointment.urls')),
+    path('bloodpacket/',include('blood_packet.urls')),
+    path('equipment/',include('equipment.urls')),
+    path('report/',include('appointment_report.urls')),
 ]
 
 urlpatterns += static(settings.QRCODE_URL, document_root = settings.QRCODE_ROOT)
