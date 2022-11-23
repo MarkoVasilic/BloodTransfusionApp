@@ -158,7 +158,8 @@ const chooseSideMenu = (group) => {
             "List Transfusion Centers": "/list-centers",
             "My Center": "/list-centers-update",
             "Calendar": "/calendar",
-            "Center Users": "/center/list-users",
+            "Users": "/center/list-users",
+            "Check QR code": "/check-QR-code",
         };
     } else {
         return { "List Transfusion Centers": "/list-centers" };

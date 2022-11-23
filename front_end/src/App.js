@@ -37,6 +37,7 @@ import UpdateAdminProfile from "./pages/UpdateAdminProfile";
 import VerifyEmail from "./pages/VerifyEmail";
 import AllCenterUsers from "./pages/AllCenterUsers";
 import EmailVerificationDeclaration from "./pages/EmailVerificationDeclaration";
+import AdminCheckQRCode from "./pages/AdminCheckQRCode";
 
 
 
@@ -88,6 +89,7 @@ function App() {
                         <Route path="/selected-center/" element={<SelectedCenter />} />
                         <Route path="/center/list-users" element={<AllCenterUsers />} />
                         <Route path="/user-scheduled/" element={<ScheduledAppointments />} />
+                        <Route path="/check-QR-code/" element={<AdminCheckQRCode />} />
                     </Routes>
                 </div>
             </Router>
