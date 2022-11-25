@@ -62,7 +62,7 @@ function CheckQRCode() {
         QrScanner.scanImage(data.files[0], { returnDetailedScanResult: true })
             .then((result) => {
                 setResult(result);
-                var id = result.data.slice(7, result.data.indexOf(','));
+                var id = result.data.slice(7, result.data.indexOf(","));
                 axiosApi
                     .get(`appointment/validate/${id}`)
                     .then((response) => {
@@ -70,9 +70,8 @@ function CheckQRCode() {
                             setErrorAlert("hidden");
                             setSuccessAlert("visible");
                             setAlert("success");
-                            navigate('/questionnaire/'+id);
-                        }
-                        else {
+                            navigate("/questionnaire/" + id);
+                        } else {
                             setError("The selected QR Code is NOT valid!");
                             setErrorAlert("visible");
                             setSuccessAlert("hidden");
@@ -80,11 +79,10 @@ function CheckQRCode() {
                         }
                     })
                     .catch((error) => {
-                            setError("The selected QR Code is NOT valid!");
-                            setErrorAlert("visible");
-                            setSuccessAlert("hidden");
-                            setAlert("error");
-                        
+                        setError("The selected QR Code is NOT valid!");
+                        setErrorAlert("visible");
+                        setSuccessAlert("hidden");
+                        setAlert("error");
                     });
             })
             .catch((e) => console.log("Nije procitao QR kod : ", e));
@@ -92,17 +90,18 @@ function CheckQRCode() {
 
     return (
         <div>
+            <Typography variant="h5" color={purple[500]}>Upload a QR Code</Typography>
             <Button
                 variant="contained"
                 component="label"
                 color="secondary"
                 sx={{
-                    mt: 3,
-                    mb: 2,
+                    mt: 1.5,
+                    mb: 0.5,
                     background: "primary",
                     align: "center",
-                    height: "50",
-                    width: "250px",
+                    height: "100px",
+                    width: "100px",
                     "&.MuiButtonBase-root": {
                         "&:hover": {
                             backgroundColor: purple["A100"],
@@ -110,8 +109,7 @@ function CheckQRCode() {
                     },
                 }}
             >
-                Upload QR Code
-                <QrCodeIcon p={2} />
+                <QrCodeIcon sx={{fontSize: "90px"}} />
                 <input type="file" {...register("files")} hidden />
             </Button>
             <Stack direction={"column"} spacing={"10px"}>
@@ -144,7 +142,7 @@ function CheckQRCode() {
                         variant="contained"
                         onClick={handleSubmit(onSubmit)}
                         sx={{
-                            mt: 3,
+                            mt: 2,
                             mb: 2,
                             background: "#6fbf73",
                             height: "50",

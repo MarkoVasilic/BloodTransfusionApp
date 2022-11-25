@@ -69,6 +69,7 @@ function ReportForm() {
     }, []);
 
     useEffect(() => {
+        try {
         if(doPost === true){
             axiosApi.post(`/report/`, {
                 appointment: appointment.id,
@@ -84,6 +85,15 @@ function ReportForm() {
                 setAlert("success");
             });
         }
+    }
+    catch {
+        setErrorMessage(
+            "Report for this appointment was already created!"
+        );
+        setAlert("error");
+        setErrorAlert("visible");
+        setSuccessAlert("hidden");
+    }
     }, [doPost]);
 
     const handleUpdate = useCallback(
@@ -98,7 +108,7 @@ function ReportForm() {
                         setAlert("error");
                         setErrorAlert("visible");
                         setSuccessAlert("hidden");
-                        navigate("/check-QR-code");
+                       // navigate("/check-QR-code");
                     }
                     else {       
                         if (data.equipmentQuantity > 0) {
@@ -161,7 +171,7 @@ function ReportForm() {
                 <div>
                     <Grid
                         container
-                        rowSpacing={4}
+                        rowSpacing={3}
                         p={1}
                         justify="center"
                         alignItems="center"
@@ -241,7 +251,7 @@ function ReportForm() {
                                 variant="filled"
                                 required
                                 helperText="Number of liters"
-                                width={3}
+                                fullWidth
                             ></InputTextField>
                         </Grid>
                         <Grid item xs={12}>
@@ -319,7 +329,7 @@ function ReportForm() {
                             variant="contained"
                             onClick={handleSubmit(handleCancel)}
                             sx={{
-                                mt: 3,
+                                mt: 0.3,
                                 mb: 2,
                                 background: red[400],
                                 height: "40px",
@@ -332,13 +342,13 @@ function ReportForm() {
                                 },
                             }}
                         >
-                            Remove
+                            Decline
                         </Button>
                         <Button
                             variant="containted"
                             onClick={handleSubmit(handleUpdate)}
                             sx={{
-                                mt: 3,
+                                mt: 0.3,
                                 mb: 2,
                                 background: "#6fbf73",
                                 height: "40px",
