@@ -38,6 +38,8 @@ import VerifyEmail from "./pages/VerifyEmail";
 import AllCenterUsers from "./pages/AllCenterUsers";
 import EmailVerificationDeclaration from "./pages/EmailVerificationDeclaration";
 import AdminCheckQRCode from "./pages/AdminCheckQRCode";
+import QuestionnaireViewPage from "./pages/QuestionnaireViewPage";
+import ReportFormPage from "./pages/ReportFormPage";
 
 
 
@@ -90,6 +92,8 @@ function App() {
                         <Route path="/center/list-users" element={<AllCenterUsers />} />
                         <Route path="/user-scheduled/" element={<ScheduledAppointments />} />
                         <Route path="/check-QR-code/" element={<AdminCheckQRCode />} />
+                        <Route path="/questionnaire/:id" element={<QuestionnaireViewPage />} />
+                        <Route path="/create-report/:id" element={<ReportFormPage />} />
                     </Routes>
                 </div>
             </Router>

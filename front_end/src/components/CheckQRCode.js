@@ -9,6 +9,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import QrScanner from "qr-scanner";
+import { wait } from "@testing-library/user-event/dist/utils";
 const schema = yup
     .object()
     .shape({
@@ -61,24 +62,21 @@ function CheckQRCode() {
         QrScanner.scanImage(data.files[0], { returnDetailedScanResult: true })
             .then((result) => {
                 setResult(result);
-                console.log("result: ", result);
-                let id = result.data.slice(7, result.data.indexOf(','));
+                var id = result.data.slice(7, result.data.indexOf(','));
                 axiosApi
                     .get(`appointment/validate/${id}`)
                     .then((response) => {
-                        console.log(response);
                         if (response.data == true) {
                             setErrorAlert("hidden");
                             setSuccessAlert("visible");
                             setAlert("success");
-                            console.log("TRUE");
+                            navigate('/questionnaire/'+id);
                         }
                         else {
                             setError("The selected QR Code is NOT valid!");
                             setErrorAlert("visible");
                             setSuccessAlert("hidden");
                             setAlert("error");
-                            console.log("FALSE");
                         }
                     })
                     .catch((error) => {
@@ -86,38 +84,11 @@ function CheckQRCode() {
                             setErrorAlert("visible");
                             setSuccessAlert("hidden");
                             setAlert("error");
-                            console.log("FALSE", error);
                         
                     });
-                console.log("ID : ", id);
             })
             .catch((e) => console.log("Nije procitao QR kod : ", e));
-        // console.log("fileName: ", data.files[0].name.slice(0, data.files[0].name.length - 4));
     };
-
-    const handleUpdate = useCallback(
-        (data) => {
-            axiosApi
-                .put(`/account/users/change-password/${user.id}/`, {
-                    ...data,
-                    userprofile: user.userprofile,
-                })
-                .then((response) => {
-                    setAlert("success");
-                    setSuccessAlert("visible");
-                    setErrorAlert("hidden");
-                    setError("");
-                    navigate("/");
-                })
-                .catch((error) => {
-                    setError(error.response.data.password[0]);
-                    setAlert("error");
-                    setSuccessAlert("hidden");
-                    setErrorAlert("visible");
-                });
-        },
-        [user, navigate]
-    );
 
     return (
         <div>
