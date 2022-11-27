@@ -52,3 +52,12 @@ class ListQuestionnaireGetAPIView(generics.ListAPIView):
     queryset = Questionnaire.objects.all()
     serializer_class = QuestionnaireSerializer
     permission_classes = [IsAuthenticated, IsAdmin]
+
+
+class RetrieveQuestionnaireByUser(generics.RetrieveAPIView):
+    queryset = Questionnaire.objects.all()
+    serializer_class = QuestionnaireSerializer
+    def get(self, request, pk):
+        queryset = Questionnaire.objects.filter(user_profile = pk).order_by("created").last()
+        serialized_data = QuestionnaireSerializer(instance = queryset)
+        return Response(serialized_data.data)

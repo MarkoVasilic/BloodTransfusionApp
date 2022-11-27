@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import filters, generics, viewsets, status, mixins, filters, permissions
+from rest_framework import filters, generics, viewsets, filters, permissions
 from django_filters.rest_framework import DjangoFilterBackend
 from appointment.serializer import AppointmentSerializer, AppointmentUserSerializer
 from appointment.models import Appointment
@@ -151,7 +151,7 @@ class AppointmentUpdateUserProfileView(generics.RetrieveUpdateDestroyAPIView):
             if months6:
                 if len(Appointment.objects.filter(id=request.data['id'], user_profiles_that_canceled=request.data['user_profile'])) == 0:
                     create_qrcode(request.data)
-                    send_email(request.data['user_profile'], 'vasilicmarko111@gmail.com', request.data['id'])
+                    send_email(request.data['user_profile'], request.user.email, request.data['id'])
                     return self.update(request, *args, **kwargs)
                 else:
                     return Response({"message" : "You already canceled this appointment!"}, status=404)
@@ -174,3 +174,13 @@ class SearchCenterUsers(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     search_fields = ['user_profile__user__first_name', 'user_profile__user__last_name']
+
+class ValidateAppointmentQRCode(generics.RetrieveAPIView):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request, pk):
+        queryset = Appointment.objects.filter(pk = pk)
+        if(queryset.count() == 0):
+            return Response(False, status = status.HTTP_404_NOT_FOUND)
+        return Response(True, status = status.HTTP_202_ACCEPTED)
