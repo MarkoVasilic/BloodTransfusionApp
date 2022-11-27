@@ -40,11 +40,13 @@ class RetrieveQuestionnaireAPIView(generics.RetrieveAPIView):
 
 class RetrieveQuestionnaireByUserAPIView(mixins.ListModelMixin,
                             generics.GenericAPIView):
-    queryset = [Questionnaire.objects.filter(user_profile=18).order_by("created").last()]
+    queryset = Questionnaire.objects.all()
     serializer_class = QuestionnaireSerializer
     permission_classes = [IsAuthenticated, IsViewAllowedForLoggedUser]
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+    def get(self, request, pk):
+        queryset = Questionnaire.objects.filter(user_profile=pk).order_by("created").last()
+        serialized_data = QuestionnaireSerializer(instance=queryset)
+        return Response(serialized_data.data)
 
 class ListQuestionnaireGetAPIView(generics.ListAPIView):
     queryset = Questionnaire.objects.all()
