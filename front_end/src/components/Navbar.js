@@ -152,6 +152,8 @@ const chooseSideMenu = (group) => {
             "Fill Questionnaire": "/fill-questionnaire",
             "Make An Appointment": "/select-center/",
             "List Scheduled Appointments": "/user-scheduled/",
+            "Appointment History" : "/list-appointment-history/",
+            "List QR Codes" : "/list-qrcodes/"
         };
     } else if (group[0] === "TranfusionCenterStaff") {
         return {

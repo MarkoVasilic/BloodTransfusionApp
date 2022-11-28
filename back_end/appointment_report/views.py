@@ -1,10 +1,14 @@
 from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
-from rest_framework import permissions, generics, status
+from rest_framework import permissions, generics, status, filters
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from appointment_report.models import AppointmentReport
+from appointment.models import Appointment
 from appointment_report.serializer import AppointmentReportSerializer
+from datetime import datetime, timedelta
+from django_filters.rest_framework import DjangoFilterBackend
+import pytz
 
 class AppointmentReportViewSet(ModelViewSet):
     queryset = AppointmentReport.objects.all()

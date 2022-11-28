@@ -19,89 +19,49 @@ import Navbar from "../components/Navbar";
 
 const columns = [
     {
-        field: "id",
-        headerName: "ID",
-        width: 200,
-        sortable: false,
-        filterable: false,
-        editable: false,
-    },
-    {
         field: "date_time",
         headerName: "Date and Time",
         type: "string",
-        width: 400,
+        width: 600,
         sortable: false,
         filterable: false,
         editable: false,
     },
     {
-        field: "duration",
-        headerName: "Duration (minutes)",
+        field: "qrcode_url",
+        renderCell: (params) => (
+            <div>
+                <img
+                    src={params.value}
+                    alt="car"
+                    height={120}
+                    width={120}
+                />
+            </div>
+        ),
+        headerName: "QR Code URL",
         type: "string",
-        width: 400,
+        width: 600,
         sortable: false,
         filterable: false,
         editable: false,
     },
     {
-        field: "transfusion_center",
-        headerName: "Transfusion Center",
+        field: "status",
+        headerName: "Status",
         type: "string",
-        width: 400,
+        width: 500,
         sortable: false,
         filterable: false,
         editable: false,
     }
 ];
 
-function rowAction(navigate, user, setAlert, setFailed, setErr, alert) {
-    return {
-        field: "action",
-        headerName: "Cancel",
-        align: "center",
-        headerAlign: "center",
-        sortable: false,
-        renderCell: (params) => {
-            const onClick = (e) => {
-                e.stopPropagation();
-                const thisRow = params.row;
-                thisRow.date_time = thisRow.date
-                thisRow.user_profile = user.id
-                try {
-                    axiosApi.put(`appointment/cancel/${thisRow.id}`, thisRow).then(res => {
-                        console.log(res)
-                        setAlert(true)
-                    }).catch(err => {
-                        console.log(err.response);
-                        setFailed(true)
-                        setErr(err.response.data.message)
-                    });
-                } catch (error) {
-                    console.log(error.response);
-                    setFailed(true)
-                }
-            };
-            return (
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    size="small"
-                    onClick={onClick}
-                    disabled={alert}
-                >
-                    Cancel
-                </Button>
-            );
-        },
-    };
-}
-
-export default function ListCreatedAppointments() {
+export default function UserAppointmentHistory() {
     const [appointments, setAppointments] = useState([]);
     const [sortby, setSortBy] = React.useState('');
     const [direction, setDirection] = React.useState('');
-    const { state } = useLocation();
+    const [filter, setFilter] = React.useState('');
     const [user, setUser] = useState(null);
     const [alert, setAlert] = React.useState(false);
     const [failed, setFailed] = React.useState(false);
@@ -112,22 +72,35 @@ export default function ListCreatedAppointments() {
             await axiosApi.get('/account/users/user-profile/').then((res) => {
                 setUser(res.data);
                 if (sortby === 0) {
-                    axiosApi.get(`/appointment/user-scheduled/${res.data.id}`).then((response) => {
+                    axiosApi.get(`/appointment/qrcodes/`).then((response) => {
+                        let rows = []
                         response.data.forEach((app) => {
                             app.date = app.date_time
                             app.date_time = app.date_time.split("T")[0] + " " + app.date_time.split("T")[1].split("Z")[0]
+                            if (app.accepted == true)
+                                app['accepted'] = 'Yes'
+                            else
+                                app['accepted'] = 'No'
+                            app.qrcode_url =
+                                rows.push(app)
                         })
-                        setAppointments(response.data);
+                        setAppointments(rows);
                     });
                 } else {
                     axiosApi
-                        .get(`/appointment/user-scheduled/${res.data.id}?${sortby !== "" ? `ordering=${direction}${sortby}&` : ""}`)
+                        .get(`/appointment/qrcodes?${sortby !== "" ? `ordering=${direction}${sortby}&` : ""}${filter != "" ? `filter=${filter}&` : ""}`)
                         .then((response) => {
+                            let rows = []
                             response.data.forEach((app) => {
                                 app.date = app.date_time
                                 app.date_time = app.date_time.split("T")[0] + " " + app.date_time.split("T")[1].split("Z")[0]
+                                if (app.accepted == true)
+                                    app['accepted'] = 'Yes'
+                                else
+                                    app['accepted'] = 'No'
+                                rows.push(app)
                             })
-                            setAppointments(response.data);
+                            setAppointments(rows);
                         });
                 }
                 return res.data;
@@ -138,10 +111,7 @@ export default function ListCreatedAppointments() {
     };
     useEffect(() => {
         getData();
-    }, [sortby, direction]);
-    const getUser = async (e) => {
-        
-    };
+    }, [sortby, direction, filter]);
 
     const handleChange = (event) => {
         setSortBy(event.target.value);
@@ -149,6 +119,10 @@ export default function ListCreatedAppointments() {
 
     const handleDirection = (event) => {
         setDirection(event.target.value);
+    };
+
+    const handleFilter = (event) => {
+        setFilter(event.target.value);
     };
 
     return (
@@ -178,9 +152,7 @@ export default function ListCreatedAppointments() {
                         <MenuItem value={0}>
                             <em>None</em>
                         </MenuItem>
-                        <MenuItem value={"id"}>Id</MenuItem>
                         <MenuItem value={"date_time"}>Date and Time</MenuItem>
-                        <MenuItem value={"duration"}>Duration</MenuItem>
                     </Select>
                 </FormControl>
             </Stack>
@@ -199,16 +171,33 @@ export default function ListCreatedAppointments() {
                     </Select>
                 </FormControl>
             </Stack>
+            <Stack direction={"row"} sx={{ justifyContent: "start" }} p={1}>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
+                    <InputLabel id="demo-simple-select-standard-label">Filter By</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        value={filter}
+                        onChange={handleFilter}
+                        defaultValue={""}
+                    >
+                        <MenuItem value={""}>None</MenuItem>
+                        <MenuItem value={"New"}>New</MenuItem>
+                        <MenuItem value={"Accepted"}>Accepted</MenuItem>
+                        <MenuItem value={"Refused"}>Refused</MenuItem>
+                    </Select>
+                </FormControl>
+            </Stack>
             <Paper>
-                <Box sx={{ height: 400, width: "100%" }}>
+                <Box sx={{ height: 1400, width: "100%" }}>
                     <DataGrid
                         rows={appointments}
                         disableColumnFilter
-                        columns={[...columns, rowAction(navigate, user, setAlert, setFailed, setErr, alert)]}
+                        columns={[...columns]}
                         autoHeight
                         density="comfortable"
                         disableSelectionOnClick
-                        rowHeight={50}
+                        rowHeight={120}
                         pageSize={5}
                         headerHeight={35}
                     />

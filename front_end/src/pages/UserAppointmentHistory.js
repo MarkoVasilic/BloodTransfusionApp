@@ -45,63 +45,29 @@ const columns = [
         editable: false,
     },
     {
-        field: "transfusion_center",
+        field: "center_name",
         headerName: "Transfusion Center",
         type: "string",
         width: 400,
         sortable: false,
         filterable: false,
         editable: false,
+    },
+    {
+        field: "accepted",
+        headerName: "Accepted",
+        type: "string",
+        width: 100,
+        sortable: false,
+        filterable: false,
+        editable: false,
     }
 ];
 
-function rowAction(navigate, user, setAlert, setFailed, setErr, alert) {
-    return {
-        field: "action",
-        headerName: "Cancel",
-        align: "center",
-        headerAlign: "center",
-        sortable: false,
-        renderCell: (params) => {
-            const onClick = (e) => {
-                e.stopPropagation();
-                const thisRow = params.row;
-                thisRow.date_time = thisRow.date
-                thisRow.user_profile = user.id
-                try {
-                    axiosApi.put(`appointment/cancel/${thisRow.id}`, thisRow).then(res => {
-                        console.log(res)
-                        setAlert(true)
-                    }).catch(err => {
-                        console.log(err.response);
-                        setFailed(true)
-                        setErr(err.response.data.message)
-                    });
-                } catch (error) {
-                    console.log(error.response);
-                    setFailed(true)
-                }
-            };
-            return (
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    size="small"
-                    onClick={onClick}
-                    disabled={alert}
-                >
-                    Cancel
-                </Button>
-            );
-        },
-    };
-}
-
-export default function ListCreatedAppointments() {
+export default function UserAppointmentHistory() {
     const [appointments, setAppointments] = useState([]);
     const [sortby, setSortBy] = React.useState('');
     const [direction, setDirection] = React.useState('');
-    const { state } = useLocation();
     const [user, setUser] = useState(null);
     const [alert, setAlert] = React.useState(false);
     const [failed, setFailed] = React.useState(false);
@@ -112,22 +78,34 @@ export default function ListCreatedAppointments() {
             await axiosApi.get('/account/users/user-profile/').then((res) => {
                 setUser(res.data);
                 if (sortby === 0) {
-                    axiosApi.get(`/appointment/user-scheduled/${res.data.id}`).then((response) => {
+                    axiosApi.get(`/appointment/user/`).then((response) => {
+                        let rows = []
                         response.data.forEach((app) => {
                             app.date = app.date_time
                             app.date_time = app.date_time.split("T")[0] + " " + app.date_time.split("T")[1].split("Z")[0]
+                            if (app.accepted == true)
+                                app['accepted'] = 'Yes'
+                            else
+                                app['accepted'] = 'No'
+                            rows.push(app)
                         })
-                        setAppointments(response.data);
+                        setAppointments(rows);
                     });
                 } else {
                     axiosApi
-                        .get(`/appointment/user-scheduled/${res.data.id}?${sortby !== "" ? `ordering=${direction}${sortby}&` : ""}`)
+                        .get(`/appointment/user?${sortby !== "" ? `ordering=${direction}${sortby}&` : ""}`)
                         .then((response) => {
+                            let rows = []
                             response.data.forEach((app) => {
                                 app.date = app.date_time
                                 app.date_time = app.date_time.split("T")[0] + " " + app.date_time.split("T")[1].split("Z")[0]
+                                if (app.accepted == true)
+                                    app['accepted'] = 'Yes'
+                                else
+                                    app['accepted'] = 'No'
+                                rows.push(app)
                             })
-                            setAppointments(response.data);
+                            setAppointments(rows);
                         });
                 }
                 return res.data;
@@ -139,9 +117,6 @@ export default function ListCreatedAppointments() {
     useEffect(() => {
         getData();
     }, [sortby, direction]);
-    const getUser = async (e) => {
-        
-    };
 
     const handleChange = (event) => {
         setSortBy(event.target.value);
@@ -204,7 +179,7 @@ export default function ListCreatedAppointments() {
                     <DataGrid
                         rows={appointments}
                         disableColumnFilter
-                        columns={[...columns, rowAction(navigate, user, setAlert, setFailed, setErr, alert)]}
+                        columns={[...columns]}
                         autoHeight
                         density="comfortable"
                         disableSelectionOnClick

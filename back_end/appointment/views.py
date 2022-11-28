@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from rest_framework import filters, generics, viewsets, filters, permissions
 from django_filters.rest_framework import DjangoFilterBackend
-from appointment.serializer import AppointmentSerializer, AppointmentUserSerializer
+from appointment.serializer import AppointmentSerializer, AppointmentUserSerializer, AppointmentWithReportSerializer, AppointmentWithQrCodeSerializer
 from appointment.models import Appointment
 from appointment_report.models import AppointmentReport
+from tranfusion_center.models import TranfusionCenter
+from user_profile.models import UserProfile
 from questionnaire.models import Questionnaire
 from rest_framework.response import Response
 from rest_framework import status, permissions
@@ -184,3 +186,54 @@ class ValidateAppointmentQRCode(generics.RetrieveAPIView):
         if(queryset.count() == 0):
             return Response(False, status = status.HTTP_404_NOT_FOUND)
         return Response(True, status = status.HTTP_202_ACCEPTED)
+
+class AppointmentGetByUserViewSet(generics.ListAPIView):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentWithReportSerializer
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    ordering_fields = '__all__'
+    def list(self, request, *args, **kwargs):
+        if request.query_params:
+            user_appointments = Appointment.objects.filter(user_profile=request.user.id, date_time__lte=datetime.now(pytz.utc)).order_by(request.query_params['ordering'])
+        else:
+            user_appointments = Appointment.objects.filter(user_profile=request.user.id, date_time__lte=datetime.now(pytz.utc))
+        for i in user_appointments:
+            reports = AppointmentReport.objects.prefetch_related('appointment').filter(appointment=i.id)
+            center = TranfusionCenter.objects.filter(id=i.transfusion_center.id)
+            i.accepted = reports[0].accepted
+            i.center_name = center[0].name
+        serializer = self.get_serializer(user_appointments, many=True)
+        return Response(serializer.data)
+
+class AppointmentGetQRCodesViewSet(generics.ListAPIView):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentWithQrCodeSerializer
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    ordering_fields = '__all__'
+    def list(self, request, *args, **kwargs):
+        print(request.query_params)
+        if 'ordering' in request.query_params.keys():
+            user_appointments = Appointment.objects.filter(user_profile=request.user.id).order_by(request.query_params['ordering'])
+        else:
+            user_appointments = Appointment.objects.filter(user_profile=request.user.id)
+        for i in user_appointments:
+            reports = AppointmentReport.objects.prefetch_related('appointment').filter(appointment=i.id)
+            center = TranfusionCenter.objects.filter(id=i.transfusion_center.id)
+            if len(reports) > 0 and  reports[0].accepted:
+                i.status = 'Accepted'
+            elif len(reports) > 0 and reports[0].accepted == False:
+                i.status = 'Refused'
+            else:
+                i.status = 'New'
+            i.qrcode_url = 'http://localhost:8000/qrcodes/' + str(i.id) + '_' + str(request.user.id) + '.png'
+            i.center_name = center[0].name
+        if 'filter' in request.query_params.keys():
+            filtered_appointments = []
+            for i in user_appointments:
+                if i.status == request.query_params['filter']:
+                    filtered_appointments.append(i)
+        else:
+            filtered_appointments = user_appointments
+        serializer = self.get_serializer(filtered_appointments, many=True)
+        return Response(serializer.data)
+        

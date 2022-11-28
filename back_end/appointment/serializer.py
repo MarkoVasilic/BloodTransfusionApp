@@ -14,3 +14,18 @@ class AppointmentUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = ['id','date_time','duration', 'transfusion_center','staff', 'user_profile']
+
+class AppointmentWithReportSerializer(serializers.ModelSerializer):
+    accepted = serializers.BooleanField()
+    center_name = serializers.StringRelatedField()
+    class Meta:
+        model = Appointment
+        fields = ['id','date_time','duration', 'transfusion_center','staff', 'accepted', 'center_name']
+
+class AppointmentWithQrCodeSerializer(serializers.ModelSerializer):
+    status = serializers.StringRelatedField()
+    center_name = serializers.StringRelatedField()
+    qrcode_url = serializers.StringRelatedField()
+    class Meta:
+        model = Appointment
+        fields = ['id','date_time','duration', 'transfusion_center','staff', 'status', 'qrcode_url', 'center_name']

@@ -1,4 +1,4 @@
-from .views import  AppointmentReportViewSet,AppointmentReportDuplicate
+from .views import  AppointmentReportViewSet, AppointmentReportDuplicate
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
