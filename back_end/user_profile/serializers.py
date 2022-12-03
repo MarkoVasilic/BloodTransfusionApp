@@ -44,7 +44,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
       model = UserProfile
       fields = ('id','address', 'city', 'country', 'phone_number',
-       'jmbg', 'gender', 'blood_type', 'profession', 'workplace','loyalty_points', 'tranfusion_center', "is_activated")       
+       'jmbg', 'gender', 'blood_type', 'profession', 'workplace', 'loyalty_points', 'penalty_points', 'tranfusion_center', "is_activated", 'penalty_deleted')       
 
 class UserSerializer(serializers.ModelSerializer):
   userprofile = UserProfileSerializer(read_only = True)
@@ -71,7 +71,6 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         users_profile_data = validated_data.pop('userprofile')
-        print(users_profile_data)
         instance.first_name = validated_data.get('first_name')
         instance.last_name = validated_data.get('last_name')
         users = instance.userprofile
@@ -85,6 +84,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         users.profession = users_profile_data.get('profession')
         users.workplace = users_profile_data.get('workplace')
         users.tranfusion_center = users_profile_data.get('tranfusion_center')
+        users.penalty_deleted = users_profile_data.get('penalty_deleted')
+        users.penalty_points = users_profile_data.get('penalty_points')
         instance.save()
         return instance
 

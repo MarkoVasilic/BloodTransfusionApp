@@ -18,6 +18,7 @@ import Collapse from "@mui/material/Collapse";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import AllowedUsers from "../components/AllowedUsers";
 
 const columns = [
     {
@@ -110,11 +111,14 @@ export default function ListCreatedAppointments() {
     const [failed, setFailed] = React.useState(false);
     const [err, setErr] = React.useState("");
     const navigate = useNavigate();
+    const listOfAllowedUsers = ["TranfusionCenterUser"];
     const getUser = async (e) => {
         try {
-            const res = await axiosApi.get('/account/users/user-profile/');
-            setUser(res.data);
-            return res.data;
+            await axiosApi.get('/account/users/user-profile/').then((res) => {
+                setUser(res.data);
+                axiosApi.put(`/account/users/update-penalty/${res.data.id}/`, res.data)
+                return res.data;
+            });
         } catch (error) {
             console.log(error.response);
         }
@@ -158,6 +162,7 @@ export default function ListCreatedAppointments() {
     return (
         <div>
             <Navbar />
+            <AllowedUsers userRole = {listOfAllowedUsers}/>
             <Stack direction={"row"} sx={{ justifyContent: "center" }}>
                 <Typography
                     component="h1"

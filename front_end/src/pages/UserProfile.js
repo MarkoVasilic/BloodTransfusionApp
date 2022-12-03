@@ -17,6 +17,7 @@ export default function UserProfile() {
         axiosApi
         .get('/account/users/user-profile/')
         .then((response) => {
+            axiosApi.put(`/account/users/update-penalty/${response.data.id}/`, response.data)
             setId(response.data.id);
         })
     }

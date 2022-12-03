@@ -4,10 +4,12 @@ import { Typography, Paper, Button } from '@mui/material';
 import { Stack } from '@mui/system';
 import Navbar from "../components/Navbar";
 import * as React from "react";
+import AllowedUsers from "../components/AllowedUsers";
 import { useNavigate, useLocation } from "react-router-dom";
 
 export default function CreateCenter(props) {
     let navigate = useNavigate();
+    const listOfAllowedUsers = ["TranfusionCenterUser"];
     const { state } = useLocation();
     const onClick = (e) => {
         console.log(state)
@@ -16,6 +18,7 @@ export default function CreateCenter(props) {
     return (
         <div>
             <Navbar />
+            <AllowedUsers userRole = {listOfAllowedUsers}/>
             <Stack marginTop={"10px"} justifyContent={"center"}>
                 <Typography align="center" marginBottom={"30px"} component="h1" variant="h4" color={green[800]}>
                     Details

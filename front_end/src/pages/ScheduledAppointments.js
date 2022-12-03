@@ -16,6 +16,7 @@ import Collapse from "@mui/material/Collapse";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import AllowedUsers from "../components/AllowedUsers";
 
 const columns = [
     {
@@ -106,6 +107,7 @@ export default function ListCreatedAppointments() {
     const [alert, setAlert] = React.useState(false);
     const [failed, setFailed] = React.useState(false);
     const [err, setErr] = React.useState("");
+    const listOfAllowedUsers = ["TranfusionCenterUser"];
     const navigate = useNavigate();
     let getData = async () => {
         try {
@@ -154,6 +156,7 @@ export default function ListCreatedAppointments() {
     return (
         <div>
             <Navbar />
+            <AllowedUsers userRole = {listOfAllowedUsers}/>
             <Stack direction={"row"} sx={{ justifyContent: "center" }}>
                 <Typography
                     component="h1"

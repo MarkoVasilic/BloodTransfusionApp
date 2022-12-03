@@ -118,6 +118,7 @@ class AppointmentGetByCenterViewSet(generics.ListAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    permission_classes = [permissions.IsAuthenticated & (IsAdmin | IsUser)]
     ordering_fields = '__all__'
     def list(self, request, *args, **kwargs):
         if request.query_params:
@@ -135,10 +136,13 @@ class AppointmentUpdateUserProfileView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AppointmentSerializer
     permission_classes = [permissions.IsAuthenticated & (IsAdmin | IsUser)]
     def put(self, request, *args, **kwargs):
+        user_profile = UserProfile.objects.filter(id=request.user.id)
         questionnaires = Questionnaire.objects.filter(user_profile=request.user.id)
         user_appointments = Appointment.objects.filter(user_profile=request.user.id, date_time__gte=datetime.now() - timedelta(days=60), date_time__lte=datetime.now())
         reports = False
         months6 = True
+        if user_profile[0].penalty_points >= 3:
+            return Response({"message" : "You have 3 penalties so you can't make appointment this month!"}, status=404)
         if len(user_appointments) > 0:
             months6 = False
         for q in questionnaires:
@@ -190,6 +194,7 @@ class ValidateAppointmentQRCode(generics.RetrieveAPIView):
 class AppointmentGetByUserViewSet(generics.ListAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentWithReportSerializer
+    permission_classes = [permissions.IsAuthenticated & (IsAdmin | IsUser)]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = '__all__'
     def list(self, request, *args, **kwargs):
@@ -208,6 +213,7 @@ class AppointmentGetByUserViewSet(generics.ListAPIView):
 class AppointmentGetQRCodesViewSet(generics.ListAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentWithQrCodeSerializer
+    permission_classes = [permissions.IsAuthenticated & (IsAdmin | IsUser)]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = '__all__'
     def list(self, request, *args, **kwargs):

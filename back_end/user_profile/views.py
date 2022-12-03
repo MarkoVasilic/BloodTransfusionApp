@@ -15,6 +15,9 @@ from rest_framework import filters, permissions
 from rest_framework.decorators import api_view
 from tranfusion_center.models import TranfusionCenter
 from rest_framework import viewsets
+from django.http import QueryDict
+import datetime
+import pytz
 
 class IsAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -62,6 +65,28 @@ class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
     permission_classes = [IsAuthenticated & (IsAdmin | IsOwner)]
+
+class UserUpdatePenaltyDateViewSet(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserUpdateSerializer
+    permission_classes = [IsAuthenticated & (IsAdmin | IsOwner)]
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        if instance.userprofile.penalty_deleted.month < datetime.datetime.now(tz=pytz.timezone('Europe/Belgrade')).month:
+            request.data['userprofile']['penalty_deleted'] = datetime.datetime.now(tz=pytz.timezone('Europe/Belgrade'))
+            request.data['userprofile']['penalty_points'] = 0
+        else:
+            request.data['userprofile']['penalty_deleted'] = instance.userprofile.penalty_deleted
+            request.data['userprofile']['penalty_points'] = instance.userprofile.penalty_points
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+        return Response(serializer.data)
     
 class RegisterCenterUserAPIView(APIView):
     queryset = User.objects.all()
@@ -92,6 +117,7 @@ def post_new_user(request, group, isActive, is_superuser, is_staff, tranfusion_c
             instance.is_active = isActive
             instance.userprofile.is_activated = False
             instance.tranfusion_center = tranfusion_center
+            instance.userprofile.penalty_deleted = datetime.datetime.now(tz=pytz.timezone('Europe/Belgrade'))
             instance.save()
             user_profile_serializer.instance = instance.userprofile
             user_profile_serializer.save()

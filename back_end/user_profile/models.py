@@ -44,6 +44,7 @@ class UserProfile(models.Model):
     penalty_points = models.PositiveIntegerField(default=0)
     tranfusion_center = models.ForeignKey(TranfusionCenter, on_delete=models.CASCADE, null=True, blank=True)
     is_activated = models.BooleanField(default=False)
+    penalty_deleted = models.DateTimeField(auto_now = False, auto_now_add = False, null=True, blank=True)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

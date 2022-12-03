@@ -16,6 +16,7 @@ import Collapse from "@mui/material/Collapse";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import AllowedUsers from "../components/AllowedUsers";
 
 const columns = [
     {
@@ -69,9 +70,7 @@ export default function UserAppointmentHistory() {
     const [sortby, setSortBy] = React.useState('');
     const [direction, setDirection] = React.useState('');
     const [user, setUser] = useState(null);
-    const [alert, setAlert] = React.useState(false);
-    const [failed, setFailed] = React.useState(false);
-    const [err, setErr] = React.useState("");
+    const listOfAllowedUsers = ["TranfusionCenterUser"];
     const navigate = useNavigate();
     let getData = async () => {
         try {
@@ -129,6 +128,7 @@ export default function UserAppointmentHistory() {
     return (
         <div>
             <Navbar />
+            <AllowedUsers userRole = {listOfAllowedUsers}/>
             <Stack direction={"row"} sx={{ justifyContent: "center" }}>
                 <Typography
                     component="h1"
@@ -137,7 +137,7 @@ export default function UserAppointmentHistory() {
                     marginBottom={3}
                     marginTop={1}
                 >
-                    Your Appointments
+                    Your Appointments History
                 </Typography>
             </Stack>
             <Stack direction={"row"} sx={{ justifyContent: "start" }} p={1}>
@@ -187,51 +187,6 @@ export default function UserAppointmentHistory() {
                         pageSize={5}
                         headerHeight={35}
                     />
-                </Box>
-                <Box sx={{ width: "100%" }}>
-                    <Collapse in={alert}>
-                        <Alert
-                            severity="success"
-                            action={
-                                <IconButton
-                                    aria-label="close"
-                                    color="inherit"
-                                    size="small"
-                                    onClick={() => {
-                                        setAlert(false);
-                                        navigate("/");
-                                    }}
-                                >
-                                    <CloseIcon fontSize="inherit" />
-                                </IconButton>
-                            }
-                            sx={{ mb: 2 }}
-                        >
-                            Appointment cancelation successfull!
-                        </Alert>
-                    </Collapse>
-                </Box>
-                <Box sx={{ width: "100%" }}>
-                    <Collapse in={failed}>
-                        <Alert
-                            severity="error"
-                            action={
-                                <IconButton
-                                    aria-label="close"
-                                    color="inherit"
-                                    size="small"
-                                    onClick={() => {
-                                        setFailed(false);
-                                    }}
-                                >
-                                    <CloseIcon fontSize="inherit" />
-                                </IconButton>
-                            }
-                            sx={{ mb: 2 }}
-                        >
-                            {err}
-                        </Alert>
-                    </Collapse>
                 </Box>
             </Paper>
         </div>

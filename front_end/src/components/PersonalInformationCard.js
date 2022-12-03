@@ -133,6 +133,12 @@ function PersonalInformationCardComponent() {
             <Grid item xs={9}>
             <Typography variant="h5" color="text.secondary" align='left' marginLeft={"80px"}>{userprofile.workplace}</Typography>
             </Grid>
+            <Grid item xs={3}>
+            <Typography variant="h5" align='left' marginLeft={"100px"}>Penalty points: </Typography>
+            </Grid>
+            <Grid item xs={9}>
+            <Typography variant="h5" color="text.secondary" align='left' marginLeft={"80px"}>{userprofile.penalty_points}</Typography>
+            </Grid>
         </Grid>
     );
 }
