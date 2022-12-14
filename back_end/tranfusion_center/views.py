@@ -52,5 +52,4 @@ class TransfusionCenterAPIView(generics.RetrieveAPIView):
         return Response(serializer.data)
 
 
-
         

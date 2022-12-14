@@ -20,6 +20,7 @@ import os
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from email.mime.image import MIMEImage
+from django.db.models import Q
 
 class IsAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -170,6 +171,15 @@ class ListCenterUsers(generics.ListAPIView):
         serialized_users = AppointmentUserSerializer(instance = queryset, many = True)
         return Response(serialized_users.data)
 
+class ListCenterUsersForSearch(generics.ListAPIView):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentUserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    def list(self, request):
+        queryset = Appointment.objects.filter(transfusion_center = request.user.userprofile.tranfusion_center).exclude(user_profile = None).distinct("user_profile_id")
+        serialized_users = AppointmentUserSerializer(instance = queryset, many = True)
+        return Response(serialized_users.data)
+
 class SearchCenterUsers(generics.ListAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentUserSerializer
@@ -237,3 +247,21 @@ class AppointmentGetQRCodesViewSet(generics.ListAPIView):
         serializer = self.get_serializer(filtered_appointments, many=True)
         return Response(serializer.data)
         
+class AppointmentGetByUserAndStaffViewSet(generics.ListAPIView):
+   queryset = Appointment.objects.all()
+   serializer_class = AppointmentSerializer
+   filter_backends = [DjangoFilterBackend]
+   def list(self,  request, *args, **kwargs):
+        user_appointments = Appointment.objects.filter(Q(staff = request.user.id), Q(user_profile = kwargs['pk']))
+        reports = AppointmentReport.objects.all()
+        filtered_appointments = []
+        for ua in user_appointments:
+            reports_appointment = AppointmentReport.objects.prefetch_related('appointment').filter(appointment = ua.id)
+            if(len(reports_appointment)==0):
+                filtered_appointments.append(ua)      
+        serializer = self.get_serializer(filtered_appointments, many = True)
+        return Response(serializer.data)
+        
+class DestroyAppointmentAPIView(generics.DestroyAPIView):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentSerializer

@@ -35,6 +35,26 @@ const RenderDetailsButton = (params) => {
 };
 
 
+const RenderAppointmentsButton = (params) => {
+    let navigate = useNavigate();
+    return (
+        <strong>
+            <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                style={{ marginLeft: 16 }}
+                onClick={() => {
+                    navigate('/user-appointments/'+params.row.user_profile.user.id);
+                }}
+            >
+                Appointments
+            </Button>
+        </strong>
+    )
+};
+
+
 const columns = [
     {
         field: "id",
@@ -72,7 +92,7 @@ const columns = [
         field: "email",
         headerName: "Email",
         type: "string",
-        width: 300,
+        width: 250,
         editable: false,
         valueGetter: (params) => {return params.row.user_profile.user.email}
     },
@@ -80,7 +100,7 @@ const columns = [
         field: "transfusion_center",
         headerName: "Center ID",
         type: "string",
-        width: 200,
+        width: 100,
         editable: false,
     },
 
@@ -92,6 +112,13 @@ const columns = [
         width: 100,
         renderCell: RenderDetailsButton,
         disableClickEventBubbling: true   
+    },
+    {
+        field: "appointments",
+        headerName: "Appointments view",
+        width: 250,
+        renderCell: RenderAppointmentsButton,
+        disableClickEventBubbling: true  
     }
 ];
 
@@ -108,7 +135,7 @@ function ListCenterUsers() {
     let getData = async () => {
         if (searchTerm === "") {
             axiosApi
-                .get("/appointment/users/")
+                .get("/appointment/users-search/")
                 .then((response) => {
                     setKorisnici(response.data);
                     console.log("resp", response.data); 

@@ -7,7 +7,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from django.contrib.auth.models import User, Group
 from user_profile.models import UserProfile
-from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer, UserUpdateSerializer, UserUpdatePasswordSerializer, UserActivateSerializer
+from .serializers import RegisterSerializer, UserProfileSerializer, UserSerializer, UserUpdateSerializer, UserUpdatePasswordSerializer, UserActivateSerializer, UserIncreasePenaltyPointsSerializer
 from django.contrib.auth.models import Group, AnonymousUser
 from rest_framework import status, mixins, generics
 from django_filters.rest_framework import DjangoFilterBackend
@@ -142,3 +142,9 @@ class ActivateUserView(generics.RetrieveUpdateDestroyAPIView):
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
+class IncreasePenaltyPoints(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserIncreasePenaltyPointsSerializer
+        
+
+        

@@ -26,6 +26,7 @@ function MyCalendar() {
             appointment.duration + endDate.getMinutes()
         )
             return {
+                id: appointment.id,
                 title: appointment.user_profile.user.first_name + " " +appointment.user_profile.user.last_name + "'s Appointment",
                 startDate: new Date(appointment.date_time),
                 endDate,
