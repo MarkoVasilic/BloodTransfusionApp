@@ -50,15 +50,15 @@ function UserQuestionnaireView() {
                             <Typography
                                 variant="h5"
                                 color={
-                                    questionnaire.Less_than_50kg === true
+                                    questionnaire.less_than_50kg === true
                                         ? "error"
                                         : green[700]
                                 }
                                 align={"left"}
                             >
-                                {questionnaire.Less_than_50kg === true
-                                    ? "Yes"
-                                    : "No"}
+                                {questionnaire.less_than_50kg === true
+                                    ? "No"
+                                    : "Yes"}
                             </Typography>
                         </Stack>
                         <Stack direction={"row"} spacing={2}>

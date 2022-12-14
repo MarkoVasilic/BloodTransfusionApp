@@ -44,7 +44,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
       model = UserProfile
       fields = ('id','address', 'city', 'country', 'phone_number',
-       'jmbg', 'gender', 'blood_type', 'profession', 'workplace', 'loyalty_points', 'penalty_points', 'tranfusion_center', "is_activated", 'penalty_deleted')       
+       'jmbg', 'gender', 'blood_type', 'profession', 'workplace', 'loyalty_points', 'penalty_points', 'tranfusion_center', "is_activated", 'penalty_points', 'penalty_deleted')       
 
 class UserSerializer(serializers.ModelSerializer):
   userprofile = UserProfileSerializer(read_only = True)
@@ -129,3 +129,17 @@ class UserAppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['user', 'address', 'city', 'phone_number']
+
+
+class UserIncreasePenaltyPointsSerializer(serializers.ModelSerializer):
+    userprofile = UserProfileSerializer(read_only = True)
+    class Meta:
+        model = UserProfile
+        fields = ['userprofile']
+        extra_kwargs = {'userprofile':{'read_only': True}}
+
+    def update(self, instance, validated_data):
+        users = instance.userprofile
+        users.penalty_points += 1
+        instance.save()
+        return instance

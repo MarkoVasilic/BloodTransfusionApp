@@ -53,6 +53,7 @@ function ReportForm() {
                     });
                 axiosApi.get(`/account/users/${id}`).then((response) => {
                     setUser(response.data);
+
                 });
             });
         } catch (error) {
@@ -71,13 +72,7 @@ function ReportForm() {
     useEffect(() => {
         try {
         if(doPost === true){
-            axiosApi.post(`/report/`, {
-                appointment: appointment.id,
-                blood_packet: bloodPacket.id,
-                questionnaire: questionnaire.id,
-                equipment: [equipments.id],
-                accepted: true,
-            })
+            axiosApi.post(`/report/`, {appointment: appointment.id, blood_packet: bloodPacket.id, questionnaire: questionnaire.id, equipment: [equipments.id], accepted: true,})
             .then((response) => {
                 console.log(response.data);
                 setSuccessAlert("visible");
@@ -166,8 +161,8 @@ function ReportForm() {
 
     return (
         <div>
-            {!appointment && <div>Loading...</div>}
-            {appointment && (
+            {!user && <div>Loading...</div>}
+            {user && (
                 <div>
                     <Grid
                         container
@@ -251,7 +246,7 @@ function ReportForm() {
                                 variant="filled"
                                 required
                                 helperText="Number of liters"
-                                fullWidth
+                                
                             ></InputTextField>
                         </Grid>
                         <Grid item xs={12}>

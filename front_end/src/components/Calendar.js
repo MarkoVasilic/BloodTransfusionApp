@@ -12,20 +12,27 @@ import {
     DateNavigator,
     DayView,
 } from "@devexpress/dx-react-scheduler-material-ui";
+import { useNavigate } from "react-router-dom";
 
-const Appointment = ({ children, style, ...restProps }) => (
-    <Appointments.Appointment
-        {...restProps}
-        style={{
-            ...style,
-            backgroundColor: "#6fbf73",
-            borderRadius: "8px",
-        }}
-    >
-        {children}
-        {restProps.data.desc && <div>{restProps.data.desc}</div>}
-    </Appointments.Appointment>
-);
+
+
+const Appointment = ({ children, style, ...restProps }) =>{
+    const navigate = useNavigate();
+    return (
+        <Appointments.Appointment
+            {...restProps}
+            style={{
+                ...style,
+                backgroundColor: "#6fbf73",
+                borderRadius: "8px",
+            }}
+            onClick={()=>navigate('/questionnaire/'+restProps.data.id)}
+        >
+            {children}
+            {restProps.data.desc && <div>{restProps.data.desc}</div>}
+        </Appointments.Appointment>
+    );
+}
 
 export default function Calendar(props) {
     const { appointments } = props;

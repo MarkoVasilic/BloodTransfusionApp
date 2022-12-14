@@ -42,7 +42,7 @@ import QuestionnaireViewPage from "./pages/QuestionnaireViewPage";
 import ReportFormPage from "./pages/ReportFormPage";
 import UserAppointmentHistory from "./pages/UserAppointmentHistory"
 import ListQrCodes from "./pages/ListQrCodes"
-
+import UserAppointmentsStaff from "./pages/UserAppointmentsForStaff";
 
 
 
@@ -98,6 +98,7 @@ function App() {
                         <Route path="/create-report/:id" element={<ReportFormPage />} />
                         <Route path="/list-appointment-history/" element={<UserAppointmentHistory />} /> 
                         <Route path="/list-qrcodes/" element={<ListQrCodes />} /> 
+                        <Route path="/user-appointments/:user" element={<UserAppointmentsStaff />} /> 
                     </Routes>
                 </div>
             </Router>

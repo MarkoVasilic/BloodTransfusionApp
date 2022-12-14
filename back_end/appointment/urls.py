@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AppointmentViewSet, AppointmentGetByCenterViewSet, AppointmentUpdateUserProfileView, ListCenterUsers, SearchCenterUsers, AppointmentGetByUserScheduledViewSet, AppointmentCancelView, ValidateAppointmentQRCode, AppointmentGetByUserViewSet, AppointmentGetQRCodesViewSet
+from .views import AppointmentViewSet, AppointmentGetByCenterViewSet, AppointmentUpdateUserProfileView, ListCenterUsers, SearchCenterUsers, AppointmentGetByUserScheduledViewSet, AppointmentCancelView, ValidateAppointmentQRCode, AppointmentGetByUserViewSet, AppointmentGetQRCodesViewSet, AppointmentGetByUserAndStaffViewSet, DestroyAppointmentAPIView, ListCenterUsersForSearch
 from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
@@ -12,6 +12,9 @@ urlpatterns = [
     path('validate/<int:pk>', ValidateAppointmentQRCode.as_view()),
     path(r'user/', AppointmentGetByUserViewSet.as_view()),
     path(r'qrcodes/', AppointmentGetQRCodesViewSet.as_view()),
+    path(r'staff-appointments-for-user/<int:pk>', AppointmentGetByUserAndStaffViewSet.as_view()),
+    path('delete-appointment/<int:pk>', DestroyAppointmentAPIView.as_view()),
+    path('users-search/', ListCenterUsersForSearch.as_view()),
 ]
 
 router = DefaultRouter()
