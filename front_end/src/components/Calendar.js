@@ -26,7 +26,7 @@ const Appointment = ({ children, style, ...restProps }) =>{
                 backgroundColor: "#6fbf73",
                 borderRadius: "8px",
             }}
-            onClick={()=>navigate('/questionnaire/'+restProps.data.id)}
+            onClick={()=>navigate('/start-appointment/'+restProps.data.id)}
         >
             {children}
             {restProps.data.desc && <div>{restProps.data.desc}</div>}

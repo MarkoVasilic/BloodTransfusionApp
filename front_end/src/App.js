@@ -43,7 +43,7 @@ import ReportFormPage from "./pages/ReportFormPage";
 import UserAppointmentHistory from "./pages/UserAppointmentHistory"
 import ListQrCodes from "./pages/ListQrCodes"
 import UserAppointmentsStaff from "./pages/UserAppointmentsForStaff";
-
+import StartAppointment from "./pages/StartAppointmentPenalty"
 
 
 function App() {
@@ -99,6 +99,7 @@ function App() {
                         <Route path="/list-appointment-history/" element={<UserAppointmentHistory />} /> 
                         <Route path="/list-qrcodes/" element={<ListQrCodes />} /> 
                         <Route path="/user-appointments/:user" element={<UserAppointmentsStaff />} /> 
+                        <Route path ="/start-appointment/:id" element={<StartAppointment/>}/>
                     </Routes>
                 </div>
             </Router>
