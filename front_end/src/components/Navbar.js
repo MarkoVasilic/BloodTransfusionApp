@@ -150,7 +150,7 @@ const chooseSideMenu = (group) => {
         return {
             "List Transfusion Centers": "/list-centers",
             "Fill Questionnaire": "/fill-questionnaire",
-            "Make An Appointment": "/select-center/",
+            "Make An Appointment": "/fill-questionnaire",
             "List Scheduled Appointments": "/user-scheduled/",
             "Appointment History" : "/list-appointment-history/",
             "List QR Codes" : "/list-qrcodes/"
