@@ -21,6 +21,7 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from email.mime.image import MIMEImage
 from django.db.models import Q
+from dateutil import parser
 
 class IsAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -139,9 +140,12 @@ class AppointmentUpdateUserProfileView(generics.RetrieveUpdateDestroyAPIView):
     def put(self, request, *args, **kwargs):
         user_profile = UserProfile.objects.filter(id=request.user.id)
         questionnaires = Questionnaire.objects.filter(user_profile=request.user.id)
-        user_appointments = Appointment.objects.filter(user_profile=request.user.id, date_time__gte=datetime.now() - timedelta(days=60), date_time__lte=datetime.now())
+        user_appointments = Appointment.objects.filter(user_profile=request.user.id, date_time__gte=datetime.now() - timedelta(days=180), date_time__lte=datetime.now())
+        future_appointments = Appointment.objects.filter(user_profile=request.user.id, date_time__gte=datetime.now(), date_time__lte=datetime.now() + timedelta(days=180))
         reports = False
         months6 = True
+        if len(future_appointments) > 0 and parser.parse(request.data['date_time']) < pytz.UTC.localize(datetime.now() + timedelta(days=180)):
+            return Response({"message" : "You already have appointment scheduled in next 6 months!"}, status=404)
         if user_profile[0].penalty_points >= 3:
             return Response({"message" : "You have 3 penalties so you can't make appointment this month!"}, status=404)
         if len(user_appointments) > 0:

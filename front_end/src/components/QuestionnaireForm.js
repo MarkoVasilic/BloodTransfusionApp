@@ -305,7 +305,7 @@ const RegistrationForm = () => {
                                 size="small"
                                 onClick={() => {
                                     setAlert(false);
-                                    navigate("/");
+                                    navigate("/select-center/");
                                 }}
                             >
                                 <CloseIcon fontSize="inherit" />
