@@ -40,6 +40,10 @@ import EmailVerificationDeclaration from "./pages/EmailVerificationDeclaration";
 import AdminCheckQRCode from "./pages/AdminCheckQRCode";
 import QuestionnaireViewPage from "./pages/QuestionnaireViewPage";
 import ReportFormPage from "./pages/ReportFormPage";
+import CentersForAppointmentPage from "./pages/CentersForAppointmentPage";
+import CreatePredefinedAppointmentsPage from "./pages/CreatePredefinedAppointmentsPage";
+import ChooseStaffForAppointmentPage from "./pages/ChooseStaffForAppointmentPage";
+
 
 
 
@@ -94,6 +98,9 @@ function App() {
                         <Route path="/check-QR-code/" element={<AdminCheckQRCode />} />
                         <Route path="/questionnaire/:id" element={<QuestionnaireViewPage />} />
                         <Route path="/create-report/:id" element={<ReportFormPage />} />
+                        <Route path="/centers-appointments" element={<CentersForAppointmentPage />} />
+                        <Route path="/choose-staff/:id" element={<ChooseStaffForAppointmentPage />} />
+                        <Route path="/staff-create-predefined" element={<CreatePredefinedAppointmentsPage />} />
                     </Routes>
                 </div>
             </Router>

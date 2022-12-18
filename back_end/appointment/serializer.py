@@ -14,3 +14,8 @@ class AppointmentUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = ['id','date_time','duration', 'transfusion_center','staff', 'user_profile']
+
+class AppointmentPredefinedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Appointment
+        fields = ['id','date_time','duration', 'transfusion_center','staff']
