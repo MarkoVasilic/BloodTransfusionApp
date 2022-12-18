@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import filters, generics, viewsets, filters, permissions
 from django_filters.rest_framework import DjangoFilterBackend
-from appointment.serializer import AppointmentSerializer, AppointmentUserSerializer, AppointmentWithReportSerializer, AppointmentWithQrCodeSerializer
+from appointment.serializer import AppointmentSerializer, AppointmentUserSerializer, AppointmentPredefinedSerializer, AppointmentWithReportSerializer, AppointmentWithQrCodeSerializer
 from appointment.models import Appointment
 from appointment_report.models import AppointmentReport
 from tranfusion_center.models import TranfusionCenter
@@ -169,6 +169,59 @@ class AppointmentUpdateUserProfileView(generics.RetrieveUpdateDestroyAPIView):
             else:
                     return Response({"message" : "You had appointment in last 6 months!"}, status=404)
         return Response({"message" : "You don't have questionnaire!"}, status=404)
+
+#### predefinisani
+class CreatePredefinedAppointmentView(generics.CreateAPIView):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentPredefinedSerializer
+    permission_classes = [permissions.IsAuthenticated & (IsAdmin | IsStaff)] #obrisati admina posle
+
+    def post(self, request, *args, **kwargs):
+        duration = timedelta(minutes=int(request.data['duration']))
+        print(datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M') - duration)
+        appointments = Appointment.objects.filter(Q(transfusion_center=request.data['transfusion_center']) & Q(date_time__gte=datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M')-duration) & Q(date_time__lte=datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M')+duration))
+        #print(datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M')+timedelta(minutes=45))
+        if len(appointments) > 0:
+            return Response({'message' : 'Already exists appointment at choosen time. Please choose another date and time.'}, status=status.HTTP_404_NOT_FOUND)
+        return self.create(request, *args, **kwargs)
+
+#zakazivanje slobodnog termina za odabrani centar
+class CreateAppointmentUserView(generics.CreateAPIView):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentSerializer
+    permission_classes = [permissions.IsAuthenticated & (IsAdmin | IsUser)]
+    def post(self, request, *args, **kwargs):
+        print(request.user.id)
+        user_profile = UserProfile.objects.filter(id=request.user.id)
+        questionnaires = Questionnaire.objects.filter(user_profile=request.user.id)
+        user_appointments = Appointment.objects.filter(user_profile=request.user.id, date_time__gte=datetime.now() - timedelta(days=180), date_time__lte=datetime.now())
+        future_appointments = Appointment.objects.filter(user_profile=request.user.id, date_time__gte=datetime.now(), date_time__lte=datetime.now() + timedelta(days=180))
+        reports = False
+        months6 = True
+        if len(future_appointments) > 0 and datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M') < (datetime.now() + timedelta(days=180)):
+            return Response({"message" : "You already have appointment scheduled in next 6 months!"}, status=404)
+        if user_profile[0].penalty_points >= 3:
+            return Response({"message" : "You have 3 penalties so you can't make appointment this month!"}, status=404)
+        if len(user_appointments) > 0:
+            months6 = False
+        for q in questionnaires:
+            if AppointmentReport.objects.filter(questionnaire=q.id).exists() == False:
+                reports = True
+                break
+        for ua in user_appointments:
+            if AppointmentReport.objects.filter(appointment=ua.id, accepted=True).exists() == False:
+                months6 = True
+                break
+        if Questionnaire.objects.filter(user_profile=request.user.id).exists() and reports:
+            if months6:
+                self.create(request, *args, **kwargs)
+                #create_qrcode(request.data)
+                #send_email(request.data['user_profile'], request.user.email, request.data['id'])
+                return Response({"message" : "Appointment scheduled!"}, status=200)
+            else:
+                    return Response({"message" : "You had appointment in last 6 months!"}, status=404)
+        return Response({"message" : "You don't have questionnaire!"}, status=404)
+
 
 class ListCenterUsers(generics.ListAPIView):
     queryset = Appointment.objects.all()

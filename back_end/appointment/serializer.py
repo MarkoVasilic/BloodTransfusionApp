@@ -15,6 +15,11 @@ class AppointmentUserSerializer(serializers.ModelSerializer):
         model = Appointment
         fields = ['id','date_time','duration', 'transfusion_center','staff', 'user_profile']
 
+class AppointmentPredefinedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Appointment
+        fields = ['id','date_time','duration', 'transfusion_center','staff']
+
 class AppointmentWithReportSerializer(serializers.ModelSerializer):
     accepted = serializers.BooleanField()
     center_name = serializers.StringRelatedField()

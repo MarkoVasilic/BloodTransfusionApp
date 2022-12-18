@@ -162,6 +162,7 @@ const chooseSideMenu = (group) => {
             "Calendar": "/calendar",
             "Users": "/center/list-users",
             "Check QR code": "/check-QR-code",
+            "Make predefined appointment": "/staff-create-predefined",
         };
     } else {
         return { "List Transfusion Centers": "/list-centers" };
