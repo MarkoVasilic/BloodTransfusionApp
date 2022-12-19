@@ -242,7 +242,7 @@ class ListCenterUsersForSearch(generics.ListAPIView):
         return Response(serialized_users.data)
 
 class SearchCenterUsers(generics.ListAPIView):
-    queryset = Appointment.objects.all()
+    queryset = Appointment.objects.all().distinct("user_profile_id")
     serializer_class = AppointmentUserSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
@@ -265,16 +265,19 @@ class AppointmentGetByUserViewSet(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = '__all__'
     def list(self, request, *args, **kwargs):
+        appointments_to_return = []
         if request.query_params:
-            user_appointments = Appointment.objects.filter(user_profile=request.user.id, date_time__lte=datetime.now(pytz.utc)).order_by(request.query_params['ordering'])
+            user_appointments = Appointment.objects.filter(user_profile=request.user.id).order_by(request.query_params['ordering'])
         else:
-            user_appointments = Appointment.objects.filter(user_profile=request.user.id, date_time__lte=datetime.now(pytz.utc))
+            user_appointments = Appointment.objects.filter(user_profile=request.user.id)
         for i in user_appointments:
             reports = AppointmentReport.objects.prefetch_related('appointment').filter(appointment=i.id)
             center = TranfusionCenter.objects.filter(id=i.transfusion_center.id)
-            i.accepted = reports[0].accepted
-            i.center_name = center[0].name
-        serializer = self.get_serializer(user_appointments, many=True)
+            if len(reports) > 0:
+                i.accepted = reports[0].accepted
+                i.center_name = center[0].name
+                appointments_to_return.append(i)
+        serializer = self.get_serializer(appointments_to_return, many=True)
         return Response(serializer.data)
 
 class AppointmentGetQRCodesViewSet(generics.ListAPIView):
