@@ -16,7 +16,9 @@ import Select from "@mui/material/Select";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
-
+import Alert from "@mui/material/Alert";
+import Collapse from "@mui/material/Collapse";
+import CloseIcon from "@mui/icons-material/Close";
 
 const columns = [
     {
@@ -118,6 +120,7 @@ function rowAction(navigate, buttonName, buttonUrl, state, user) {
                 console.log(thisRow)
                 
                 let staffs = [];
+                let alert = false;
 
                 try{
                     axiosApi
@@ -130,16 +133,16 @@ function rowAction(navigate, buttonName, buttonUrl, state, user) {
                 }catch(err){
                     console.log(err)
                 }
-
                 try {
                     const data = { transfusion_center : thisRow.id, user_profile : user.id, duration : 45, staff : staffs, date_time : state, date : "" }
                     axiosApi.post('/appointment/create-newappointment/', data)
-                    //setAlert(true)
+                    alert = false
                 }
                 catch (err) {
                     console.log(err)
+                    alert = true;
                 }
-                return navigate(buttonUrl, { state: thisRow});
+                return navigate(buttonUrl, { state: alert });
             };
             return (
                 <Button

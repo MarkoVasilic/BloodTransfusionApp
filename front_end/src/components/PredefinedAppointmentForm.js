@@ -52,13 +52,11 @@ const RegistrationForm = () => {
             data.transfusion_center = user.userprofile.tranfusion_center
             data.staff = [data.staff]
             console.log(user)
-            const res = await axiosApi.post('/appointment/create-predefined/', data);
-            setAlert(true)
+            let res = await axiosApi.post('/appointment/create-predefined/', data);
+            setAlert(true);
         }
         catch (err) {
             console.log(err)
-        }
-        if(alert===false){
             setError(true);
         }
     };
