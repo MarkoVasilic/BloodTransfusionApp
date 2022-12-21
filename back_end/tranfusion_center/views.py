@@ -61,12 +61,15 @@ class IsUser(permissions.BasePermission):
         return request.user and request.user.groups.values_list('name',flat = True)[0] == 'TranfusionCenterUser'
 
 class ListTransfusionCentersForAppointmentAPIView(generics.ListAPIView):
-    queryset = Appointment.objects.all()
+    queryset = TranfusionCenter.objects.all()
     serializer_class = TranfusionCenterSerializer
     #permission_classes = [permissions.IsAuthenticated & (IsUser)]
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = '__all__'
 
     def list(self, request, date_time):
-        centers = TranfusionCenter.objects.all()
+        centers = self.filter_queryset(self.get_queryset())
+
         centersList = []
         for c in centers:
             appointments = Appointment.objects.filter(Q(transfusion_center=c.id) & Q(date_time__gte=datetime.strptime(date_time, '%Y-%m-%dT%H:%M')-timedelta(minutes=45)) & Q(date_time__lte=datetime.strptime(date_time, '%Y-%m-%dT%H:%M')+timedelta(minutes=45)))
@@ -74,6 +77,8 @@ class ListTransfusionCentersForAppointmentAPIView(generics.ListAPIView):
                 centersList.append(c)
         serializer = self.get_serializer(centersList, many=True)
         return Response(serializer.data)
+
+        
 
     
 
