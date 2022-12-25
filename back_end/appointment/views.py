@@ -22,6 +22,7 @@ from django.core.mail import EmailMultiAlternatives
 from email.mime.image import MIMEImage
 from django.db.models import Q
 from dateutil import parser
+from django.contrib.auth.models import User
 
 class IsAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -164,6 +165,7 @@ class AppointmentUpdateUserProfileView(generics.RetrieveUpdateDestroyAPIView):
             if months6:
                 if len(Appointment.objects.filter(id=request.data['id'], user_profiles_that_canceled=request.data['user_profile'])) == 0:
                     create_qrcode(request.data)
+                    print(request.data['user_profile'])
                     send_email(request.data['user_profile'], request.user.email, request.data['id'])
                     return self.update(request, *args, **kwargs)
                 else:
@@ -216,9 +218,14 @@ class CreateAppointmentUserView(generics.CreateAPIView):
                 break
         if Questionnaire.objects.filter(user_profile=request.user.id).exists() and reports:
             if months6:
-                self.create(request, *args, **kwargs)
-                #create_qrcode(request.data)
-                #send_email(request.data['user_profile'], request.user.email, request.data['id'])
+                kreiran = self.create(request, *args, **kwargs)
+                kreiran.data['date'] = ""
+                create_qrcode(kreiran.data)
+                print(kreiran)
+                print(kreiran.data)
+                user = User.objects.filter(id=kreiran.data['user_profile'])
+                email = user[0].email
+                send_email(kreiran.data['user_profile'], email, kreiran.data['id'])
                 return Response({"message" : "Appointment scheduled!"}, status=200)
             else:
                     return Response({"message" : "You had appointment in last 6 months!"}, status=404)
@@ -230,7 +237,7 @@ class ListCenterUsers(generics.ListAPIView):
     serializer_class = AppointmentUserSerializer
     permission_classes = [permissions.IsAuthenticated]
     def list(self, request):
-        queryset = Appointment.objects.filter(transfusion_center = request.user.userprofile.tranfusion_center).exclude(user_profile = None)
+        queryset = Appointment.objects.filter(transfusion_center = request.user.userprofile.tranfusion_center)
         serialized_users = AppointmentUserSerializer(instance = queryset, many = True)
         return Response(serialized_users.data)
 
@@ -244,7 +251,7 @@ class ListCenterUsersForSearch(generics.ListAPIView):
         return Response(serialized_users.data)
 
 class SearchCenterUsers(generics.ListAPIView):
-    queryset = Appointment.objects.all()
+    queryset = Appointment.objects.all().distinct("user_profile_id")
     serializer_class = AppointmentUserSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
@@ -267,16 +274,19 @@ class AppointmentGetByUserViewSet(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = '__all__'
     def list(self, request, *args, **kwargs):
+        appointments_to_return = []
         if request.query_params:
-            user_appointments = Appointment.objects.filter(user_profile=request.user.id, date_time__lte=datetime.now(pytz.utc)).order_by(request.query_params['ordering'])
+            user_appointments = Appointment.objects.filter(user_profile=request.user.id).order_by(request.query_params['ordering'])
         else:
-            user_appointments = Appointment.objects.filter(user_profile=request.user.id, date_time__lte=datetime.now(pytz.utc))
+            user_appointments = Appointment.objects.filter(user_profile=request.user.id)
         for i in user_appointments:
             reports = AppointmentReport.objects.prefetch_related('appointment').filter(appointment=i.id)
             center = TranfusionCenter.objects.filter(id=i.transfusion_center.id)
-            i.accepted = reports[0].accepted
-            i.center_name = center[0].name
-        serializer = self.get_serializer(user_appointments, many=True)
+            if len(reports) > 0:
+                i.accepted = reports[0].accepted
+                i.center_name = center[0].name
+                appointments_to_return.append(i)
+        serializer = self.get_serializer(appointments_to_return, many=True)
         return Response(serializer.data)
 
 class AppointmentGetQRCodesViewSet(generics.ListAPIView):
@@ -330,3 +340,11 @@ class AppointmentGetByUserAndStaffViewSet(generics.ListAPIView):
 class DestroyAppointmentAPIView(generics.DestroyAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
+
+class ListAppointmentsForCenterAPIView(generics.ListAPIView):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentSerializer
+    def list(self, request, staff):
+        appointments = Appointment.objects.filter(staff=staff)
+        serializer=self.get_serializer(appointments, many=True)
+        return Response(serializer.data)

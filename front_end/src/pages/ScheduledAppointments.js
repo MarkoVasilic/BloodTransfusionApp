@@ -109,7 +109,10 @@ export default function ListCreatedAppointments() {
     const [err, setErr] = React.useState("");
     const listOfAllowedUsers = ["TranfusionCenterUser"];
     const navigate = useNavigate();
+    const [ errorAppointment, setErrorAppointment ]= React.useState(state);
+
     let getData = async () => {
+        console.log("AAAAAAAAAAAAAA",state);
         try {
             await axiosApi.get('/account/users/user-profile/').then((res) => {
                 setUser(res.data);
@@ -202,6 +205,28 @@ export default function ListCreatedAppointments() {
                     </Select>
                 </FormControl>
             </Stack>
+            <Box sx={{ width: "100%" }}>
+                <Collapse in={errorAppointment}>
+                    <Alert
+                        severity="error"
+                        action={
+                            <IconButton
+                                aria-label="close"
+                                color="inherit"
+                                size="small"
+                                onClick={() => {
+                                    setErrorAppointment(false);
+                                }}
+                            >
+                                <CloseIcon fontSize="inherit" />
+                            </IconButton>
+                        }
+                        sx={{ mb: 2 }}
+                    >
+                        You cannot schedule appointment because you had appointment in the last 6 months!
+                    </Alert>
+                </Collapse>
+            </Box>
             <Paper>
                 <Box sx={{ height: 400, width: "100%" }}>
                     <DataGrid
