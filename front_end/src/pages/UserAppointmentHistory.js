@@ -82,7 +82,7 @@ export default function UserAppointmentHistory() {
                         response.data.forEach((app) => {
                             app.date = app.date_time
                             app.date_time = app.date_time.split("T")[0] + " " + app.date_time.split("T")[1].split("Z")[0]
-                            if (app.accepted == true)
+                            if (app.accepted === true)
                                 app['accepted'] = 'Yes'
                             else
                                 app['accepted'] = 'No'

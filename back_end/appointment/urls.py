@@ -12,8 +12,6 @@ urlpatterns = [
     path('validate/<int:pk>', ValidateAppointmentQRCode.as_view()),
     path('create-newappointment/', CreateAppointmentUserView.as_view()),
     path('create-predefined/', CreatePredefinedAppointmentView.as_view()),
-
-
     path(r'user/', AppointmentGetByUserViewSet.as_view()),
     path(r'qrcodes/', AppointmentGetQRCodesViewSet.as_view()),
     path(r'staff-appointments-for-user/<int:pk>', AppointmentGetByUserAndStaffViewSet.as_view()),

@@ -158,6 +158,8 @@ class AppointmentUpdateUserProfileView(generics.RetrieveUpdateDestroyAPIView):
             if AppointmentReport.objects.filter(appointment=ua.id, accepted=True).exists() == False:
                 months6 = True
                 break
+        if len(user_appointments) > 0 and user_appointments.last().date_time + timedelta(days=180) > parser.parse(request.data['date_time']):
+            months6 = False
         if Questionnaire.objects.filter(user_profile=request.user.id).exists() and reports:
             if months6:
                 if len(Appointment.objects.filter(id=request.data['id'], user_profiles_that_canceled=request.data['user_profile'])) == 0:
