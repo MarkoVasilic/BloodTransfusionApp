@@ -23,6 +23,7 @@ from email.mime.image import MIMEImage
 from django.db.models import Q
 from dateutil import parser
 from django.contrib.auth.models import User
+from django.db import DatabaseError, transaction
 
 class IsAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -145,6 +146,9 @@ class AppointmentUpdateUserProfileView(generics.RetrieveUpdateDestroyAPIView):
         future_appointments = Appointment.objects.filter(user_profile=request.user.id, date_time__gte=datetime.now(), date_time__lte=datetime.now() + timedelta(days=180))
         reports = False
         months6 = True
+        app = Appointment.objects.filter(id=kwargs['pk'])
+        if  len(app) > 0 and app[0].user_profile != None:
+            return Response({"message" : "Somebody else already scheduled this appointment!"}, status=404)
         if len(future_appointments) > 0 and parser.parse(request.data['date_time']) < pytz.UTC.localize(datetime.now() + timedelta(days=180)):
             return Response({"message" : "You already have appointment scheduled in next 6 months!"}, status=404)
         if user_profile[0].penalty_points >= 3:
@@ -164,10 +168,20 @@ class AppointmentUpdateUserProfileView(generics.RetrieveUpdateDestroyAPIView):
         if Questionnaire.objects.filter(user_profile=request.user.id).exists() and reports:
             if months6:
                 if len(Appointment.objects.filter(id=request.data['id'], user_profiles_that_canceled=request.data['user_profile'])) == 0:
-                    create_qrcode(request.data)
-                    print(request.data['user_profile'])
-                    send_email(request.data['user_profile'], request.user.email, request.data['id'])
-                    return self.update(request, *args, **kwargs)
+                    try:
+                        apps = Appointment.objects.select_for_update(nowait=True).filter(id=kwargs['pk'])
+                        with transaction.atomic():
+                            for app in apps:
+                                partial = kwargs.pop('partial', False)
+                                instance = app
+                                serializer = self.get_serializer(instance, data=request.data, partial=partial)
+                                serializer.is_valid(raise_exception=True)
+                                serializer.save()
+                                create_qrcode(request.data)
+                                send_email(request.data['user_profile'], request.user.email, request.data['id'])
+                                return Response(serializer.data)
+                    except DatabaseError:
+                        return Response({"message" : "Somebody else already scheduled this appointment!"}, status=404)
                 else:
                     return Response({"message" : "You already canceled this appointment!"}, status=404)
             else:
