@@ -18,7 +18,7 @@ function UpdateComplaintForm() {
 
     const handleUpdate = async (data) => {
         try {
-            const resp = await axiosApi.put(`/complaints/${params.id}/`, {
+            const resp = await axiosApi.put(`/complaints/transactional-update/${params.id}/`, {
                 id: complaint.id,
                 text: complaint.text,
                 transfusion_center: complaint.transfusion_center,
@@ -29,6 +29,7 @@ function UpdateComplaintForm() {
             navigate("/list-complaints");
         } catch (error) {
             console.log(error.response);
+            alert("Transaction alert, Other Admins are replying to the same complaint!");
         }
     };
 
@@ -49,6 +50,7 @@ function UpdateComplaintForm() {
             });
         } catch (error) {
             console.log(error.response);
+            alert(error.response);
         }
     };
 

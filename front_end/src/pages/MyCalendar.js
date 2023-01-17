@@ -25,12 +25,31 @@ function MyCalendar() {
           endDate.setMinutes(
             appointment.duration + endDate.getMinutes()
         )
-            return {
-                id: appointment.id,
-                title: appointment.user_profile.user.first_name + " " +appointment.user_profile.user.last_name + "'s Appointment",
-                startDate: new Date(appointment.date_time),
-                endDate,
-            };
+        
+        function addHours(date, hours) {
+            date.setHours(date.getHours() - hours);
+        
+            return date;
+          }
+          
+          const date = new Date(appointment.date_time);
+          
+          const newDate = addHours(date, 1)
+            if(appointment.user_profile == null){
+                return {
+                    id: appointment.id,
+                    title: "Predefined appointment",
+                    startDate: newDate,
+                    endDate,
+                };
+            }else{
+                return {
+                    id: appointment.id,
+                    title: appointment.user_profile.user.first_name + " " +appointment.user_profile.user.last_name + "'s Appointment",
+                    startDate: newDate,
+                    endDate,
+                };
+            }
         });
     }, [appointments]);
 
@@ -50,4 +69,4 @@ function MyCalendar() {
     );
 }
 
-export default MyCalendar;
+export default MyCalendar;  
