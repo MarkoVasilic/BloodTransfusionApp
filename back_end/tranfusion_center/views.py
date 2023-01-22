@@ -15,6 +15,8 @@ from appointment.serializer import AppointmentSerializer
 from rest_framework.response import Response
 from django.db.models import Q
 from datetime import datetime, timedelta
+from django.db import DatabaseError, transaction
+import time
 
 
 class IsUpdateAllowedForLoggedUser(permissions.BasePermission):
@@ -31,7 +33,28 @@ class RetrieveUpdateDestroyTranfusionCenterAPIView(generics.RetrieveUpdateDestro
     serializer_class = TranfusionCenterSerializer
     permission_classes = [IsAuthenticated, IsUpdateAllowedForLoggedUser]
     def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+        try:
+            
+            tcs = TranfusionCenter.objects.select_for_update(nowait=True).filter(id=kwargs['pk'])
+            with transaction.atomic():
+                for tc in tcs:
+                    time.sleep(5)
+                    partial = kwargs.pop('partial', False)
+                    instance = tc
+                    serializer = self.get_serializer(instance, data=request.data, partial=partial)
+                    serializer.is_valid(raise_exception=True)
+                    self.perform_update(serializer)
+
+                    if getattr(instance, '_prefetched_objects_cache', None):
+                        # If 'prefetch_related' has been applied to a queryset, we need to
+                        # forcibly invalidate the prefetch cache on the instance.
+                        instance._prefetched_objects_cache = {}
+
+                    return Response(serializer.data)
+                           
+        except DatabaseError:
+            return Response({"message" : "Someone else is trying to update transfusion centar!"}, status=404)
+     
         
 
 class RetrieveTranfusionCenterAPIView(generics.RetrieveAPIView):
