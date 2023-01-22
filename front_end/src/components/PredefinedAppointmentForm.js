@@ -22,6 +22,7 @@ const RegistrationForm = () => {
     const { handleSubmit, control } = useForm();
     const [alert, setAlert] = React.useState(false);
     const [ error, setError ] = React.useState(false);
+    const [er, setEr] = React.useState("");
     let navigate = useNavigate();
     const [user, setUser] = useState("");
     const [staff, setStaff] = useState([]);
@@ -52,8 +53,14 @@ const RegistrationForm = () => {
             data.transfusion_center = user.userprofile.tranfusion_center
             data.staff = [data.staff]
             console.log(user)
-            let res = await axiosApi.post('/appointment/create-predefined/', data);
-            setAlert(true);
+            let res = await axiosApi.post('/appointment/create-predefined/', data).then(res => {
+                console.log(res)
+                setAlert(true)
+            }).catch(er => {
+                console.log(er.response);
+                setError(true)
+                setEr(er.response.data.message)
+            });
         }
         catch (err) {
             console.log(err)
@@ -168,32 +175,32 @@ const RegistrationForm = () => {
                         }
                         sx={{ mb: 2 }}
                     >
-                        Submit successfull!
+                        Successfuly scheduled appointment!
                     </Alert>
                 </Collapse>
             </Box>
             <Box sx={{ width: "100%" }}>
-                <Collapse in={error}>
-                    <Alert
-                        severity="error"
-                        action={
-                            <IconButton
-                                aria-label="close"
-                                color="inherit"
-                                size="small"
-                                onClick={() => {
-                                    setError(false);
-                                }}
-                            >
-                                <CloseIcon fontSize="inherit" />
-                            </IconButton>
-                        }
-                        sx={{ mb: 2 }}
-                    >
-                        Cannot schedule appointment! Please choose another date and time!
-                    </Alert>
-                </Collapse>
-            </Box>
+                    <Collapse in={error}>
+                        <Alert
+                            severity="error"
+                            action={
+                                <IconButton
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        setError(false);
+                                    }}
+                                >
+                                    <CloseIcon fontSize="inherit" />
+                                </IconButton>
+                            }
+                            sx={{ mb: 2 }}
+                        >
+                            {er}
+                        </Alert>
+                    </Collapse>
+                </Box>
         </div>
     );
 };

@@ -24,6 +24,7 @@ from django.db.models import Q
 from dateutil import parser
 from django.contrib.auth.models import User
 from django.db import DatabaseError, transaction
+import time
 
 class IsAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -195,13 +196,18 @@ class CreatePredefinedAppointmentView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated & (IsAdmin | IsStaff)] #obrisati admina posle
 
     def post(self, request, *args, **kwargs):
-        duration = timedelta(minutes=int(request.data['duration']))
-        print(datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M') - duration)
-        appointments = Appointment.objects.filter(Q(transfusion_center=request.data['transfusion_center']) & Q(date_time__gte=datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M')-duration) & Q(date_time__lte=datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M')+duration))
-        #print(datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M')+timedelta(minutes=45))
-        if len(appointments) > 0:
-            return Response({'message' : 'Already exists appointment at choosen time. Please choose another date and time.'}, status=status.HTTP_404_NOT_FOUND)
-        return self.create(request, *args, **kwargs)
+        try:
+            with transaction.atomic():
+                time.sleep(5)
+                duration = timedelta(minutes=int(request.data['duration']))
+                print(datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M') - duration)
+                appointments = Appointment.objects.filter(Q(transfusion_center=request.data['transfusion_center']) & Q(date_time__gte=datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M')-duration) & Q(date_time__lte=datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M')+duration))
+                #print(datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M')+timedelta(minutes=45))
+                if len(appointments) > 0:
+                    return Response({'message' : 'Already exists appointment at choosen time. Please choose another date and time.'}, status=status.HTTP_404_NOT_FOUND)
+                return self.create(request, *args, **kwargs)
+        except DatabaseError:
+            return Response({"message" : "Already exists appointment at choosen time. Please choose another date and time."}, status=404)
 
 #zakazivanje slobodnog termina za odabrani centar
 class CreateAppointmentUserView(generics.CreateAPIView):

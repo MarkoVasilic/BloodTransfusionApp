@@ -18,6 +18,8 @@ from rest_framework import viewsets
 from django.http import QueryDict
 import datetime
 import pytz
+from django.db import DatabaseError, transaction
+import time
 
 class IsAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -64,7 +66,28 @@ class UserViewSet(mixins.RetrieveModelMixin,
 class UserUpdateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
-    permission_classes = [IsAuthenticated & (IsAdmin | IsOwner)]
+    permission_classes = [IsAuthenticated & (IsAdmin | IsOwner | IsStaff)]
+    def put(self, request, *args, **kwargs):
+        try:
+            users = User.objects.select_for_update(nowait=True).filter(id=kwargs['pk'])
+            with transaction.atomic():
+                for user in users:
+                    time.sleep(5)
+                    partial = kwargs.pop('partial', False)
+                    instance = user
+                    serializer = self.get_serializer(instance, data=request.data, partial=partial)
+                    serializer.is_valid(raise_exception=True)
+                    self.perform_update(serializer)
+
+                    if getattr(instance, '_prefetched_objects_cache', None):
+                        # If 'prefetch_related' has been applied to a queryset, we need to
+                        # forcibly invalidate the prefetch cache on the instance.
+                        instance._prefetched_objects_cache = {}
+
+                    return Response(serializer.data)
+        except DatabaseError:
+            return Response({"message" : "Somebody else already updated this user!"}, status=404)
+    
 
 class UserUpdatePenaltyDateViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
