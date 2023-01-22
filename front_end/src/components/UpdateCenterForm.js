@@ -1,12 +1,16 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, IconButton } from "@mui/material";
 import { green } from "@mui/material/colors";
-import { useEffect} from 'react';
+import { useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosApi from "../api/axios";
 import {useForm} from "react-hook-form";
 import InputTextField from "./InputTextField";
+import Box from "@mui/material/Box";
+import Collapse from "@mui/material/Collapse";
+import Alert from "@mui/material/Alert";
+import CloseIcon from "@mui/icons-material/Close";
 
 function UpdateCenterForm() {
 
@@ -15,13 +19,24 @@ function UpdateCenterForm() {
     const params = useParams();
     const {control, handleSubmit, reset} = useForm();
     const [alert, setAlert] = React.useState(false);
+    const [failed, setFailed] = React.useState(false);
+    const [err, setErr] = React.useState("");
 
     const handleUpdate = async (data) => {
         try {
-            const resp = await axiosApi.put(`/center/update-delete/${params.center}/` ,data);
-            navigate('/list-centers-update');
-        } catch (error) {
-            console.log(error.response);
+            await axiosApi.put(`/center/update-delete/${params.center}/` ,data).then(res => {
+                console.log(res)
+                setAlert(true)
+            }).catch(err => {
+                console.log(err.response);
+                setFailed(true)
+                setErr(err.response.data.message)
+            });
+
+        }
+        catch (error) {
+            console.log(error)
+            setFailed(true)
         }
     };
 
@@ -127,6 +142,52 @@ function UpdateCenterForm() {
                     </Button>
                 </Grid>
             </Grid>
+
+            <Box sx={{ width: "100%" }}>
+                    <Collapse in={alert}>
+                        <Alert
+                            severity="success"
+                            action={
+                                <IconButton
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        setAlert(false);
+                                        navigate('/list-centers-update');
+                                    }}
+                                >
+                                    <CloseIcon fontSize="inherit" />
+                                </IconButton>
+                            }
+                            sx={{ mb: 2 }}
+                        >
+                            Successfuly updated transfusion center!
+                        </Alert>
+                    </Collapse>
+                </Box>
+                <Box sx={{ width: "100%" }}>
+                    <Collapse in={failed}>
+                        <Alert
+                            severity="error"
+                            action={
+                                <IconButton
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        setFailed(false);
+                                    }}
+                                >
+                                    <CloseIcon fontSize="inherit" />
+                                </IconButton>
+                            }
+                            sx={{ mb: 2 }}
+                        >
+                            {err}
+                        </Alert>
+                    </Collapse>
+                </Box>
         </div>
     );
 }
