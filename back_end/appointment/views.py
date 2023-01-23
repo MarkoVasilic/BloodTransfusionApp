@@ -197,15 +197,21 @@ class CreatePredefinedAppointmentView(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         try:
+            apps = Appointment.objects.select_for_update(nowait=True).filter(transfusion_center=request.data['transfusion_center'])
             with transaction.atomic():
                 time.sleep(5)
                 duration = timedelta(minutes=int(request.data['duration']))
                 print(datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M') - duration)
-                appointments = Appointment.objects.filter(Q(transfusion_center=request.data['transfusion_center']) & Q(date_time__gte=datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M')-duration) & Q(date_time__lte=datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M')+duration))
+                appointments = apps.filter(Q(transfusion_center=request.data['transfusion_center']) & Q(date_time__gte=datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M')-duration) & Q(date_time__lte=datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M')+duration))
                 #print(datetime.strptime(request.data['date_time'], '%Y-%m-%dT%H:%M')+timedelta(minutes=45))
                 if len(appointments) > 0:
                     return Response({'message' : 'Already exists appointment at choosen time. Please choose another date and time.'}, status=status.HTTP_404_NOT_FOUND)
-                return self.create(request, *args, **kwargs)
+                serializer = self.get_serializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                self.perform_create(serializer)
+                headers = self.get_success_headers(serializer.data)
+                return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+                #return self.create(request, *args, **kwargs)
         except DatabaseError:
             return Response({"message" : "Already exists appointment at choosen time. Please choose another date and time."}, status=404)
 
